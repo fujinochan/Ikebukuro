@@ -1,0 +1,19 @@
+# Unreal generated files
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+/.vs/
+/*.sln
+/*.slnx
+/*.suo
+/*.VC.db
+
+# Local backups and original / derived city datasets
+/Backups/
+/13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip
+/Data/City/
+
+# Python generated files
+__pycache__/
+*.pyc
