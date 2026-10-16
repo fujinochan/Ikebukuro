@@ -2,6 +2,8 @@
 
 実施日: 2026-10-16。Step 2 の読み込み・衝突・Windows同梱検証を完了。
 
+現在の起動マップはStep 4で作成した `L_Ikebukuro`。切り出した建物・道路と固定の足場については [Step 4の記録](step4-city-area.md) を参照。以下はStep 2時点の検証記録。
+
 ## 原本と展開
 
 - 原本: `13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip`

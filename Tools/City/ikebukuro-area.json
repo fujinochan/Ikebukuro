@@ -1,0 +1,13 @@
+{
+  "origin_longitude_latitude_height": [139.7109, 35.7295, 60.0],
+  "play_min_cm": [-8000, -23000],
+  "play_max_cm": [32000, 17000],
+  "background_buffer_m": 150,
+  "collision_margin_m": 15,
+  "ground_grid_m": 10,
+  "source_zip": "13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip",
+  "layers": {
+    "Buildings": "13116_toshima-ku_pref_2025_citygml_1_op_bldg_3dtiles_13116_toshima-ku_lod1/",
+    "Roads": "13116_toshima-ku_pref_2025_citygml_1_op_tran_3dtiles_lod3/"
+  }
+}

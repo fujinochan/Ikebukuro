@@ -1,0 +1,148 @@
+{
+  "config": {
+    "origin_longitude_latitude_height": [
+      139.7109,
+      35.7295,
+      60.0
+    ],
+    "play_min_cm": [
+      -8000,
+      -23000
+    ],
+    "play_max_cm": [
+      32000,
+      17000
+    ],
+    "background_buffer_m": 150,
+    "collision_margin_m": 15,
+    "ground_grid_m": 10,
+    "source_zip": "13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip",
+    "layers": {
+      "Buildings": "13116_toshima-ku_pref_2025_citygml_1_op_bldg_3dtiles_13116_toshima-ku_lod1/",
+      "Roads": "13116_toshima-ku_pref_2025_citygml_1_op_tran_3dtiles_lod3/"
+    }
+  },
+  "background_region_radians": [
+    2.438370835488535,
+    0.6235470789052735,
+    2.438505875945959,
+    0.6236571893122372
+  ],
+  "background_bounds_degrees": [
+    139.70835776128143,
+    35.726615948983095,
+    139.71609500955535,
+    35.73292481058259
+  ],
+  "play_bounds_degrees": [
+    139.7100157430544,
+    35.72796784789727,
+    139.71443702778237,
+    35.73157291166841
+  ],
+  "layers": {
+    "Buildings": {
+      "source_tiles": 68,
+      "selected_leaf_tiles": 4,
+      "ancestor_and_leaf_nodes": 13,
+      "source_bytes": 352685304,
+      "selected_bytes": 25512156,
+      "files": [
+        {
+          "uri": "data/data17.b3dm",
+          "bytes": 6385452,
+          "sha256": "3649b6ac3b9a668f5fd002b22d83c9a6fa06966ab3f1f4925e664211449ffedc"
+        },
+        {
+          "uri": "data/data31.b3dm",
+          "bytes": 5821832,
+          "sha256": "0f406babf60cb4e8a97f164edeea7d72a0af657179df17533beb1a1d74974f2a"
+        },
+        {
+          "uri": "data/data43.b3dm",
+          "bytes": 6842708,
+          "sha256": "4c41d252d4a008976f948bfa18d2f74087e38f4351cf48223a745a6f5d13538d"
+        },
+        {
+          "uri": "data/data51.b3dm",
+          "bytes": 6462164,
+          "sha256": "a9e7ab173a40fa5d1d5ab1d3fa563f51c49cbdaf494ed44dd6e8998ca3df01d7"
+        }
+      ]
+    },
+    "Roads": {
+      "source_tiles": 58,
+      "selected_leaf_tiles": 13,
+      "ancestor_and_leaf_nodes": 21,
+      "source_bytes": 13708188,
+      "selected_bytes": 5704828,
+      "files": [
+        {
+          "uri": "data/data7.b3dm",
+          "bytes": 406808,
+          "sha256": "2372850ca6d6d944cb44f644ad77a2742764b205e5e3e7f0dc5c37dfc6d264a1"
+        },
+        {
+          "uri": "data/data10.b3dm",
+          "bytes": 475628,
+          "sha256": "90d3f77f932d1ff3712c3eedeae4791145ccddd4366a7d535af10bac531f01fa"
+        },
+        {
+          "uri": "data/data11.b3dm",
+          "bytes": 386044,
+          "sha256": "903776f32392df95851e7cdcd0fd248a44026fe2fb715b57b0afc5f10b7ed060"
+        },
+        {
+          "uri": "data/data12.b3dm",
+          "bytes": 491412,
+          "sha256": "84cf6b088ffba93217ecf33718b4f4062cb42d39393b0ede7a2350d0b5e8bce9"
+        },
+        {
+          "uri": "data/data13.b3dm",
+          "bytes": 433872,
+          "sha256": "35cd60b31ec084ee1d31c4cf4da123b66c41a95df71eb1abc4675b856d87bbd4"
+        },
+        {
+          "uri": "data/data15.b3dm",
+          "bytes": 747228,
+          "sha256": "b4bf08dd52ee2786de00aeb8206d4a98dfe3a7f1d3371111b524ffccb8a07a15"
+        },
+        {
+          "uri": "data/data17.b3dm",
+          "bytes": 696324,
+          "sha256": "d803d129fe2c2c94060efb7fc33e3c6ce3f954d3acbda831ad0db9493642af0c"
+        },
+        {
+          "uri": "data/data39.b3dm",
+          "bytes": 354788,
+          "sha256": "82737954ca1e886138d28277d15cf80ab97488e9603e033ca6b094ed266528ec"
+        },
+        {
+          "uri": "data/data40.b3dm",
+          "bytes": 417492,
+          "sha256": "e1fc214cb1993e9b34140543cd8232f938b3dedf86754c86a667a0c6f96fbde8"
+        },
+        {
+          "uri": "data/data41.b3dm",
+          "bytes": 404564,
+          "sha256": "9af4de6580e51ca4658c33a3b32b40d448141e4e094c4054e2af467aeeb57c91"
+        },
+        {
+          "uri": "data/data42.b3dm",
+          "bytes": 438548,
+          "sha256": "454b13646023951e44cef2a3ac258561ea13f8d3aa3aedfbbeee1696df0390c9"
+        },
+        {
+          "uri": "data/data44.b3dm",
+          "bytes": 235172,
+          "sha256": "1919df31b4fa55ddd29bdb4824e9f840e7fd32406bd56d86a49be895193baac5"
+        },
+        {
+          "uri": "data/data46.b3dm",
+          "bytes": 216948,
+          "sha256": "fb206c5900999a0c6f0ebc77379361e8ac9125d5a37c8bfce06424c8de41b7b5"
+        }
+      ]
+    }
+  }
+}

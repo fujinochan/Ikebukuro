@@ -9,3 +9,4 @@
 - User separately approved downloading, installing into this project's `Plugins/`, and using the official `CesiumForUnreal-58-v2.30.0.zip`. Keep the ZIP in `Downloads/` and verify its official SHA-256 before extraction. Do not install it into the UE installation.
 - Obtain separate approval for additional external tools. Record approved exceptions in `doc/step1-setup.md`.
 - Approval granted for Step 3: the same installed UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute access and normal settings/cache/temp access for implementation verification. Keep outputs in this project. No internet acquisition is authorized or needed for Step 3.
+- Approval granted for Step 4: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access. Process map data and save outputs inside this project. Obtain separate approval for any new downloads.

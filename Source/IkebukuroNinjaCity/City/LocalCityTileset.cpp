@@ -40,7 +40,7 @@ void ALocalCityTileset::ConfigureLocalSource()
 	}
 	SetTilesetSource(ETilesetSource::FromUrl);
 	SetUrl(TEXT("file:///") + ResolvedDatasetPath.Replace(TEXT(" "), TEXT("%20")));
-	SetCreatePhysicsMeshes(true);
+	SetCreatePhysicsMeshes(bCreateTilePhysics);
 }
 
 void ALocalCityTileset::OnConstruction(const FTransform& Transform)

@@ -23,6 +23,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Local City")
 	FString DatasetRelativePath = TEXT("CityData/ToshimaLOD1/tileset.json");
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Local City")
+	bool bCreateTilePhysics = true;
 
 	UFUNCTION(CallInEditor, BlueprintCallable, Category="Local City")
 	void ConfigureLocalSource();

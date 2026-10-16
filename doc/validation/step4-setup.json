@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "map": "/Game/Ninja/Maps/L_Ikebukuro",
+  "config": {
+    "origin_longitude_latitude_height": [
+      139.7109,
+      35.7295,
+      60.0
+    ],
+    "play_min_cm": [
+      -8000,
+      -23000
+    ],
+    "play_max_cm": [
+      32000,
+      17000
+    ],
+    "background_buffer_m": 150,
+    "collision_margin_m": 15,
+    "ground_grid_m": 10,
+    "source_zip": "13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip",
+    "layers": {
+      "Buildings": "13116_toshima-ku_pref_2025_citygml_1_op_bldg_3dtiles_13116_toshima-ku_lod1/",
+      "Roads": "13116_toshima-ku_pref_2025_citygml_1_op_tran_3dtiles_lod3/"
+    }
+  },
+  "safe_street": [
+    12218.342425564924,
+    -5055.32582249244,
+    924.9839275229606
+  ],
+  "street_run_end": [
+    15218.342425564924,
+    -5055.32582249244,
+    913.113156780084
+  ],
+  "roof_targets": [
+    [
+      -126.33295139670372,
+      -4159.55824492375,
+      1481.3756103693595
+    ],
+    [
+      1748.2912601629891,
+      -12561.96346392234,
+      1471.770548492299
+    ],
+    [
+      4824.284140328566,
+      -7151.134530901909,
+      1521.336018885675
+    ]
+  ],
+  "ground_vertices": 1936,
+  "ground_triangles": 3698,
+  "ground_method": "inverse-distance nearby road heights, 10m grid, 30cm below roads; approximate fill terrain",
+  "tile_physics": false,
+  "fixed_collision_assets": [
+    "SM_BuildingsCollision",
+    "SM_RoadsCollision",
+    "SM_FillGround"
+  ]
+}
