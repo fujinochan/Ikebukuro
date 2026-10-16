@@ -5,6 +5,8 @@
 #include "NinjaCharacter.generated.h"
 
 class UInputMappingContext;
+class ARedNinja;
+enum class ENinjaDefeatMethod : uint8;
 
 UCLASS()
 class IKEBUKURONINJACITY_API ANinjaCharacter : public AIkebukuroNinjaCityCharacter
@@ -13,6 +15,7 @@ class IKEBUKURONINJACITY_API ANinjaCharacter : public AIkebukuroNinjaCityCharact
 public:
 	ANinjaCharacter();
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void Landed(const FHitResult& Hit) override;
@@ -27,11 +30,31 @@ public:
 	bool CanChainJump() const;
 	UFUNCTION(BlueprintPure, Category="Ninja|Jump")
 	float GetSecondsToJumpApex() const;
+	UFUNCTION(BlueprintCallable,Category="Ninja|Combat") void DoThrow();
+	bool TryThrowShuriken();
+	bool TryStomp(ARedNinja* Enemy,const FHitResult& Hit);
+	bool ReceiveContactDamage();
+	void RegisterDefeat(ENinjaDefeatMethod Method);
+	void SetSafeSurface(FVector Surface);
+	void RecoverToSurface(FVector Surface,bool bFallPenalty);
+	UFUNCTION() void OnNinjaHit(UPrimitiveComponent* Component,AActor* Other,UPrimitiveComponent* OtherComponent,FVector Impulse,const FHitResult& Hit);
+	UPROPERTY(EditDefaultsOnly,Category="Ninja|Input") TObjectPtr<UInputAction> ThrowAction;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 Health=3;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 Defeats=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 StompDefeats=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 ShurikenDefeats=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 ShotsFired=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 ShurikenWorldHits=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 Knockouts=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") FString CombatFeedback=TEXT("F / LMB: shuriken  |  Stomp red ninjas from above");
+	bool IsInvulnerable() const;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ninja|Movement")
 	float WalkSpeed = 700;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ninja|Movement")
 	float RunSpeed = 1400;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Ninja|Camera")
+	FVector CameraShoulderOffset=FVector(0,90,60);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ninja|Jump")
 	FVector JumpSpeeds = FVector(1100, 1700, 2300);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ninja|Jump", meta=(ClampMin="0.01", Units="s"))
@@ -50,4 +73,10 @@ public:
 private:
 	bool bJumpButtonHeld = false;
 	double PredictedApexTime = 0;
+	double NextThrowTime=0;
+	double InvulnerableUntil=0;
+	FVector SafeSurface=FVector::ZeroVector;
+	FVector PreviousFeet=FVector::ZeroVector;
+	float PreviousVerticalVelocity=0;
+	bool bCityHandlesRecovery=false;
 };

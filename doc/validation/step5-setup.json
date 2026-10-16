@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "combat_map": "/Game/Ninja/Maps/L_NinjaCombat",
+  "city_enemy": [
+    14618.323637092486,
+    -5055.32582249244,
+    1025.487385273209
+  ],
+  "throw_keys": [
+    "F",
+    "LeftMouseButton"
+  ],
+  "practice_enemies": 3,
+  "city_enemies": 1,
+  "external_downloads": false
+}

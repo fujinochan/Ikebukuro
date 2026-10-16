@@ -1,0 +1,19 @@
+{
+	"status": "passed",
+	"error": "",
+	"fixed_simulation_fps": 30,
+	"city_mode": false,
+	"city_enemy_ground_error_cm": 0,
+	"passed_cases": [
+		"Mapped F throw, cooldown, owner ignored, shuriken defeat",
+		"200m/s swept shuriken and duplicate defeat guard",
+		"Camera can see target but hand trajectory stops at 15cm wall",
+		"Gravity-free straight flight, 60m expiry and airborne LMB input",
+		"Descending top stomp, bounce, stage preserved until real ground",
+		"Side contact damages once, never stomps, repeated damage rejected",
+		"Ascending underside contact does not defeat enemy",
+		"Fall recovers to checkpoint and costs one health",
+		"Zero health recovers once with full health",
+		"Same-frame stomp and projectile dispatch count once in both orders"
+	]
+}

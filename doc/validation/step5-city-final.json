@@ -1,0 +1,10 @@
+{
+	"status": "passed",
+	"error": "",
+	"fixed_simulation_fps": 60,
+	"city_mode": true,
+	"city_enemy_ground_error_cm": 2.1503054960128338,
+	"passed_cases": [
+		"City red ninja stands on fixed road and is defeated by mapped shuriken input"
+	]
+}

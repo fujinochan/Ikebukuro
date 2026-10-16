@@ -43,14 +43,14 @@ void ACityPlayArea::BeginPlay()
 void ACityPlayArea::PlaceAt(FVector Surface, bool bRecovery)
 {
 	if (!Ninja) return;
+	if (bRecovery)
+	{
+		Ninja->RecoverToSurface(Surface,Ninja->GetActorLocation().Z < -1500);
+		++RecoveryCount; Ninja->JumpFeedback=TEXT("Returned to the safe street"); return;
+	}
 	Ninja->SetActorLocation(Surface + FVector(0,0,Ninja->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+20));
 	Ninja->GetCharacterMovement()->StopMovementImmediately();
 	Ninja->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
-	if (bRecovery)
-	{
-		++RecoveryCount;
-		Ninja->JumpFeedback = TEXT("Returned to the safe street");
-	}
 }
 
 void ACityPlayArea::Key(const FKey& Input, bool bPressed)
@@ -80,6 +80,7 @@ void ACityPlayArea::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	Ninja = Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 	if (!Ninja) return;
+	Ninja->SetSafeSurface(SafeStreet);
 	auto* PC = Cast<APlayerController>(Ninja->GetController());
 	if (!PC) return;
 	const FVector Position = Ninja->GetActorLocation();

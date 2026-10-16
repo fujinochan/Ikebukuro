@@ -2,9 +2,9 @@
 
 作成日: 2026-10-16  
 対象: `IkebukuroNinjaCity` / Unreal Engine  
-状態: Step 1〜4を実装・検証済み。現在の起動マップは `L_Ikebukuro`。次はStep 5。以下の数値・操作・追加ルールは初期案で、試遊結果に合わせて調整する。
+状態: Step 1〜5を実装・検証済み。現在の起動マップは `L_Ikebukuro`。次はStep 6。以下の数値・操作・追加ルールは初期案で、試遊結果に合わせて調整する。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)。
 
 ## 1. 完成させるゲーム
 

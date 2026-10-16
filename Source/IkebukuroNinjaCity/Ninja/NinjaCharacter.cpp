@@ -1,9 +1,18 @@
 #include "NinjaCharacter.h"
+#include "NinjaAppearance.h"
+#include "RedNinja.h"
+#include "NinjaShuriken.h"
+#include "City/CityPlayArea.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
 
 ANinjaCharacter::ANinjaCharacter()
 {
@@ -13,6 +22,12 @@ ANinjaCharacter::ANinjaCharacter()
 void ANinjaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCameraBoom()->SocketOffset=CameraShoulderOffset;
+	FNinjaAppearance::Apply(this,false);
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this,&ANinjaCharacter::OnNinjaHit);
+	SafeSurface=GetActorLocation()-FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+	PreviousFeet=SafeSurface;
+	bCityHandlesRecovery=UGameplayStatics::GetActorOfClass(this,ACityPlayArea::StaticClass())!=nullptr;
 	// Apply the Ninja tuning even when inheriting saved template Blueprint defaults.
 	auto* Movement = GetCharacterMovement();
 	Movement->GravityScale = 1.5f;
@@ -52,7 +67,9 @@ void ANinjaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 			if (SprintMappingContext) Subsystem->AddMappingContext(SprintMappingContext, 1);
 		}
 	}
-	if (auto* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent); Input && SprintAction)
+	auto* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (Input && ThrowAction) Input->BindAction(ThrowAction,ETriggerEvent::Started,this,&ANinjaCharacter::DoThrow);
+	if (Input && SprintAction)
 	{
 		Input->BindAction(SprintAction, ETriggerEvent::Started, this, &ANinjaCharacter::DoSprintStart);
 		Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &ANinjaCharacter::DoSprintEnd);
@@ -99,6 +116,7 @@ void ANinjaCharacter::DoJumpEnd()
 
 void ANinjaCharacter::Landed(const FHitResult& Hit)
 {
+	if (auto* Enemy=Cast<ARedNinja>(Hit.GetActor()); Enemy && (Enemy->bDefeated || TryStomp(Enemy,Hit))) return;
 	Super::Landed(Hit);
 	JumpStage = 0;
 	PredictedApexTime = 0;
@@ -115,4 +133,106 @@ void ANinjaCharacter::DoSprintEnd()
 {
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
+void ANinjaCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (!bCityHandlesRecovery && GetActorLocation().Z < -1500) RecoverToSurface(SafeSurface,true);
+	if (!bCityHandlesRecovery)
+		if (auto* PC=Cast<APlayerController>(GetController()); PC && PC->WasInputKeyJustPressed(EKeys::R)) RecoverToSurface(SafeSurface,false);
+	PreviousVerticalVelocity=GetVelocity().Z;
+	PreviousFeet=GetActorLocation()-FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+}
+
+void ANinjaCharacter::DoThrow() { TryThrowShuriken(); }
+
+bool ANinjaCharacter::TryThrowShuriken()
+{
+	const double Now=GetWorld()->GetTimeSeconds();
+	if (Now<NextThrowTime) return false;
+	auto* PC=Cast<APlayerController>(GetController());
+	if (!PC) return false;
+	FVector Camera; FRotator Look; PC->GetPlayerViewPoint(Camera,Look);
+	FCollisionQueryParams Params(SCENE_QUERY_STAT(NinjaAim),true,this);
+	FHitResult Aim;
+	const FVector FarPoint=Camera+Look.Vector()*10000;
+	const FVector AimPoint=GetWorld()->LineTraceSingleByChannel(Aim,Camera,FarPoint,ECC_Visibility,Params)?Aim.ImpactPoint:FarPoint;
+	const FVector Chest=GetActorLocation()+FVector(0,0,20);
+	const FVector Hand=GetMesh()->DoesSocketExist(TEXT("hand_r"))?GetMesh()->GetSocketLocation(TEXT("hand_r")):Chest+GetActorRightVector()*45;
+	const FVector Direction=(AimPoint-Hand).GetSafeNormal();
+	FHitResult Block;
+	const bool bBlocked=GetWorld()->SweepSingleByChannel(Block,Chest,Hand+Direction*12,FQuat::Identity,ECC_Visibility,FCollisionShape::MakeSphere(8),Params);
+	FActorSpawnParameters Spawn; Spawn.Owner=this; Spawn.Instigator=this;
+	Spawn.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	auto* Star=GetWorld()->SpawnActor<ANinjaShuriken>(bBlocked?Block.Location:Hand,Direction.Rotation(),Spawn);
+	if (!Star) return false;
+	Star->Launch(this,Direction);
+	NextThrowTime=Now+0.3; ++ShotsFired;
+	if (bBlocked) Star->Impact(Block);
+	return true;
+}
+
+bool ANinjaCharacter::TryStomp(ARedNinja* Enemy,const FHitResult& Hit)
+{
+	if (!Enemy || Enemy->bDefeated) return false;
+	const float Top=Enemy->GetActorLocation().Z+Enemy->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	// A previous descending frame may precede a bounce. Never accept an actual
+	// upward velocity as a stomp; retain the previous speed only for impact clipping.
+	if (GetVelocity().Z>1 || FMath::Min(GetVelocity().Z,PreviousVerticalVelocity)>=-50 || Hit.ImpactNormal.Z<0.5 || Hit.ImpactPoint.Z<Top-25 || PreviousFeet.Z<Top-30) return false;
+	if (!Enemy->TryDefeat(ENinjaDefeatMethod::Stomp,this)) return false;
+	LaunchCharacter(FVector(0,0,650),false,true); return true;
+}
+
+void ANinjaCharacter::OnNinjaHit(UPrimitiveComponent*,AActor* Other,UPrimitiveComponent*,FVector,const FHitResult& Hit)
+{
+	if (auto* Enemy=Cast<ARedNinja>(Other); Enemy && !Enemy->bDefeated)
+	{
+		if (TryStomp(Enemy,Hit)) return;
+		const int32 PreviousKnockouts=Knockouts;
+		if (ReceiveContactDamage() && Knockouts==PreviousKnockouts)
+		{
+			const FVector Away=(GetActorLocation()-Enemy->GetActorLocation()).GetSafeNormal2D();
+			LaunchCharacter(Away*350+FVector(0,0,300),true,true);
+		}
+	}
+}
+
+bool ANinjaCharacter::IsInvulnerable() const { return GetWorld()->GetTimeSeconds()<InvulnerableUntil; }
+
+bool ANinjaCharacter::ReceiveContactDamage()
+{
+	if (IsInvulnerable()) return false;
+	Health=FMath::Max(0,Health-1); InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
+	CombatFeedback=TEXT("Hit! One second of protection");
+	if (Health==0)
+	{
+		++Knockouts; Health=3; RecoverToSurface(SafeSurface,false);
+		CombatFeedback=TEXT("Knocked out - returned with full health");
+	}
+	return true;
+}
+
+void ANinjaCharacter::RegisterDefeat(ENinjaDefeatMethod Method)
+{
+	++Defeats;
+	if (Method==ENinjaDefeatMethod::Stomp) { ++StompDefeats; CombatFeedback=TEXT("STOMP! Red ninja defeated"); }
+	else { ++ShurikenDefeats; CombatFeedback=TEXT("SHURIKEN HIT! Red ninja defeated"); }
+}
+
+void ANinjaCharacter::SetSafeSurface(FVector Surface) { SafeSurface=Surface; }
+
+void ANinjaCharacter::RecoverToSurface(FVector Surface,bool bFallPenalty)
+{
+	SetSafeSurface(Surface);
+	if (bFallPenalty)
+	{
+		Health=FMath::Max(0,Health-1);
+		if (Health==0) { ++Knockouts; Health=3; }
+		InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
+	}
+	SetActorLocation(Surface+FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+20));
+	GetCharacterMovement()->StopMovementImmediately(); GetCharacterMovement()->ClearAccumulatedForces(); GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+	JumpStage=0; PredictedApexTime=0;
+	CombatFeedback=bFallPenalty?TEXT("Fell - lost one health, returned to safety"):TEXT("Returned to safety");
 }
