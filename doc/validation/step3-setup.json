@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "map": "/Game/Ninja/Maps/L_NinjaTraining",
+  "character": "/Game/Ninja/Blueprints/BP_NinjaCharacter",
+  "mode": "/Game/Ninja/Blueprints/BP_NinjaTrainingGameMode",
+  "sprint_keys": [
+    "LeftShift",
+    "RightShift"
+  ],
+  "jump_key": "SpaceBar (existing IMC_Default)",
+  "building_heights_m": [
+    10,
+    20,
+    30
+  ],
+  "floor_size_m": 200,
+  "timing_window_seconds": [
+    -0.15,
+    0.15
+  ]
+}

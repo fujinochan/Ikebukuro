@@ -1,0 +1,58 @@
+{
+	"status": "passed",
+	"error": "",
+	"simulation_fps": 120,
+	"walk_speed_cm_s": 700,
+	"run_speed_cm_s": 1400,
+	"input_method": "PlayerController mapped W / LeftShift / Space key events",
+	"cases": [
+		{
+			"case": "hold_no_repeat",
+			"passed": true,
+			"max_stage": 1,
+			"height_cm": 411.5625,
+			"max_x_cm": 0,
+			"landed_and_reset": true
+		},
+		{
+			"case": "early_rejected",
+			"passed": true,
+			"max_stage": 1,
+			"height_cm": 411.5625,
+			"max_x_cm": 0,
+			"landed_and_reset": true
+		},
+		{
+			"case": "late_rejected",
+			"passed": true,
+			"max_stage": 1,
+			"height_cm": 411.5625,
+			"max_x_cm": 0,
+			"landed_and_reset": true
+		},
+		{
+			"case": "triple_and_fourth_rejected",
+			"passed": true,
+			"max_stage": 3,
+			"height_cm": 3193.72412109375,
+			"max_x_cm": 0,
+			"landed_and_reset": true
+		},
+		{
+			"case": "single_blocked_by_30m",
+			"passed": true,
+			"max_stage": 1,
+			"height_cm": 411.5625,
+			"max_x_cm": 4464.8994140625,
+			"landed_and_reset": true
+		},
+		{
+			"case": "triple_clears_30m",
+			"passed": true,
+			"max_stage": 3,
+			"height_cm": 3193.72412109375,
+			"max_x_cm": 8034.7919921875,
+			"landed_and_reset": true
+		}
+	]
+}

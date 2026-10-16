@@ -20,6 +20,10 @@ if (!$GameExecutable) {
     $ueArgs += '"' + (Join-Path $projectRoot 'IkebukuroNinjaCity.uproject') + '"'
     $ueArgs += '/Game/Ninja/Maps/L_CityProof', '-game'
 }
+else {
+    # Step 2 stays reproducible even after later steps change the default map.
+    $ueArgs += '/Game/Ninja/Maps/L_CityProof'
+}
 $ueArgs += @(
     '-CitySmokeTest', "-CitySmokeReport=`"$reportPath`"",
     "-CitySmokeScreenshot=`"$(Join-Path $validation "$ReportName.png")`"",
