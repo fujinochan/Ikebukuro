@@ -4,6 +4,7 @@
 #if WITH_EDITOR
 #include "CesiumGeoreference.h"
 #include "Engine/StaticMesh.h"
+#include "StaticMeshResources.h"
 #include "Materials/Material.h"
 #include "PhysicsEngine/BodySetup.h"
 #include "AssetRegistry/AssetRegistryModule.h"
@@ -47,6 +48,29 @@ bool UCityGeometryTools::IsRouteClear(UObject* WorldContext, FVector Start, FVec
 	FHitResult Hit;
 	return World && !World->SweepSingleByChannel(Hit, Start + FVector(0,0,110), End + FVector(0,0,110), FQuat::Identity,
 		ECC_Visibility, FCollisionShape::MakeSphere(60), FCollisionQueryParams(SCENE_QUERY_STAT(CityRouteSample), true));
+}
+
+FVector UCityGeometryTools::SurfaceOnMesh(UStaticMesh* Mesh, FVector2D Location)
+{
+	FVector Result(Location,-1000000);
+#if WITH_EDITOR
+	if (!Mesh || !Mesh->GetRenderData() || Mesh->GetRenderData()->LODResources.IsEmpty()) return Result;
+	const auto& LOD=Mesh->GetRenderData()->LODResources[0];
+	const auto& Positions=LOD.VertexBuffers.PositionVertexBuffer;
+	for (int32 I=0; I+2<LOD.IndexBuffer.GetNumIndices(); I+=3)
+	{
+		const FVector A(Positions.VertexPosition(LOD.IndexBuffer.GetIndex(I)));
+		const FVector B(Positions.VertexPosition(LOD.IndexBuffer.GetIndex(I+1)));
+		const FVector C(Positions.VertexPosition(LOD.IndexBuffer.GetIndex(I+2)));
+		const double D=(B.Y-C.Y)*(A.X-C.X)+(C.X-B.X)*(A.Y-C.Y);
+		if (FMath::Abs(D)<1e-6) continue;
+		const double U=((B.Y-C.Y)*(Location.X-C.X)+(C.X-B.X)*(Location.Y-C.Y))/D;
+		const double V=((C.Y-A.Y)*(Location.X-C.X)+(A.X-C.X)*(Location.Y-C.Y))/D;
+		const double W=1-U-V;
+		if (U>=-1e-6 && V>=-1e-6 && W>=-1e-6) Result.Z=FMath::Max(Result.Z,U*A.Z+V*B.Z+W*C.Z);
+	}
+#endif
+	return Result;
 }
 
 UStaticMesh* UCityGeometryTools::BuildSurfaceMesh(const FString& AssetPath, const TArray<FVector>& Vertices, const TArray<int32>& Indices)
@@ -120,6 +144,12 @@ UStaticMesh* UCityGeometryTools::BuildSurfaceMesh(const FString& AssetPath, cons
 UStaticMesh* UCityGeometryTools::BakeLayer(const FString& DatasetRelativePath, const FString& AssetPath,
 	ACesiumGeoreference* Georeference, FVector2D Minimum, FVector2D Maximum)
 {
+	return BakeLayerWithoutFeatures(DatasetRelativePath, AssetPath, Georeference, Minimum, Maximum, {});
+}
+
+UStaticMesh* UCityGeometryTools::BakeLayerWithoutFeatures(const FString& DatasetRelativePath, const FString& AssetPath,
+	ACesiumGeoreference* Georeference, FVector2D Minimum, FVector2D Maximum, const TArray<FString>& ExcludedFeatureIds)
+{
 #if WITH_EDITOR
 	if (!Georeference) return nullptr;
 	const FString Root = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir());
@@ -136,6 +166,9 @@ UStaticMesh* UCityGeometryTools::BakeLayer(const FString& DatasetRelativePath, c
 	Options.decodeEmbeddedImages = false;
 	Options.resolveExternalImages = false;
 	bool bError = false;
+	TSet<FString> Excluded(ExcludedFeatureIds);
+	int64 ExcludedTriangles = 0;
+	TSet<FString> RepresentedFeatures;
 	for (const auto& TileValue : Tileset->GetObjectField(TEXT("root"))->GetArrayField(TEXT("children")))
 	{
 		const auto Content = TileValue->AsObject()->GetObjectField(TEXT("content"));
@@ -146,8 +179,24 @@ UStaticMesh* UCityGeometryTools::BakeLayer(const FString& DatasetRelativePath, c
 		TArray<uint8> Bytes;
 		if (!FFileHelper::LoadFileToArray(Bytes, *TilePath) || Bytes.Num() < 28) return nullptr;
 		uint32 Offset = 0;
+		TArray<bool> SkipFeatures;
+		TArray<FString> FeatureIds;
 		if (FMemory::Memcmp(Bytes.GetData(), "b3dm", 4) == 0)
 		{
+			{
+				uint32 FeatureJson, FeatureBinary, BatchJson;
+				FMemory::Memcpy(&FeatureJson, Bytes.GetData()+12, 4);
+				FMemory::Memcpy(&FeatureBinary, Bytes.GetData()+16, 4);
+				FMemory::Memcpy(&BatchJson, Bytes.GetData()+20, 4);
+				const uint64 BatchStart = 28ull+FeatureJson+FeatureBinary;
+				if (BatchStart+BatchJson>uint64(Bytes.Num())) return nullptr;
+				FUTF8ToTCHAR Text(reinterpret_cast<const ANSICHAR*>(Bytes.GetData()+BatchStart),BatchJson);
+				TSharedPtr<FJsonObject> Batch;
+				if (!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(FString(Text.Length(),Text.Get())),Batch)) return nullptr;
+				const TArray<TSharedPtr<FJsonValue>>* IDs=nullptr;
+				if (Batch->TryGetArrayField(TEXT("gml_id"),IDs)) for (const auto& ID:*IDs)
+				{ FeatureIds.Add(ID->AsString()); SkipFeatures.Add(Excluded.Contains(ID->AsString())); }
+			}
 			Offset = 28;
 			for (int32 Header = 3; Header < 7; ++Header) { uint32 Length; FMemory::Memcpy(&Length, Bytes.GetData() + Header*4, 4); Offset += Length; }
 		}
@@ -166,10 +215,30 @@ UStaticMesh* UCityGeometryTools::BakeLayer(const FString& DatasetRelativePath, c
 			const auto IndexView = CesiumGltf::getIndexAccessorView(M, Primitive);
 			const int64 IndexCount = Primitive.indices < 0 ? Count : std::visit(CesiumGltf::NumIndicesFromAccessor{}, IndexView);
 			const auto Matrix = RootTransform * Transform;
+			auto FeatureAt = [&](int64 Vertex)->int64
+			{
+				const auto It = Primitive.attributes.find("_BATCHID");
+				if (It==Primitive.attributes.end() || It->second<0 || It->second>=M.accessors.size()) return -1;
+				switch (M.accessors[It->second].componentType)
+				{
+				case 5121: { CesiumGltf::AccessorView<uint8_t> V(M,It->second); return V.status()==CesiumGltf::AccessorViewStatus::Valid && Vertex<V.size()?V[Vertex]:-1; }
+				case 5123: { CesiumGltf::AccessorView<uint16_t> V(M,It->second); return V.status()==CesiumGltf::AccessorViewStatus::Valid && Vertex<V.size()?V[Vertex]:-1; }
+				case 5125: { CesiumGltf::AccessorView<uint32_t> V(M,It->second); return V.status()==CesiumGltf::AccessorViewStatus::Valid && Vertex<V.size()?int64(V[Vertex]):-1; }
+				case 5126: { CesiumGltf::AccessorView<float> V(M,It->second); return V.status()==CesiumGltf::AccessorViewStatus::Valid && Vertex<V.size()?int64(V[Vertex]):-1; }
+				default: return -1;
+				}
+			};
 			for (int64 Face = 0; Face < IndexCount/3; ++Face)
 			{
 				++SourceTriangles;
 				const auto FaceIndices = std::visit(CesiumGltf::IndicesForFaceFromAccessor{Face, Count, Primitive.mode}, IndexView);
+				if (!FeatureIds.IsEmpty())
+				{
+					const int64 ID=FeatureAt(FaceIndices[0]);
+					if (!SkipFeatures.IsValidIndex(ID) || FeatureAt(FaceIndices[1])!=ID || FeatureAt(FaceIndices[2])!=ID) { bError=true; return; }
+					if (SkipFeatures[ID]) { ++ExcludedTriangles; continue; }
+					RepresentedFeatures.Add(FeatureIds[ID]);
+				}
 				FVector P[3];
 				for (int32 J = 0; J < 3; ++J)
 				{
@@ -202,6 +271,11 @@ UStaticMesh* UCityGeometryTools::BakeLayer(const FString& DatasetRelativePath, c
 	}
 	auto Summary = MakeShared<FJsonObject>();
 	Summary->SetNumberField(TEXT("source_triangles"), SourceTriangles);
+	Summary->SetNumberField(TEXT("excluded_triangles"), ExcludedTriangles);
+	TArray<FString> SortedFeatures=RepresentedFeatures.Array(); SortedFeatures.Sort();
+	TArray<TSharedPtr<FJsonValue>> FeatureValues;
+	for (const FString& ID:SortedFeatures) FeatureValues.Add(MakeShared<FJsonValueString>(ID));
+	Summary->SetArrayField(TEXT("represented_feature_ids"),FeatureValues);
 	Summary->SetNumberField(TEXT("saved_triangles"), Indices.Num()/3);
 	Summary->SetArrayField(TEXT("upward_surface_samples"), Samples);
 	FString Json;

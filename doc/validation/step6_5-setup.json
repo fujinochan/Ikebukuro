@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "map": "/Game/Ninja/Maps/L_Ikebukuro",
+  "baseline_map": "/Game/Ninja/Maps/L_IkebukuroLOD1Comparison",
+  "textured_dataset": "CityData/IkebukuroLOD2/Buildings/tileset.json",
+  "lod2_represented_features": 1378,
+  "lod1_fallback_source_features": 2697,
+  "lod1_fallback_used": false,
+  "duplicate_feature_ids": 0,
+  "lod1_removed_triangles": 32248,
+  "lod2_collision_triangles": 73034,
+  "fallback_triangles": 0,
+  "roof_targets": [
+    [
+      -126.33295139670372,
+      -4159.55824492375,
+      1531.3756913747923
+    ],
+    [
+      1748.2912601629891,
+      -12561.96346392234,
+      1531.7704262201607
+    ],
+    [
+      4824.284140328566,
+      -7151.134530901909,
+      1687.335815166011
+    ]
+  ],
+  "roof_enemy_surface": [
+    8345.25,
+    -6637.38,
+    1671.1901662183245
+  ],
+  "external_downloads": false
+}

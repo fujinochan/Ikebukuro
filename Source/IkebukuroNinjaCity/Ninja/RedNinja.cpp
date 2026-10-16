@@ -29,7 +29,7 @@ void ARedNinja::BeginPlay()
 {
 	Super::BeginPlay(); FNinjaAppearance::Apply(this,true);
 	// Legacy checks isolate fixed city collision and the original stationary target.
-	if (FParse::Param(FCommandLine::Get(),TEXT("CityAreaCheck")))
+	if (FParse::Param(FCommandLine::Get(),TEXT("CityAreaCheck")) || FParse::Param(FCommandLine::Get(),TEXT("CityTextureCheck")))
 	{ GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision); SetActorHiddenInGame(true); SetActorTickEnabled(false); return; }
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaCityCombatCheck"))) { SetActorTickEnabled(false); return; }
 	if (bAIEnabled && !GetController()) SpawnDefaultController();

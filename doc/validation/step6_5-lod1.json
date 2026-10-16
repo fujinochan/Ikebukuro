@@ -1,0 +1,35 @@
+{
+	"status": "passed",
+	"error": "",
+	"baseline_lod1": true,
+	"max_loaded_building_meshes": 4,
+	"loaded_cesium_runtime_textures": 0,
+	"texture_object_reported_bytes": 0,
+	"texture_memory_scope": "UObject resource accounting only; excludes Cesium custom GPU image allocations. This is not VRAM usage.",
+	"process_physical_memory_bytes": 3455242240,
+	"sampled_frame_ms_average": 17.218264709739614,
+	"sampled_frame_ms_max": 392.53109741210938,
+	"performance_scope": "Editor game helper, 1280x720, capped 60fps, includes streaming; not a 1080p performance acceptance test",
+	"screenshots": [
+		"C:\\Users\\tfuji\\work\\UE\\IkebukuroNinjaCity\\Saved\\Validation/step6_5-baseline-final_street.png",
+		"C:\\Users\\tfuji\\work\\UE\\IkebukuroNinjaCity\\Saved\\Validation/step6_5-baseline-final_overview.png",
+		"C:\\Users\\tfuji\\work\\UE\\IkebukuroNinjaCity\\Saved\\Validation/step6_5-baseline-final_roof.png"
+	],
+	"roof_surfaces": [
+		{
+			"x": -126.33295139670372,
+			"y": -4159.55824492375,
+			"z": 1481.3756103693595
+		},
+		{
+			"x": 1748.2912601629891,
+			"y": -12561.96346392234,
+			"z": 1471.770548492299
+		},
+		{
+			"x": 4824.2841403285656,
+			"y": -7151.1345309019089,
+			"z": 1521.3360188856677
+		}
+	]
+}

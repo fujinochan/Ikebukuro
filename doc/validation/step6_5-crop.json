@@ -1,0 +1,359 @@
+{
+  "config": {
+    "origin_longitude_latitude_height": [
+      139.7109,
+      35.7295,
+      60.0
+    ],
+    "play_min_cm": [
+      -8000,
+      -23000
+    ],
+    "play_max_cm": [
+      32000,
+      17000
+    ],
+    "background_buffer_m": 150,
+    "collision_margin_m": 15,
+    "ground_grid_m": 10,
+    "source_zip": "13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip",
+    "layers": {
+      "Buildings": "13116_toshima-ku_pref_2025_citygml_1_op_bldg_3dtiles_13116_toshima-ku_lod2/"
+    }
+  },
+  "background_region_radians": [
+    2.438370835488535,
+    0.6235470789052735,
+    2.438505875945959,
+    0.6236571893122372
+  ],
+  "background_bounds_degrees": [
+    139.70835776128143,
+    35.726615948983095,
+    139.71609500955535,
+    35.73292481058259
+  ],
+  "play_bounds_degrees": [
+    139.7100157430544,
+    35.72796784789727,
+    139.71443702778237,
+    35.73157291166841
+  ],
+  "layers": {
+    "Buildings": {
+      "source_tiles": 829,
+      "selected_leaf_tiles": 30,
+      "ancestor_and_leaf_nodes": 55,
+      "source_bytes": 515269728,
+      "selected_bytes": 60308572,
+      "files": [
+        {
+          "uri": "data/data241.b3dm",
+          "bytes": 2276280,
+          "sha256": "31841fedd8cfbf74b5ad1546bd2778958418d26732b7dbcf6083e4580342a41b",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 3,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 1298346
+        },
+        {
+          "uri": "data/data243.b3dm",
+          "bytes": 1414624,
+          "sha256": "ab4484da2cb76b1445065e123fbef9cc677561c57054cd2e989c2a0a22f0c82e",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 613538
+        },
+        {
+          "uri": "data/data251.b3dm",
+          "bytes": 1842884,
+          "sha256": "55aa58c159538ae3a65cb81b5c5e0bf9f9440335a7021b3815b2f5fddef55d6e",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 741258
+        },
+        {
+          "uri": "data/data253.b3dm",
+          "bytes": 3114404,
+          "sha256": "a73dc317d8f39810ae522f26ac341ff68fd6e5c55d029bf528348bfc86e87dfb",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 3,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 1685026
+        },
+        {
+          "uri": "data/data397.b3dm",
+          "bytes": 2023000,
+          "sha256": "499a0bc93a364fee22308953d9d74dd4b1c5c36349e95e5be2a9b75c6e71080a",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 764566
+        },
+        {
+          "uri": "data/data398.b3dm",
+          "bytes": 1372144,
+          "sha256": "d145acaffc111a9700af522ee9aeee2586eb877f028e2803c0ec1f6bbe0422f4",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 3,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 418496
+        },
+        {
+          "uri": "data/data399.b3dm",
+          "bytes": 3041596,
+          "sha256": "a09c1186108c3aed06ef1e3823765479c0134909199a8db322d5bfabb4a04d17",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 1700094
+        },
+        {
+          "uri": "data/data400.b3dm",
+          "bytes": 1561380,
+          "sha256": "1c183acf76d33692a6472191ae26a0022fbeab3df35a5fdc6af7b25c0b86f73c",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 608830
+        },
+        {
+          "uri": "data/data402.b3dm",
+          "bytes": 2521944,
+          "sha256": "d11dce92c33a0037eb41ec5fcf02436e79bc6e5db2b9b07e401b9c6a160da6a6",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 791320
+        },
+        {
+          "uri": "data/data404.b3dm",
+          "bytes": 2199004,
+          "sha256": "29d0ab6ee7ec0b0147bd1468725f68c7d73bd7064a3e4385f010d369081319ac",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 767242
+        },
+        {
+          "uri": "data/data407.b3dm",
+          "bytes": 2316276,
+          "sha256": "0776977fe149c8d7c5f7bfddb68453ec88bb0d59f7c5941840943e283fddac14",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 827778
+        },
+        {
+          "uri": "data/data408.b3dm",
+          "bytes": 420840,
+          "sha256": "0b4049235272b342545b2629378e52f0386b36b488a643cef0649d24e4b66dab",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 146206
+        },
+        {
+          "uri": "data/data409.b3dm",
+          "bytes": 2986764,
+          "sha256": "0022a3ede24816e516cb42b82ea308ca3cf13358636297604e3c82a616c804d8",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 4,
+          "untextured_primitives": 4,
+          "embedded_image_bytes": 1629842
+        },
+        {
+          "uri": "data/data410.b3dm",
+          "bytes": 1540196,
+          "sha256": "cb2f9adc709f15da98c5a8dd35e8528f0ac43e6815e460379a23821d4b5d670c",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 1158892
+        },
+        {
+          "uri": "data/data412.b3dm",
+          "bytes": 1651548,
+          "sha256": "3ffc7475b6fba508f94226e6f9ee80438751c33c876535e33c460b7cba055364",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 687874
+        },
+        {
+          "uri": "data/data414.b3dm",
+          "bytes": 2757120,
+          "sha256": "bada0f50ae1154a46320df608a57edbab682c8e223267965ec1ea8e10fc334b3",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 659698
+        },
+        {
+          "uri": "data/data415.b3dm",
+          "bytes": 1477304,
+          "sha256": "422de9b02979d154af52b48f5c5c581b00b261a6c7649d18daf5731f78cc6807",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 629242
+        },
+        {
+          "uri": "data/data562.b3dm",
+          "bytes": 1524328,
+          "sha256": "360fde310de00bdc30bf122e743aa2d56e9453f73f578994fe0f98fe850b4cd9",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 704824
+        },
+        {
+          "uri": "data/data564.b3dm",
+          "bytes": 1427180,
+          "sha256": "ae9f066ba2fbc2809e326865f6adc49ccb57972fb0979270724c4dff85bd2f28",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 709872
+        },
+        {
+          "uri": "data/data572.b3dm",
+          "bytes": 2352164,
+          "sha256": "f09e3e3387e585e26bc857bae0dcaea7dc507d4dd77705e9fb92645985aaf0ed",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 1527334
+        },
+        {
+          "uri": "data/data632.b3dm",
+          "bytes": 3020116,
+          "sha256": "9ceb938187616bee57bf4b4df9c05ccbb3b0c5f404eb121498a899b771ab295f",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 1850468
+        },
+        {
+          "uri": "data/data633.b3dm",
+          "bytes": 5247224,
+          "sha256": "a76a8cf50b369821db8d387a4aed1b83ba157ed12e8de077e21bd082aebe34b4",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 3,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 2550628
+        },
+        {
+          "uri": "data/data634.b3dm",
+          "bytes": 1929336,
+          "sha256": "e935d06867870cd6b98553456e8031ba84e37fc68884eda65c31476ec088b462",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 765410
+        },
+        {
+          "uri": "data/data635.b3dm",
+          "bytes": 1218628,
+          "sha256": "a4d5cd418771016408a1ff4abe9c43e46f7fd1579f71af5d12141173c24f921d",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 610236
+        },
+        {
+          "uri": "data/data637.b3dm",
+          "bytes": 819936,
+          "sha256": "7f4b384918cadd5a19c6017be3cc36d534fe13551d4ec45e81ae2459ecedccae",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 421606
+        },
+        {
+          "uri": "data/data638.b3dm",
+          "bytes": 1548928,
+          "sha256": "34fcb7351475891e702b511c153cf7866bc8c33788b4ab6420c8c191bca83ad2",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 659652
+        },
+        {
+          "uri": "data/data639.b3dm",
+          "bytes": 1610136,
+          "sha256": "1a042d2591b5b54019dc12c34e64acff47218352d62197e7dc9f3cfe181145fa",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 629262
+        },
+        {
+          "uri": "data/data642.b3dm",
+          "bytes": 1660256,
+          "sha256": "f127e8e1f634ffefc862b4704cee2a9161ca607f0a37fc8240d254f5496771c2",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 2,
+          "embedded_image_bytes": 708796
+        },
+        {
+          "uri": "data/data643.b3dm",
+          "bytes": 2649972,
+          "sha256": "1264bc5a0ce31e8cdc316fa4d7c2ef35a6a74589f9c559b6e8d1a2bff4956ea1",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 1500132
+        },
+        {
+          "uri": "data/data647.b3dm",
+          "bytes": 783060,
+          "sha256": "0c6003e016c22bbbfe614f2f4ba381b7650aae9bc563aea40ad09fdd7b5b9b0b",
+          "images": 1,
+          "textures": 1,
+          "textured_primitives": 2,
+          "untextured_primitives": 3,
+          "embedded_image_bytes": 162208
+        }
+      ],
+      "images": 30,
+      "textures": 30,
+      "textured_primitives": 66,
+      "untextured_primitives": 71,
+      "embedded_image_bytes": 27928676,
+      "tiles_with_images": 30
+    }
+  }
+}
