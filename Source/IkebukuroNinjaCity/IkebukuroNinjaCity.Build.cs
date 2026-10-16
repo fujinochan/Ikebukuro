@@ -10,6 +10,8 @@ public class IkebukuroNinjaCity : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] {
 			"Core",
+			"CesiumRuntime",
+			"Json",
 			"CoreUObject",
 			"Engine",
 			"InputCore",

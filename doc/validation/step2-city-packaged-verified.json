@@ -1,0 +1,16 @@
+{
+	"status": "passed",
+	"dataset": "C:/Users/tfuji/work/UE/IkebukuroNinjaCity/SavedBuilds/Step2/VerifiedWindows/IkebukuroNinjaCity/Content/CityData/ToshimaLOD1/tileset-fixed.json",
+	"dataset_exists": true,
+	"visible_mesh_components": 49,
+	"load_progress": 100,
+	"roof_hits_before_camera_turn": 31,
+	"roof_hits_after_camera_turn": 31,
+	"camera_turned_180_degrees": true,
+	"frustum_culling_enabled": false,
+	"character_landed_on_city_roof": true,
+	"one_metre_in_unreal_cm": 100.00000000000004,
+	"origin_longitude": 139.71090000000001,
+	"origin_latitude": 35.729500000000002,
+	"origin_height_m": 60
+}

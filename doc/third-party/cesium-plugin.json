@@ -1,0 +1,14 @@
+{
+  "name": "Cesium for Unreal",
+  "version": "2.30.0",
+  "engine": "5.8",
+  "source": "https://github.com/CesiumGS/cesium-unreal/releases/download/v2.30.0/CesiumForUnreal-58-v2.30.0.zip",
+  "archive": "Downloads/CesiumForUnreal-58-v2.30.0.zip",
+  "archive_bytes": 1262445524,
+  "sha256": "f523862a9ec712801d024c488f8a73be18c5dc9be9ba995ac05761886a0b4bbf",
+  "install_directory": "Plugins/CesiumForUnreal",
+  "license": "Apache-2.0",
+  "license_file": "doc/third-party/Cesium-LICENSE.txt",
+  "user_approval": "2026-10-16: download, install in project, and use explicitly approved",
+  "notes": "Plugin archive and installed tree are ignored by local Git. Preserve the archive for setup restoration. See plugin ThirdParty.json and bundled licenses for its dependencies."
+}

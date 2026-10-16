@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "map": "/Game/Ninja/Maps/L_CityProof",
+  "origin": [
+    139.7109,
+    35.7295,
+    60
+  ],
+  "one_metre_up_cm": [
+    2.9802322387695312e-08,
+    2.9802322387695312e-06,
+    99.99999994039536
+  ],
+  "east_0_00001_degrees_cm": [
+    90.47144097089767,
+    -4.708766937255859e-06,
+    -6.4373016357421875e-06
+  ],
+  "north_0_00001_degrees_cm": [
+    0.0,
+    -110.95504158735275,
+    -6.377696990966797e-06
+  ],
+  "local_source": "file:///C:/Users/tfuji/work/UE/IkebukuroNinjaCity/Content/CityData/ToshimaLOD1/tileset-fixed.json",
+  "actors": [
+    "Ikebukuro_FixedOrigin",
+    "Toshima_Local_LOD1",
+    "CesiumCameraManager0",
+    "CesiumCreditSystemBP0",
+    "Temporary_Ground_Not_Surveyed",
+    "Observation_Deck_20m",
+    "Calibration_Cube_1m",
+    "Calibration_Beam_10m",
+    "Observation_PlayerStart",
+    "DirectionalLight",
+    "SkyAtmosphere",
+    "SkyLight"
+  ]
+}

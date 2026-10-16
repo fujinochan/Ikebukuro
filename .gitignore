@@ -3,6 +3,7 @@
 /DerivedDataCache/
 /Intermediate/
 /Saved/
+/Build/*/FileOpenOrder/
 /.vs/
 /*.sln
 /*.slnx
@@ -13,6 +14,11 @@
 /Backups/
 /13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip
 /Data/City/
+/Downloads/
+/Plugins/CesiumForUnreal/
+/Content/CityData/
+/SavedBuilds/
+/cesium-request-cache.sqlite*
 
 # Python generated files
 __pycache__/
