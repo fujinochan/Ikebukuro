@@ -1,0 +1,30 @@
+{
+	"status": "passed",
+	"error": "",
+	"city": false,
+	"fixed_fps": 30,
+	"passed_cases": [
+		"Three enemies initialized with fixed-collision walking graphs",
+		"Patrol moved on street and roof; walk route detours around wall",
+		"Chase reaches player and melee contact causes damage",
+		"Losing player returns ground enemy to its home",
+		"Roof enemy chases on the same roof",
+		"Roof edge / unreachable target triggers return, not a jump or fall",
+		"External displacement recovers to original roof",
+		"Stomp defeats roof enemy while preserving jump stage",
+		"Aimed shuriken launched in the encounter",
+		"Ground enemy defeated by shuriken",
+		"Ground enemy defeated by stomp; spawn one verification-only roof replacement",
+		"Aimed shuriken launched at roof enemy",
+		"Both defeat methods work on ground and roof",
+		"Mapped triple jump completes and recharges on real ground"
+	],
+	"ground_nodes": 1005,
+	"roof_nodes": 100,
+	"ground_patrol_distance_cm": 1911.3407206146962,
+	"second_ground_patrol_distance_cm": 1911.3407206146981,
+	"roof_patrol_distance_cm": 1896.7009722799557,
+	"ordinary_safety_recoveries": 0,
+	"roof_recoveries_after_forced_displacement": 1,
+	"max_jump_stage": 3
+}

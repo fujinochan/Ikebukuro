@@ -11,3 +11,4 @@
 - Approval granted for Step 3: the same installed UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute access and normal settings/cache/temp access for implementation verification. Keep outputs in this project. No internet acquisition is authorized or needed for Step 3.
 - Approval granted for Step 4: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access. Process map data and save outputs inside this project. Obtain separate approval for any new downloads.
 - Approval granted for Step 5: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for build and runtime verification. No new downloads are authorized.
+- Approval granted for Step 6: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for implementation and verification. No additional downloads are planned or authorized.

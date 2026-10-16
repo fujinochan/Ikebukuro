@@ -1,0 +1,14 @@
+{
+	"status": "passed",
+	"error": "",
+	"street_sprint_distance_cm": 1915.5556640625,
+	"max_jump_stage": 3,
+	"successful_roof_landings": 3,
+	"ground_probe_count": 121,
+	"collision_stable_after_visual_tile_removal": true,
+	"visual_collision_max_height_error_cm": 0.0017124878431786783,
+	"recovery_count": 3,
+	"camera_obstructions": 0,
+	"phase": 11,
+	"character_position": "X=12218.342 Y=-5055.326 Z=1017.134"
+}

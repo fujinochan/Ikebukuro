@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "encounter_map": "/Game/Ninja/Maps/L_NinjaEncounter",
+  "enemies_per_map": 3,
+  "enemies": [
+    {
+      "map": "/Game/Ninja/Maps/L_NinjaEncounter",
+      "label": "Encounter_GroundA",
+      "tag": "GroundA",
+      "spawn": [
+        900,
+        800,
+        110
+      ],
+      "area": "Encounter_GroundArea"
+    },
+    {
+      "map": "/Game/Ninja/Maps/L_NinjaEncounter",
+      "label": "Encounter_GroundB",
+      "tag": "GroundB",
+      "spawn": [
+        2700,
+        800,
+        110
+      ],
+      "area": "Encounter_GroundArea"
+    },
+    {
+      "map": "/Game/Ninja/Maps/L_NinjaEncounter",
+      "label": "Encounter_RoofA",
+      "tag": "RoofA",
+      "spawn": [
+        700,
+        -1800,
+        910
+      ],
+      "area": "Encounter_RoofArea"
+    },
+    {
+      "map": "/Game/Ninja/Maps/L_Ikebukuro",
+      "label": "City_RedNinja_Step5",
+      "tag": "GroundA",
+      "spawn": [
+        14618.342425564924,
+        -5055.32582249244,
+        1034.9839275229606
+      ],
+      "area": "City_GroundPatrolArea"
+    },
+    {
+      "map": "/Game/Ninja/Maps/L_Ikebukuro",
+      "label": "City_RedNinja_GroundB",
+      "tag": "GroundB",
+      "spawn": [
+        13718.342425564924,
+        -5055.32582249244,
+        1029.0485421515223
+      ],
+      "area": "City_GroundPatrolArea"
+    },
+    {
+      "map": "/Game/Ninja/Maps/L_Ikebukuro",
+      "label": "City_RedNinja_RoofA",
+      "tag": "RoofA",
+      "spawn": [
+        8345.25,
+        -6637.38,
+        1751.19
+      ],
+      "area": "City_RoofPatrolArea"
+    }
+  ],
+  "navigation": "bounded 1.5m walking grid, fixed WorldStatic collision, 50cm floor checks, 35cm maximum step",
+  "external_downloads": false
+}
