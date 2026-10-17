@@ -27,6 +27,9 @@ public:
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|AI") ENinjaBrainState BrainState=ENinjaBrainState::Waiting;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|AI") int32 SafetyRecoveries=0;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|AI") int32 SuccessfulAttacks=0;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Route") int32 RouteOrder=0;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Route") FString RouteHint;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Route") TArray<FVector> AssistRoute;
 	FVector HomeFoot;
 	int32 VisitedStates=0;
 private:

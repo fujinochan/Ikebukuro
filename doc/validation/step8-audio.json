@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "files": [
+    {
+      "file": "Content/Ninja/AudioSource/S_Damage.wav",
+      "duration": 0.2,
+      "rms": 0.1284627965173896,
+      "peak": 0.408905029296875,
+      "sha256": "03f7b9dfebfed22ddcff69c2ab61a5dfaa8bc8aaeb093208ad6475aec706366e"
+    },
+    {
+      "file": "Content/Ninja/AudioSource/S_Hit.wav",
+      "duration": 0.14997732426303856,
+      "rms": 0.12617008734236873,
+      "peak": 0.404876708984375,
+      "sha256": "805d52a40277546b4a737bb0b9b0051cab103462d8eb241a8c929650792e4afd"
+    },
+    {
+      "file": "Content/Ninja/AudioSource/S_Impact.wav",
+      "duration": 0.08,
+      "rms": 0.11893022323649213,
+      "peak": 0.378997802734375,
+      "sha256": "3accc67a9819d631a2fc2c02949a5df0591f83ff26b89ab598fee64cbc2dab62"
+    },
+    {
+      "file": "Content/Ninja/AudioSource/S_Jump.wav",
+      "duration": 0.10997732426303855,
+      "rms": 0.1231138953658956,
+      "peak": 0.394866943359375,
+      "sha256": "5f5fec1fa4921c37c55ca4af4d4e9ae8753eac339beafbd497d4c713897814b7"
+    },
+    {
+      "file": "Content/Ninja/AudioSource/S_Stomp.wav",
+      "duration": 0.18997732426303854,
+      "rms": 0.12805447568430625,
+      "peak": 0.4130859375,
+      "sha256": "961f7c7a5651b48b5da9d458a898fb8f14c914cc4dbad4119a5aa19f401f5f5c"
+    },
+    {
+      "file": "Content/Ninja/AudioSource/S_Throw.wav",
+      "duration": 0.08997732426303855,
+      "rms": 0.12060590934249472,
+      "peak": 0.380462646484375,
+      "sha256": "4a5be2f3840d1b4fb2ec4855d2ceb60ab522796315feec8fe002721d9ebac5ad"
+    },
+    {
+      "file": "Content/Ninja/AudioSource/S_Triple.wav",
+      "duration": 0.22997732426303855,
+      "rms": 0.12917228365255234,
+      "peak": 0.417694091796875,
+      "sha256": "560a608ab6d47f3651f3f4295af2a411d79476c3f1cdb57f9d61699891d9b2f5"
+    }
+  ],
+  "scope": "PCM structure, duration, non-silence and no clipping; not a subjective listening test"
+}

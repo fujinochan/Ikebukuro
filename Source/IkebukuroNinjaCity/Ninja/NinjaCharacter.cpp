@@ -3,6 +3,7 @@
 #include "RedNinja.h"
 #include "NinjaShuriken.h"
 #include "NinjaMatchDirector.h"
+#include "NinjaFeedback.h"
 #include "City/CityPlayArea.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -107,6 +108,7 @@ void ANinjaCharacter::DoJumpStart()
 	const float Gravity = FMath::Max(FMath::Abs(GetCharacterMovement()->GetGravityZ()), 1.f);
 	PredictedApexTime = GetWorld()->GetTimeSeconds() + Speed / Gravity;
 	LaunchCharacter(FVector(0, 0, Speed), false, true);
+	ANinjaFeedback::Emit(this,GetActorLocation()-FVector(0,0,75),JumpStage==3?TEXT("Triple"):TEXT("Jump"));
 	JumpFeedback = JumpStage == 3 ? TEXT("TRIPLE JUMP!") : FString::Printf(TEXT("Jump %d / 3"), JumpStage);
 }
 
@@ -172,7 +174,7 @@ bool ANinjaCharacter::TryThrowShuriken()
 	auto* Star=GetWorld()->SpawnActor<ANinjaShuriken>(bBlocked?Block.Location:Hand,Direction.Rotation(),Spawn);
 	if (!Star) return false;
 	Star->Launch(this,Direction);
-	NextThrowTime=Now+0.3; ++ShotsFired;
+	NextThrowTime=Now+0.3; ++ShotsFired; ANinjaFeedback::Emit(this,GetActorLocation(),TEXT("Throw"));
 	if (bBlocked) Star->Impact(Block);
 	return true;
 }
@@ -208,6 +210,7 @@ bool ANinjaCharacter::IsInvulnerable() const { return GetWorld()->GetTimeSeconds
 bool ANinjaCharacter::ReceiveContactDamage()
 {
 	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0 || IsInvulnerable()) return false;
+	ANinjaFeedback::Emit(this,GetActorLocation(),TEXT("Damage"));
 	Health=FMath::Max(0,Health-1); InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
 	CombatFeedback=TEXT("Hit! One second of protection");
 	if (Health==0)
@@ -236,6 +239,7 @@ void ANinjaCharacter::RecoverToSurface(FVector Surface,bool bFallPenalty)
 	SetSafeSurface(Surface);
 	if (bFallPenalty)
 	{
+		ANinjaFeedback::Emit(this,GetActorLocation(),TEXT("Damage"));
 		Health=FMath::Max(0,Health-1);
 		if (Health==0) { ++Knockouts; if (ANinjaMatchDirector::Find(this)) return; Health=3; }
 		InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;

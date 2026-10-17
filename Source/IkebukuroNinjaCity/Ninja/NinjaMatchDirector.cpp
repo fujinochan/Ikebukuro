@@ -42,6 +42,8 @@ void ANinjaMatchDirector::BeginPlay()
 	{
 		FNinjaMatchSpawn Spawn; Spawn.Class=It->GetClass(); Spawn.Transform=It->GetActorTransform();
 		Spawn.Area=It->PatrolArea; Spawn.Tags=It->Tags; Spawn.bAI=It->bAIEnabled;
+		Spawn.RouteOrder=It->RouteOrder; Spawn.RouteHint=It->RouteHint; Spawn.AssistRoute=It->AssistRoute;
+		Spawn.DetectionRadius=It->DetectionRadius; Spawn.LeashRadius=It->LeashRadius;
 		Spawns.Add(Spawn); Enemies.Add(*It);
 	}
 	if (auto* PC=UGameplayStatics::GetPlayerController(this,0))
@@ -56,7 +58,10 @@ bool ANinjaMatchDirector::IsPrepared() const
 {
 	if (!Ninja || !Ninja->GetCharacterMovement()->IsMovingOnGround() || Enemies.IsEmpty()) return false;
 	for (ARedNinja* Enemy:Enemies) if (!IsValid(Enemy) || Enemy->GetCharacterMovement()->IsFalling() || !Enemy->IsReadyForMatch()) return false;
-	for (TActorIterator<ALocalCityTileset> It(GetWorld());It;++It)
+	// The isolated NullRHI route check validates saved collision without a renderer.
+	// Normal play and the rendered match suite still wait for visible city tiles.
+	const bool CollisionOnly=FParse::Param(FCommandLine::Get(),TEXT("NinjaRouteCheck")) && FParse::Param(FCommandLine::Get(),TEXT("NullRHI"));
+	for (TActorIterator<ALocalCityTileset> It(GetWorld());!CollisionOnly && It;++It)
 	{
 		if (It->GetLoadProgress()<99) return false;
 		TArray<UStaticMeshComponent*> Meshes; It->GetComponents(Meshes);
@@ -126,6 +131,8 @@ void ANinjaMatchDirector::Retry()
 	{
 		auto* Enemy=GetWorld()->SpawnActorDeferred<ARedNinja>(Spawn.Class,Spawn.Transform,nullptr,nullptr,ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		Enemy->PatrolArea=Spawn.Area; Enemy->Tags=Spawn.Tags; Enemy->bAIEnabled=Spawn.bAI;
+		Enemy->RouteOrder=Spawn.RouteOrder; Enemy->RouteHint=Spawn.RouteHint; Enemy->AssistRoute=Spawn.AssistRoute;
+		Enemy->DetectionRadius=Spawn.DetectionRadius; Enemy->LeashRadius=Spawn.LeashRadius;
 		Enemies.Add(Enemy); Enemy->FinishSpawning(Spawn.Transform);
 	}
 }

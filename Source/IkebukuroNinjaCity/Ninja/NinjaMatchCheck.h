@@ -27,8 +27,8 @@ private:
 	TArray<FVector> PausedEnemies;
 	FVector PausedStar,ReadyPosition;
 	float PausedTime=0;
-	int32 Phase=0,FPS=60,Retries=0;
+	int32 Phase=0,FPS=60,Retries=0,ExpectedEnemies=0;
 	double PhaseTime=0,Started=0,FinishedAt=0,PauseWall=0,ReleaseAt=0;
-	bool bFinished=false,bReleaseEnter=false,bReleaseP=false,bReleaseF=false;
+	bool bFinished=false,bReleaseEnter=false,bReleaseP=false,bReleaseF=false,bCapturedPlay=false;
 	TArray<FString> Results;
 };

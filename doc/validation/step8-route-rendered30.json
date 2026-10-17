@@ -1,0 +1,77 @@
+{
+	"status": "passed",
+	"error": "",
+	"fps": 30,
+	"landings": 46,
+	"feedback_events": 27,
+	"rendered": true,
+	"scope": "Independent roof approach tests start by placing the player at each ground entrance; no claim of an end-to-end human playtest",
+	"passed_cases": [
+		"Eight unique enemies, four ready roof approaches and seven sound assets loaded",
+		"All eight enemies physically patrol for ten seconds with zero safety recovery",
+		"Roof 3: all 12 auxiliary landings reached with single jumps and physical walking, no intermediate teleport",
+		"Roof 4: all 14 auxiliary landings reached with single jumps and physical walking, no intermediate teleport",
+		"Roof 5: all 9 auxiliary landings reached with single jumps and physical walking, no intermediate teleport",
+		"Roof 6: all 11 auxiliary landings reached with single jumps and physical walking, no intermediate teleport",
+		"All four city roof approaches traversed",
+		"Street-to-mid-roof shortcut reached by three apex-timed jumps using normal movement, no in-flight teleport"
+	],
+	"enemies": [
+		{
+			"order": 1,
+			"nodes": 63,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=13258.814 Y=-5334.356 Z=1012.667"
+		},
+		{
+			"order": 2,
+			"nodes": 63,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=14458.814 Y=-5334.356 Z=1007.894"
+		},
+		{
+			"order": 3,
+			"nodes": 26,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=8195.516 Y=-6609.297 Z=1763.340"
+		},
+		{
+			"order": 4,
+			"nodes": 7,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=5033.773 Y=-7151.130 Z=2129.486"
+		},
+		{
+			"order": 5,
+			"nodes": 40,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=7505.559 Y=-19736.570 Z=2699.715"
+		},
+		{
+			"order": 6,
+			"nodes": 11,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=11270.715 Y=-18035.530 Z=3049.715"
+		},
+		{
+			"order": 7,
+			"nodes": 63,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=10840.474 Y=720.974 Z=1034.307"
+		},
+		{
+			"order": 8,
+			"nodes": 48,
+			"recovery": 0,
+			"ready": true,
+			"position": "X=15451.364 Y=3826.308 Z=1021.606"
+		}
+	]
+}

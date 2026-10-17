@@ -18,6 +18,11 @@ struct FNinjaMatchSpawn
 	UPROPERTY() TObjectPtr<ANinjaPatrolArea> Area;
 	UPROPERTY() TArray<FName> Tags;
 	UPROPERTY() bool bAI=false;
+	UPROPERTY() int32 RouteOrder=0;
+	UPROPERTY() FString RouteHint;
+	UPROPERTY() TArray<FVector> AssistRoute;
+	UPROPERTY() float DetectionRadius=1000;
+	UPROPERTY() float LeashRadius=1800;
 };
 
 /** Owns one local round. Practice maps without this actor retain their old rules. */

@@ -2,6 +2,7 @@
 #include "NinjaCharacter.h"
 #include "RedNinja.h"
 #include "NinjaMatchDirector.h"
+#include "NinjaFeedback.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -51,6 +52,6 @@ void ANinjaShuriken::Impact(const FHitResult& Hit)
 	bResolved=true;
 	if (!ANinjaMatchDirector::AllowsGameplay(this)) { Destroy(); return; }
 	if (auto* Enemy=Cast<ARedNinja>(Hit.GetActor())) Enemy->TryDefeat(ENinjaDefeatMethod::Shuriken,Shooter.Get());
-	else if (Shooter.IsValid()) ++Shooter->ShurikenWorldHits;
+	else if (Shooter.IsValid()) { ++Shooter->ShurikenWorldHits; ANinjaFeedback::Emit(this,Hit.ImpactPoint,TEXT("Impact")); }
 	Destroy();
 }

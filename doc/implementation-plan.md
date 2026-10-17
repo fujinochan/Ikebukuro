@@ -2,9 +2,9 @@
 
 作成日: 2026-10-16  
 対象: `IkebukuroNinjaCity` / Unreal Engine  
-状態: Step 1〜7（追加のStep 6.5を含む）を実装・検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵3体・300秒の開始から勝敗・リトライまで実装した。次はStep 8の敵8体と経路・難易度調整へ進む。以下の数値・操作・追加ルールは初期案で、試遊結果に合わせて調整する。
+状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・300秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。次の実装工程はStep 9の性能と不具合の調整。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)。
 
 追加調査: [街のテクスチャ](texture-investigation.md)。既存Stepの番号を維持し、Step 6と7の間にStep 6.5を追加した。
 

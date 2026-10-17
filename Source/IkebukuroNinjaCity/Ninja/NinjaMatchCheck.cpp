@@ -49,8 +49,19 @@ void ANinjaMatchCheck::Place(FVector Center)
 { Ninja->SetActorLocation(Center); Ninja->GetCharacterMovement()->StopMovementImmediately(); Ninja->GetCharacterMovement()->ClearAccumulatedForces(); Ninja->GetCharacterMovement()->SetMovementMode(MOVE_Falling); }
 bool ANinjaMatchCheck::CheckReset()
 {
-	if (Match->RemainingSeconds!=300 || Match->RemainingEnemies()!=3 || Ninja->Health!=3 || Ninja->Defeats!=0 || Ninja->JumpStage!=0 || Ninja->ShotsFired!=0 || Ninja->Knockouts!=0 || Ninja->IsInvulnerable()) return false;
+	if (Match->RemainingSeconds!=300 || Match->RemainingEnemies()!=ExpectedEnemies || Ninja->Health!=3 || Ninja->Defeats!=0 || Ninja->JumpStage!=0 || Ninja->ShotsFired!=0 || Ninja->Knockouts!=0 || Ninja->IsInvulnerable()) return false;
 	for (ARedNinja* Enemy:Match->Enemies) if (!IsValid(Enemy) || Enemy->bDefeated || !Enemy->bAIEnabled || !Enemy->IsReadyForMatch()) return false;
+	if (ExpectedEnemies==8)
+	{
+		TSet<int32> Orders;
+		for (ARedNinja* Enemy:Match->Enemies)
+		{
+			Orders.Add(Enemy->RouteOrder);
+			if (Enemy->RouteHint.IsEmpty() || Enemy->DetectionRadius!=(Enemy->RouteOrder<=2?500:900)) return false;
+			if (Enemy->RouteOrder>=3 && Enemy->RouteOrder<=6 && Enemy->AssistRoute.Num()<3) return false;
+		}
+		if (Orders.Num()!=8) return false;
+	}
 	for (TActorIterator<ANinjaShuriken> It(GetWorld());It;++It) return false;
 	return true;
 }
@@ -62,7 +73,7 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
 	{
 		Match=ANinjaMatchDirector::Find(this); Ninja=Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 		if (!Match || !Ninja) return;
-		PhaseTime=GetWorld()->GetTimeSeconds();
+		ExpectedEnemies=Match->Enemies.Num(); PhaseTime=GetWorld()->GetTimeSeconds();
 	}
 	if (Wall>ReleaseAt)
 	{
@@ -90,6 +101,7 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
 	}
 	else if (Phase==3 && Match->CanPlay() && Elapsed>.3)
 	{
+		if (!bCapturedPlay) { Capture(TEXT("playing")); bCapturedPlay=true; PhaseTime=GetWorld()->GetTimeSeconds(); return; }
 		Star=GetWorld()->SpawnActor<ANinjaShuriken>(Ninja->GetActorLocation()+FVector(0,0,1500),FRotator::ZeroRotator);
 		Star->Launch(Ninja,FVector::UpVector); Key(EKeys::P,true); Next(TEXT("Countdown enters play; timer starts; press actual P to pause"));
 	}
@@ -110,8 +122,8 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
 	{
 		if (Match->RemainingSeconds>=PausedTime || (IsValid(Star) && FVector::Dist(Star->GetActorLocation(),PausedStar)<100)) { Finish(TEXT("Resume did not advance timer/projectile")); return; }
 		HoldEnemies();
-		Match->Enemies[0]->TryDefeat(ENinjaDefeatMethod::Stomp,Ninja); Match->Enemies[1]->TryDefeat(ENinjaDefeatMethod::Shuriken,Ninja);
-		LastEnemy=Match->Enemies[2];
+		for (int32 I=0;I<ExpectedEnemies-1;++I) Match->Enemies[I]->TryDefeat(I==0?ENinjaDefeatMethod::Stomp:ENinjaDefeatMethod::Shuriken,Ninja);
+		LastEnemy=Match->Enemies.Last();
 		auto* PC=UGameplayStatics::GetPlayerController(this,0);
 		FRotator Look=(LastEnemy->GetActorLocation()-Ninja->GetActorLocation()).Rotation(); Look.Yaw+=180; Look.Pitch=0; PC->SetControlRotation(Look);
 		Next(TEXT("Resume advances time and projectiles; leave one registered enemy behind the player"));
@@ -131,11 +143,11 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
     }
     else if (Phase==9 && Match->State==ENinjaMatchState::Won)
 	{
-		if (Ninja->Defeats!=3 || Match->RemainingEnemies()!=0 || Ninja->TryThrowShuriken() || Ninja->ReceiveContactDamage()) { Finish(TEXT("Victory not locked")); return; }
+		if (Ninja->Defeats!=ExpectedEnemies || Match->RemainingEnemies()!=0 || Ninja->TryThrowShuriken() || Ninja->ReceiveContactDamage()) { Finish(TEXT("Victory not locked")); return; }
 		auto* Extra=GetWorld()->SpawnActor<ARedNinja>(Ninja->GetActorLocation()+FVector(500,0,0),FRotator::ZeroRotator);
 		auto* Late=GetWorld()->SpawnActor<ANinjaShuriken>(); Late->Launch(Ninja,FVector::ForwardVector);
 		Late->Impact(FHitResult(Extra,Extra->GetCapsuleComponent(),Extra->GetActorLocation(),FVector::UpVector));
-		const bool Changed=Extra->bDefeated || Ninja->Defeats!=3; Extra->Destroy();
+		const bool Changed=Extra->bDefeated || Ninja->Defeats!=ExpectedEnemies; Extra->Destroy();
 		if (Changed) { Finish(TEXT("Late projectile changed completed result")); return; }
 		Capture(TEXT("victory_tie")); Next(TEXT("Victory wins tied deadline; late projectile, damage and new shots cannot alter result"));
 	}
@@ -144,13 +156,13 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
 	else if (Phase==11 && Match->State==ENinjaMatchState::Ready)
 	{
 		if (!CheckReset()) { Finish(TEXT("First retry did not fully reset")); return; }
-		Key(EKeys::Enter,true); Next(TEXT("Retry restores all three AI enemies, player, counters, cooldowns and 300 seconds"));
+		Key(EKeys::Enter,true); Next(TEXT("Retry restores all registered AI enemies, player, counters, cooldowns and 300 seconds"));
 	}
 	else if (Phase==12 && Match->CanPlay())
 	{ HoldEnemies(); Match->RemainingSeconds=.15; Next(TEXT("Trigger normal timeout update with a shortened remaining deadline")); }
 	else if (Phase==13 && Match->State==ENinjaMatchState::Lost)
 	{
-		if (Match->ResultReason!=TEXT("Time is up") || Match->RemainingEnemies()!=3) { Finish(TEXT("Timeout outcome incorrect")); return; }
+		if (Match->ResultReason!=TEXT("Time is up") || Match->RemainingEnemies()!=ExpectedEnemies) { Finish(TEXT("Timeout outcome incorrect")); return; }
 		Capture(TEXT("timeout")); Next(TEXT("Timer reaches zero and loses with enemies remaining"));
 	}
 	else if (Phase==14 && Elapsed>.3) { Key(EKeys::Enter,true); ++Retries; Next(TEXT("Retry 2 requested from timeout")); }
@@ -197,13 +209,13 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
 	}
 	else if (Phase==22 && GroundB->bDefeated)
 	{
-		if (Ninja->ShurikenDefeats!=1 || Match->RemainingEnemies()!=2) { Finish(TEXT("Live projectile did not credit match")); return; }
+		if (Ninja->ShurikenDefeats!=1 || Match->RemainingEnemies()!=ExpectedEnemies-1) { Finish(TEXT("Live projectile did not credit match")); return; }
 		Place(GroundA->GetActorLocation()+FVector(0,0,450)); Ninja->JumpStage=2; Ninja->GetCharacterMovement()->Velocity=FVector(0,0,-300);
 		Next(TEXT("Actual projectile credits the round; descend onto another enemy"));
 	}
 	else if (Phase==23 && GroundA->bDefeated)
 	{
-		if (Ninja->StompDefeats!=1 || Match->RemainingEnemies()!=1 || Ninja->JumpStage!=2) { Finish(TEXT("Live stomp did not credit match or preserved stage")); return; }
+		if (Ninja->StompDefeats!=1 || Match->RemainingEnemies()!=ExpectedEnemies-2 || Ninja->JumpStage!=2) { Finish(TEXT("Live stomp did not credit match or preserved stage")); return; }
 		for (ARedNinja* Enemy:Match->Enemies) if (!Enemy->bDefeated) Enemy->TryDefeat(ENinjaDefeatMethod::Shuriken,Ninja);
 		Next(TEXT("Actual descending stomp credits the round and preserves jump stage"));
 	}
@@ -214,7 +226,7 @@ void ANinjaMatchCheck::Finish(const FString& Error)
 {
 	UGameplayStatics::SetGamePaused(this,false);
 	auto Report=MakeShared<FJsonObject>(); Report->SetStringField(TEXT("status"),Error.IsEmpty()?TEXT("passed"):TEXT("failed")); Report->SetStringField(TEXT("error"),Error);
-	Report->SetNumberField(TEXT("fixed_fps"),FPS); Report->SetNumberField(TEXT("phase"),Phase); Report->SetNumberField(TEXT("retries"),Retries);
+	Report->SetNumberField(TEXT("enemy_count"),ExpectedEnemies); Report->SetNumberField(TEXT("fixed_fps"),FPS); Report->SetNumberField(TEXT("phase"),Phase); Report->SetNumberField(TEXT("retries"),Retries);
 	Report->SetStringField(TEXT("health_loss_test"),FParse::Param(FCommandLine::Get(),TEXT("MatchFatalFall"))?TEXT("Actual out-of-world fall with one health"):TEXT("Contact damage with one health"));
 	Report->SetStringField(TEXT("timeout_test"),TEXT("Verified initial 300 seconds; shortened remaining deadline to 0.15 for timeout boundary test"));
 	if (Match) { Report->SetNumberField(TEXT("rounds"),Match->RoundNumber); Report->SetNumberField(TEXT("final_remaining_enemies"),Match->RemainingEnemies()); }

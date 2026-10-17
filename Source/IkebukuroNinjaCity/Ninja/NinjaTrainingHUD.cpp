@@ -84,26 +84,58 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 		DrawText(TEXT("P: pause  |  R: return"),FLinearColor::White,W-270*S,140*S,nullptr,S);
 		FVector View; FRotator Look; GetOwningPlayerController()->GetPlayerViewPoint(View,Look);
 		const FVector Right=FRotationMatrix(Look).GetUnitAxis(EAxis::Y),Forward=Look.Vector();
+		ARedNinja* NextEnemy=nullptr;
+		for (ARedNinja* Enemy:Match->Enemies) if (IsValid(Enemy) && !Enemy->bDefeated && Enemy->RouteOrder>0 && (!NextEnemy || Enemy->RouteOrder<NextEnemy->RouteOrder)) NextEnemy=Enemy;
+		if (NextEnemy)
+		{
+			DrawRect(FLinearColor(.015,.025,.045,.9),16*S,H-102*S,610*S,86*S);
+			DrawText(FString::Printf(TEXT("NEXT %02d / %d  %s"),NextEnemy->RouteOrder,Match->Enemies.Num(),*NextEnemy->RouteHint),FLinearColor(.25,1,.95),28*S,H-88*S,nullptr,1.1*S);
+			DrawText(TEXT("Cyan steps: single jumps  |  Triple jump: shortcut"),FLinearColor::White,28*S,H-58*S,nullptr,S);
+			DrawText(TEXT("Any defeat order is allowed. Aim at the red ninja."),FLinearColor(.7,.8,.9),28*S,H-36*S,nullptr,.9*S);
+			const float FootZ=Ninja->GetActorLocation().Z-90;
+			for (const FVector& Step:NextEnemy->AssistRoute) if (Step.Z>FootZ+120)
+			{
+				FVector Guide=Step;
+				const FVector Entry=NextEnemy->AssistRoute[0];
+				const bool EntryGuide=NextEnemy->AssistRoute.Num()>1 && FVector::Dist2D(Ninja->GetActorLocation(),Entry)>700 && FootZ<NextEnemy->AssistRoute[1].Z-80;
+				if (EntryGuide) Guide=Entry;
+				const FVector P=Canvas->Project(Guide+FVector(0,0,70));
+				FVector2D Point(P.X,P.Y),Direction(0,-1);
+				if (P.Z<=0 || P.X<150*S || P.X>W-150*S || P.Y<150*S || P.Y>H-150*S)
+				{
+					const FVector D=Guide-View;
+					const double Angle=FMath::Atan2(FVector::DotProduct(D,Right),FVector::DotProduct(D,Forward));
+					Direction=FVector2D(FMath::Sin(Angle),-FMath::Cos(Angle));
+					const double Radius=FMath::Min((W/2-160*S)/FMath::Max(.001,FMath::Abs(Direction.X)),(H/2-155*S)/FMath::Max(.001,FMath::Abs(Direction.Y)));
+					Point=FVector2D(W/2,H/2)+Direction*Radius;
+				}
+				DrawText(FString::Printf(TEXT("%s %.0fm"),EntryGuide?TEXT("STAIRS"):TEXT("STEP"),FVector::Dist2D(Ninja->GetActorLocation(),Guide)/100),FLinearColor(.2,1,1),Point.X,Point.Y,nullptr,S);
+				DrawLine(Point.X,Point.Y,Point.X-Direction.X*12+Direction.Y*6,Point.Y-Direction.Y*12-Direction.X*6,FLinearColor(.2,1,1),2*S);
+				DrawLine(Point.X,Point.Y,Point.X-Direction.X*12-Direction.Y*6,Point.Y-Direction.Y*12+Direction.X*6,FLinearColor(.2,1,1),2*S);
+				break;
+			}
+		}
 		for (ARedNinja* Enemy:Match->Enemies) if (IsValid(Enemy) && !Enemy->bDefeated)
 		{
-			++LastMarkerCount;
 			const FVector Target=Enemy->GetActorLocation()+FVector(0,0,130),D=Target-View;
 			const FVector Projected=Canvas->Project(Target);
 			FVector2D Point(Projected.X,Projected.Y),Direction(0,-1);
 			const bool Offscreen=Projected.Z<=0 || Point.X<70*S || Point.X>W-70*S || Point.Y<70*S || Point.Y>H-70*S;
 			if (Offscreen)
 			{
-				++LastOffscreenMarkerCount;
 				const double Angle=FMath::Atan2(FVector::DotProduct(D,Right),FVector::DotProduct(D,Forward));
 				Direction=FVector2D(FMath::Sin(Angle),-FMath::Cos(Angle));
 				const double Radius=FMath::Min((W/2-80*S)/FMath::Max(.001,FMath::Abs(Direction.X)),(H/2-90*S)/FMath::Max(.001,FMath::Abs(Direction.Y)));
 				Point=FVector2D(W/2,H/2)+Direction*Radius;
 			}
-			const FLinearColor Red(1,.25,.15); const FVector2D Side(-Direction.Y,Direction.X);
+			// Keep one offscreen destination readable; visible enemies retain red pins.
+			if (Offscreen && NextEnemy && Enemy!=NextEnemy) continue;
+			++LastMarkerCount; if (Offscreen) ++LastOffscreenMarkerCount;
+			const FLinearColor Red=Enemy==NextEnemy?FLinearColor(1,.85,.15):FLinearColor(1,.25,.15); const FVector2D Side(-Direction.Y,Direction.X);
 			DrawLine(Point.X,Point.Y,Point.X-Direction.X*13*S+Side.X*7*S,Point.Y-Direction.Y*13*S+Side.Y*7*S,Red,2*S);
 			DrawLine(Point.X,Point.Y,Point.X-Direction.X*13*S-Side.X*7*S,Point.Y-Direction.Y*13*S-Side.Y*7*S,Red,2*S);
 			const float Up=(Enemy->GetActorLocation().Z-Ninja->GetActorLocation().Z)/100;
-			const FString Label=FString::Printf(TEXT("%s %.0fm %+.0fm"),Enemy->ActorHasTag(TEXT("RoofA"))?TEXT("ROOF"):TEXT("NINJA"),FVector::Dist(Ninja->GetActorLocation(),Enemy->GetActorLocation())/100,Up);
+			const FString Label=Enemy->RouteOrder>0?FString::Printf(TEXT("%02d %.0fm %+.0fm"),Enemy->RouteOrder,FVector::Dist(Ninja->GetActorLocation(),Enemy->GetActorLocation())/100,Up):FString::Printf(TEXT("NINJA %.0fm %+.0fm"),FVector::Dist(Ninja->GetActorLocation(),Enemy->GetActorLocation())/100,Up);
 			DrawText(Label,Red,FMath::Clamp(Point.X-55*S,12.f,W-170*S),Point.Y+10*S,nullptr,S);
 		}
 		return;
@@ -135,6 +167,6 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	DrawText(TEXT("WASD move   |   MOUSE look   |   SHIFT run"),FLinearColor(.75,.85,.95),X+32*S,Y+137*S,nullptr,S);
 	DrawText(TEXT("SPACE near the jump apex: up to 3 jumps"),FLinearColor(.75,.85,.95),X+32*S,Y+165*S,nullptr,S);
 	DrawText(TEXT("LMB / F: throw   |   Descend onto an enemy to stomp"),FLinearColor(.75,.85,.95),X+32*S,Y+193*S,nullptr,S);
-	DrawText(TEXT("P: pause   |   Red arrows: enemy direction / height"),FLinearColor(.75,.85,.95),X+32*S,Y+221*S,nullptr,S);
+	DrawText(TEXT("Gold arrow: next enemy   |   Cyan steps: easier roof route"),FLinearColor(.75,.85,.95),X+32*S,Y+221*S,nullptr,S);
 	DrawText(Action,Color,X+32*S,Y+280*S,nullptr,1.6*S);
 }

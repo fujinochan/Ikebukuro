@@ -3,6 +3,7 @@
 #include "NinjaAppearance.h"
 #include "NinjaPatrolArea.h"
 #include "NinjaMatchDirector.h"
+#include "NinjaFeedback.h"
 #include "AIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -42,6 +43,7 @@ bool ARedNinja::TryDefeat(ENinjaDefeatMethod Method,ANinjaCharacter* Ninja)
 	auto* Match=ANinjaMatchDirector::Find(this);
 	if (Match && !Match->CanDefeat(this)) return false;
 	bDefeated=true; DefeatMethod=Method;
+	ANinjaFeedback::Emit(this,GetActorLocation(),Method==ENinjaDefeatMethod::Stomp?TEXT("Stomp"):TEXT("Hit"));
 	SetState(ENinjaBrainState::Defeated); SetActorTickEnabled(false);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->DisableMovement(); Ninja->RegisterDefeat(Method);
