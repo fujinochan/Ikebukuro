@@ -71,6 +71,11 @@ void ANinjaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		}
 	}
 	auto* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (Input && MoveAction)
+	{
+		Input->BindAction(MoveAction,ETriggerEvent::Completed,this,&ANinjaCharacter::EndMoveInput);
+		Input->BindAction(MoveAction,ETriggerEvent::Canceled,this,&ANinjaCharacter::EndMoveInput);
+	}
 	if (Input && ThrowAction) Input->BindAction(ThrowAction,ETriggerEvent::Started,this,&ANinjaCharacter::DoThrow);
 	if (Input && SprintAction)
 	{
@@ -144,6 +149,7 @@ void ANinjaCharacter::DoSprintEnd()
 void ANinjaCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	UpdateAutoCamera(DeltaSeconds);
 	if (ANinjaMatchDirector::AllowsGameplay(this) && !bCityHandlesRecovery && GetActorLocation().Z < -1500) RecoverToSurface(SafeSurface,true);
 	if (ANinjaMatchDirector::AllowsGameplay(this) && !bCityHandlesRecovery)
 		if (auto* PC=Cast<APlayerController>(GetController()); PC && PC->WasInputKeyJustPressed(EKeys::R)) RecoverToSurface(SafeSurface,false);
@@ -157,6 +163,7 @@ bool ANinjaCharacter::TryThrowShuriken()
 {
 	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0) return false;
 	const double Now=GetWorld()->GetTimeSeconds();
+	AimCameraUntil=Now+.6; // Keep repeated throws on the manually selected aim.
 	if (Now<NextThrowTime) return false;
 	auto* PC=Cast<APlayerController>(GetController());
 	if (!PC) return false;
@@ -252,12 +259,50 @@ void ANinjaCharacter::RecoverToSurface(FVector Surface,bool bFallPenalty)
 }
 
 void ANinjaCharacter::DoMove(float Right,float Forward)
-{ if (ANinjaMatchDirector::AllowsGameplay(this)) Super::DoMove(Right,Forward); }
+{
+	if (!ANinjaMatchDirector::AllowsGameplay(this) || !GetController()) return;
+	const FVector2D Input(Right,Forward);
+	if (Input.IsNearlyZero()) { EndMoveInput(); return; }
+	// Freeze the input's world frame while a direction is held. Otherwise auto-yaw
+	// would rotate camera-relative input again every frame and make D/S orbit forever.
+	if (!bHasMovementReference || !Input.GetSafeNormal().Equals(CameraMoveInput.GetSafeNormal(),.1f) ||
+		GetWorld()->GetTimeSeconds()<ManualCameraUntil)
+		MovementReferenceYaw=GetController()->GetControlRotation().Yaw;
+	bHasMovementReference=true; CameraMoveInput=Input;
+	const FRotationMatrix Basis(FRotator(0,MovementReferenceYaw,0));
+	AddMovementInput(Basis.GetUnitAxis(EAxis::X),Forward);
+	AddMovementInput(Basis.GetUnitAxis(EAxis::Y),Right);
+}
+void ANinjaCharacter::EndMoveInput()
+{ bHasMovementReference=false; CameraMoveInput=FVector2D::ZeroVector; }
+void ANinjaCharacter::UpdateAutoCamera(float DeltaSeconds)
+{
+	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0 || !GetController() ||
+		!GetController()->IsLocalPlayerController()) return;
+	const double Now=GetWorld()->GetTimeSeconds();
+	if (bHasMovementReference && Now<ManualCameraUntil)
+		MovementReferenceYaw=GetController()->GetControlRotation().Yaw;
+	if (!bAutoAdjustCamera || !bHasMovementReference || GetVelocity().SizeSquared2D()<FMath::Square(120.f) ||
+		Now<ManualCameraUntil || Now<AimCameraUntil || DeltaSeconds<=0) return;
+	FRotator View=GetController()->GetControlRotation();
+	const float Error=FMath::FindDeltaAngleDegrees(View.Yaw,GetActorRotation().Yaw);
+	if (FMath::Abs(Error)<2.f) return;
+	const float Step=Error*(1-FMath::Exp(-FMath::Max(0.f,CameraFollowSpeed)*DeltaSeconds));
+	const float Limit=FMath::Max(0.f,CameraMaxYawSpeed)*DeltaSeconds;
+	View.Yaw=FRotator::NormalizeAxis(View.Yaw+FMath::Clamp(Step,-Limit,Limit));
+	GetController()->SetControlRotation(View); // Preserve the player's vertical view.
+}
 void ANinjaCharacter::DoLook(float Yaw,float Pitch)
-{ if (ANinjaMatchDirector::AllowsGameplay(this)) Super::DoLook(Yaw,Pitch); }
+{
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
+	if (!FMath::IsNearlyZero(Yaw) || !FMath::IsNearlyZero(Pitch))
+		ManualCameraUntil=GetWorld()->GetTimeSeconds()+CameraManualGraceSeconds;
+	Super::DoLook(Yaw,Pitch);
+}
 void ANinjaCharacter::ResetForMatch(FVector Foot,FRotator Rotation)
 {
 	SetActorHiddenInGame(false);
+	EndMoveInput(); ManualCameraUntil=AimCameraUntil=0;
 	Health=3; Defeats=StompDefeats=ShurikenDefeats=ShotsFired=ShurikenWorldHits=Knockouts=0;
 	JumpStage=0; PredictedApexTime=NextThrowTime=InvulnerableUntil=0;
 	bJumpButtonHeld=false; DoJumpEnd(); DoSprintEnd();

@@ -2,9 +2,9 @@
 
 作成日: 2026-10-16  
 対象: `IkebukuroNinjaCity` / Unreal Engine  
-状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。次の実装工程はStep 9の性能と不具合の調整。
+状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。Step 9への追加要望で自動カメラを実装・検証済み。次はStep 9の性能計測・不具合調整と通し試遊。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)、[Step 9の自動カメラ](step9-auto-camera.md)。
 
 追加調査: [街のテクスチャ](texture-investigation.md)。既存Stepの番号を維持し、Step 6と7の間にStep 6.5を追加した。
 
@@ -236,13 +236,14 @@ Tools/City/                    # 調査・切り出し・検証の再現用ス�
 
 **完了条件:** 初見の試遊で、目的と操作が伝わり、3〜5分でクリアを狙える。経路や敵を探すだけの時間が長すぎない。
 
-### Step 9 — 性能と不具合を調整する
+### Step 9 — 性能・不具合と自動カメラを調整する
 
 1. テストPCの CPU / GPU / メモリ、解像度、描画品質を記録する。
 2. Windows・1080p・60 fps を暫定目標に、地上、高い屋上、高速移動、敵複数体の場面を計測する。
 3. 必要に応じて LOD、テクスチャ、表示距離、影、Lumen / Ray Tracing の設定を調整する。
 4. タイル待ち、メモリ使用量、コリジョン生成、NavMesh 更新に起因する停止を調べる。固定した足場と小範囲のAIを優先する。
 5. 下の確認表を実施し、再現手順と修正を記録する。
+6. 主人公の方向転換に合わせ、背後へ滑らかに自動追従するカメラを追加する。マウス視点と投射中の照準を優先し、上下角度は維持する。カメラの回転で移動方向が回り続けないようにする。実装・自動検証済み（追加要望、[記録](step9-auto-camera.md)）。
 
 **完了条件:** 記録したPCで1プレイを通せる。継続的な性能低下、地面抜け、進行不能がない。
 
@@ -275,7 +276,7 @@ Tools/City/                    # 調査・切り出し・検証の再現用ス�
 
 | 分野 | 確認内容 |
 | --- | --- |
-| 三人称操作 | 視点基準の移動、走り、狭い場所と壁際のカメラ |
+| 三人称操作 | 視点基準の移動、走り、方向転換への自動追従、マウス優先、狭い場所と壁際のカメラ |
 | 3段ジャンプ | 成功・早すぎ・遅すぎ・長押し・4回目・着地後のリセット、fps差 |
 | 建物越え | 通常ジャンプでは届かず、3段成功で越えられる実データ上の経路 |
 | 踏みつけ | 下降中の上面接触で成功。上昇中・横・下からは成功しない |

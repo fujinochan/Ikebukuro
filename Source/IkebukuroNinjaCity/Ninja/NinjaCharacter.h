@@ -58,6 +58,14 @@ public:
 	float RunSpeed = 1400;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Ninja|Camera")
 	FVector CameraShoulderOffset=FVector(0,90,60);
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Ninja|Camera")
+	bool bAutoAdjustCamera=true;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Ninja|Camera",meta=(ClampMin="0"))
+	float CameraFollowSpeed=3.f;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Ninja|Camera",meta=(ClampMin="0",Units="deg/s"))
+	float CameraMaxYawSpeed=100.f;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Ninja|Camera",meta=(ClampMin="0",Units="s"))
+	float CameraManualGraceSeconds=1.2f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ninja|Jump")
 	FVector JumpSpeeds = FVector(1100, 1700, 2300);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ninja|Jump", meta=(ClampMin="0.01", Units="s"))
@@ -74,6 +82,13 @@ public:
 	TObjectPtr<UInputMappingContext> SprintMappingContext;
 
 private:
+	void UpdateAutoCamera(float DeltaSeconds);
+	void EndMoveInput();
+	FVector2D CameraMoveInput=FVector2D::ZeroVector;
+	float MovementReferenceYaw=0;
+	bool bHasMovementReference=false;
+	double ManualCameraUntil=0;
+	double AimCameraUntil=0;
 	bool bJumpButtonHeld = false;
 	double PredictedApexTime = 0;
 	double NextThrowTime=0;
