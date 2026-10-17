@@ -4,7 +4,7 @@
 対象: `IkebukuroNinjaCity` / Unreal Engine  
 状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。次の実装工程はStep 9の性能と不具合の調整。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)。
 
 追加調査: [街のテクスチャ](texture-investigation.md)。既存Stepの番号を維持し、Step 6と7の間にStep 6.5を追加した。
 
@@ -232,7 +232,7 @@ Tools/City/                    # 調査・切り出し・検証の再現用ス�
 3. 3段ジャンプの成功で移動時間を短縮できる場所を作る。実際の建物寸法に合わせて移動速度と各段の上昇量を調整する。
 4. 3段ジャンプが苦手でも地上・低所から攻略を進められる補助経路を用意する。
 5. 黒忍者の輪郭が街に埋もれない照明や縁取り、赤忍者を見つけやすい表示を整える。
-6. 効果音、投射・命中・踏みつけ・ジャンプ成功の短い演出を加える。追加要望としてBGMの開始・ポーズ・曲終了による敗北・リトライを実装する。
+6. 効果音、投射・命中・踏みつけ・ジャンプ成功の短い演出を加える。追加要望としてBGMの開始・ポーズ・曲終了による敗北・リトライ、および敵の撃破・主人公の戦闘不能時の大爆発を実装する。
 
 **完了条件:** 初見の試遊で、目的と操作が伝わり、3〜5分でクリアを狙える。経路や敵を探すだけの時間が長すぎない。
 

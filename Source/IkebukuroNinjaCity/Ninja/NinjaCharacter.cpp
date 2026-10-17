@@ -3,6 +3,7 @@
 #include "RedNinja.h"
 #include "NinjaShuriken.h"
 #include "NinjaMatchDirector.h"
+#include "NinjaExplosion.h"
 #include "NinjaFeedback.h"
 #include "City/CityPlayArea.h"
 #include "Camera/CameraComponent.h"
@@ -215,8 +216,8 @@ bool ANinjaCharacter::ReceiveContactDamage()
 	CombatFeedback=TEXT("Hit! One second of protection");
 	if (Health==0)
 	{
-		++Knockouts;
-		if (ANinjaMatchDirector::Find(this)) return true;
+		++Knockouts; ANinjaExplosion::Emit(this,GetActorLocation(),true);
+		if (ANinjaMatchDirector::Find(this)) { SetActorHiddenInGame(true); return true; }
 		Health=3; RecoverToSurface(SafeSurface,false);
 		CombatFeedback=TEXT("Knocked out - returned with full health");
 	}
@@ -241,7 +242,7 @@ void ANinjaCharacter::RecoverToSurface(FVector Surface,bool bFallPenalty)
 	{
 		ANinjaFeedback::Emit(this,GetActorLocation(),TEXT("Damage"));
 		Health=FMath::Max(0,Health-1);
-		if (Health==0) { ++Knockouts; if (ANinjaMatchDirector::Find(this)) return; Health=3; }
+		if (Health==0) { ++Knockouts; ANinjaExplosion::Emit(this,GetActorLocation(),true); if (ANinjaMatchDirector::Find(this)) { SetActorHiddenInGame(true); return; } Health=3; }
 		InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
 	}
 	SetActorLocation(Surface+FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+20));
@@ -256,6 +257,7 @@ void ANinjaCharacter::DoLook(float Yaw,float Pitch)
 { if (ANinjaMatchDirector::AllowsGameplay(this)) Super::DoLook(Yaw,Pitch); }
 void ANinjaCharacter::ResetForMatch(FVector Foot,FRotator Rotation)
 {
+	SetActorHiddenInGame(false);
 	Health=3; Defeats=StompDefeats=ShurikenDefeats=ShotsFired=ShurikenWorldHits=Knockouts=0;
 	JumpStage=0; PredictedApexTime=NextThrowTime=InvulnerableUntil=0;
 	bJumpButtonHeld=false; DoJumpEnd(); DoSprintEnd();

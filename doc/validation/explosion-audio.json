@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "seconds": 1.1499773242630384,
+  "sample_rate": 44100,
+  "peak_pcm": 23562,
+  "nonzero_samples": 49984,
+  "sha256": "fefd6685b10f53e5d320bf4265a20f4cd6b1b3069b3ca79d46769fbca78612a0",
+  "origin": "Original deterministic noise and sine synthesis within this project; no downloads"
+}

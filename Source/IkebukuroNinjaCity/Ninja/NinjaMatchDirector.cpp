@@ -1,4 +1,5 @@
 #include "NinjaMatchDirector.h"
+#include "NinjaExplosion.h"
 #include "NinjaCharacter.h"
 #include "RedNinja.h"
 #include "NinjaShuriken.h"
@@ -19,6 +20,7 @@
 #include "MediaSoundComponent.h"
 #include "FileMediaSource.h"
 #include "NinjaMusicCheck.h"
+#include "NinjaExplosionCheck.h"
 
 ANinjaMatchDirector::ANinjaMatchDirector()
 {
@@ -67,6 +69,7 @@ void ANinjaMatchDirector::BeginPlay()
 		InputComponent->BindKey(EKeys::Escape,IE_Pressed,this,&ANinjaMatchDirector::TogglePause).bExecuteWhenPaused=true;
 	}
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaMusicCheck"))) GetWorld()->SpawnActor<ANinjaMusicCheck>();
+	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaExplosionCheck"))) GetWorld()->SpawnActor<ANinjaExplosionCheck>();
 }
 void ANinjaMatchDirector::StopRoundMusic()
 {
@@ -129,6 +132,7 @@ void ANinjaMatchDirector::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	if (UGameplayStatics::IsGamePaused(this)) return;
+	if (State==ENinjaMatchState::Won || State==ENinjaMatchState::Lost) ResultAge+=DeltaSeconds;
 	if (!Ninja) Ninja=Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 	if (State==ENinjaMatchState::Loading)
 	{
@@ -182,7 +186,7 @@ void ANinjaMatchDirector::TogglePause()
 }
 void ANinjaMatchDirector::Finish(bool bWon,const FString& Reason)
 {
-	State=bWon?ENinjaMatchState::Won:ENinjaMatchState::Lost; ResultReason=Reason;
+	State=bWon?ENinjaMatchState::Won:ENinjaMatchState::Lost; ResultReason=Reason; ResultAge=0;
 	StopRoundMusic();
 	Ninja->GetCharacterMovement()->StopMovementImmediately(); Ninja->GetCharacterMovement()->ClearAccumulatedForces(); Ninja->GetCharacterMovement()->DisableMovement();
 	Ninja->DoJumpEnd(); Ninja->DoSprintEnd();
@@ -194,6 +198,7 @@ void ANinjaMatchDirector::Retry()
 {
 	if (State!=ENinjaMatchState::Won && State!=ENinjaMatchState::Lost) return;
 	UGameplayStatics::SetGamePaused(this,false); State=ENinjaMatchState::Loading;
+	ANinjaExplosion::Clear(GetWorld());
 	for (TActorIterator<ANinjaShuriken> It(GetWorld());It;++It) It->Destroy();
 	for (ARedNinja* Enemy:Enemies) if (IsValid(Enemy)) Enemy->Destroy();
 	Enemies.Reset(); Credited.Reset(); RemainingSeconds=RoundDurationSeconds; CountdownSeconds=3; PreparedSeconds=0; ResultReason.Reset(); ++RoundNumber;

@@ -43,6 +43,7 @@ public:
 	void Confirm();
 	void TogglePause();
 	void Retry();
+	float ResultAge=0;
 	int32 RemainingEnemies() const { return Enemies.Num()-Credited.Num(); }
 	bool UsesRoundMusic() const { return bMusicRound; }
 	class UMediaPlayer* GetRoundMusicPlayer() const { return RoundMusic; }
