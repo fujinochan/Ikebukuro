@@ -24,4 +24,5 @@ private:
 	float PhaseAge=0;
 	double Started=0, FinishedAt=0;
 	bool bFinished=false;
+	bool bLongLived=false;
 };

@@ -1,9 +1,13 @@
 {
   "status": "passed",
-  "seconds": 1.1499773242630384,
+  "seconds": 3.45,
   "sample_rate": 44100,
-  "peak_pcm": 23562,
-  "nonzero_samples": 49984,
-  "sha256": "fefd6685b10f53e5d320bf4265a20f4cd6b1b3069b3ca79d46769fbca78612a0",
+  "peak_pcm": 19660,
+  "imported_asset_duration_seconds": 3.450000047683716,
+  "playback_gain": 1.6,
+  "single_voice_peak_after_gain": 0.9599902340769678,
+  "rms_pcm": 3062.8095886508827,
+  "nonzero_samples": 151596,
+  "sha256": "aa2d52e9d297b10a5f738dbff3591281cb1e074abcc547de95be291e49211b19",
   "origin": "Original deterministic noise and sine synthesis within this project; no downloads"
 }

@@ -56,19 +56,27 @@ void ANinjaExplosionCheck::Tick(float DeltaSeconds)
 			Target->TryDefeat(ENinjaDefeatMethod::Stomp,Ninja) || ANinjaExplosion::EnemyBursts!=EnemyBase+1) { Finish(TEXT("Enemy defeat did not emit exactly one explosion")); return; }
 		Next(TEXT("Shuriken defeat emits one explosion; duplicate defeat is rejected"));
 	}
-	else if (Phase==2 && PhaseAge>.18f)
+	else if (Phase==2 && PhaseAge>.54f)
 	{
 		int32 Components=0;
 		for (TActorIterator<ANinjaExplosion> It(GetWorld());It;++It)
 		{
+			if (!It->GetActorScale3D().Equals(FVector(3.f),.001f)) { Finish(TEXT("Explosion is not triple-sized")); return; }
 			TArray<UStaticMeshComponent*> Meshes; It->GetComponents(Meshes); Components+=Meshes.Num();
 			for (auto* Mesh:Meshes) if (Mesh->GetCollisionEnabled()!=ECollisionEnabled::NoCollision || Mesh->IsSimulatingPhysics()) { Finish(TEXT("Cosmetic explosion gained collision or physics")); return; }
 		}
 		if (Components!=69 || Ninja->Health!=3 || Match->RemainingEnemies()!=Match->Enemies.Num()-1) { Finish(TEXT("Explosion geometry or gameplay invariants failed")); return; }
 		Capture(TEXT("enemy")); Next(TEXT("Large fireball, sparks, smoke and ring exist without collision or splash damage"));
 	}
-	else if (Phase==3 && PhaseAge>1.5f)
+	else if (Phase==3)
 	{
+		if (!bLongLived && PhaseAge>1.6f)
+		{
+			int32 Alive=0; for (TActorIterator<ANinjaExplosion> It(GetWorld());It;++It) ++Alive;
+			if (Alive!=1) { Finish(TEXT("Triple-duration effect vanished at the old lifetime")); return; }
+			bLongLived=true; Cases.Add(TEXT("Triple-sized explosion remains alive beyond the original 1.45-second lifetime"));
+		}
+		if (PhaseAge<4.5f) return;
 		for (TActorIterator<ANinjaExplosion> It(GetWorld());It;++It) { Finish(TEXT("Explosion outlived its lifetime")); return; }
 		if (!Match->Enemies[1]->TryDefeat(ENinjaDefeatMethod::Stomp,Ninja) || ANinjaExplosion::EnemyBursts!=EnemyBase+2) { Finish(TEXT("Stomp did not explode")); return; }
 		if (!Ninja->ReceiveContactDamage() || Ninja->Health!=2 || ANinjaExplosion::PlayerBursts!=PlayerBase) { Finish(TEXT("Nonlethal hit exploded the player")); return; }
@@ -80,9 +88,9 @@ void ANinjaExplosionCheck::Tick(float DeltaSeconds)
 		if (!Ninja->ReceiveContactDamage() || Ninja->Health!=0 || !Ninja->IsHidden() || ANinjaExplosion::PlayerBursts!=PlayerBase+1 || Ninja->ReceiveContactDamage()) { Finish(TEXT("Player knockout did not explode exactly once and hide the ninja")); return; }
 		Next(TEXT("Lethal damage emits one player explosion and hides the defeated character"));
 	}
-	else if (Phase==5 && PhaseAge>.18f)
+	else if (Phase==5 && PhaseAge>.54f)
 	{
-		if (Match->State!=ENinjaMatchState::Lost || Match->ResultAge>=.7f) { Finish(TEXT("Result did not resolve immediately with a visible explosion interval")); return; }
+		if (Match->State!=ENinjaMatchState::Lost || Match->ResultAge>=2.1f) { Finish(TEXT("Result did not resolve immediately with a visible explosion interval")); return; }
 		Capture(TEXT("player")); Next(TEXT("Game loss resolves immediately while the result panel leaves the blast visible"));
 	}
 	else if (Phase==6 && PhaseAge>.15f)

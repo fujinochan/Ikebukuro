@@ -12,7 +12,7 @@ int32 ANinjaExplosion::EnemyBursts=0;
 int32 ANinjaExplosion::PlayerBursts=0;
 ANinjaExplosion::ANinjaExplosion()
 {
-	PrimaryActorTick.bCanEverTick=true; InitialLifeSpan=1.45f;
+	PrimaryActorTick.bCanEverTick=true; InitialLifeSpan=4.35f;
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("Root")));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Sphere(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Cube(TEXT("/Engine/BasicShapes/Cube.Cube"));
@@ -29,6 +29,7 @@ ANinjaExplosion::ANinjaExplosion()
 void ANinjaExplosion::BeginPlay()
 {
 	Super::BeginPlay();
+	SetActorScale3D(FVector(3.f)); // Deliberately ridiculous: triple every spatial dimension.
 	auto* Material=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/Ninja/Materials/M_NinjaBurst.M_NinjaBurst"));
 	for (UStaticMeshComponent* Piece:Pieces)
 	{
@@ -44,7 +45,7 @@ void ANinjaExplosion::Emit(const UObject* Context,FVector Location,bool bPlayer)
 	if (!Blast) return;
 	if (bPlayer) ++PlayerBursts; else ++EnemyBursts;
 	if (auto* Sound=LoadObject<USoundWave>(nullptr,TEXT("/Game/Ninja/Audio/S_Explosion.S_Explosion")))
-		UGameplayStatics::PlaySoundAtLocation(Context,Sound,Location,.55f);
+		UGameplayStatics::PlaySoundAtLocation(Context,Sound,Location,1.6f);
 }
 void ANinjaExplosion::Clear(UWorld* World)
 {
@@ -53,31 +54,32 @@ void ANinjaExplosion::Clear(UWorld* World)
 void ANinjaExplosion::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds); Age+=DeltaSeconds;
+	const float BlastAge=Age/3.f; // Keep the original choreography, played three times slower.
 	for (int32 I=0; I<Pieces.Num(); ++I)
 	{
 		FVector Position=FVector::ZeroVector, Scale; FLinearColor Color;
 		if (I==0)
 		{
-			const float T=FMath::Clamp(Age/.22f,0.f,1.f);
+			const float T=FMath::Clamp(BlastAge/.22f,0.f,1.f);
 			Scale=FVector(5.5f*FMath::Sin(T*PI)); Color=FLinearColor(4,1,.08);
 		}
 		else if (I<=10)
 		{
-			const float T=FMath::Clamp(Age/.7f,0.f,1.f), A=I*2.39996f;
+			const float T=FMath::Clamp(BlastAge/.7f,0.f,1.f), A=I*2.39996f;
 			const FVector D(FMath::Cos(A),FMath::Sin(A),.25f+(I%3)*.25f);
 			Position=D*(30+T*220); Scale=FVector((1.7f+I%3*.25f)*FMath::Sin(PI*T));
 			Color=FMath::Lerp(FLinearColor(3,.38,.012),FLinearColor(.4,.015,.001),T)*(.65f+.18f*(I%3));
 		}
 		else if (I<=20)
 		{
-			const float T=FMath::Clamp((Age-.15f)/1.25f,0.f,1.f), A=I*2.39996f;
+			const float T=FMath::Clamp((BlastAge-.15f)/1.25f,0.f,1.f), A=I*2.39996f;
 			Position=FVector(FMath::Cos(A)*T*210,FMath::Sin(A)*T*210,50+T*(200+(I%3)*40));
 			Scale=FVector((1.4f+T*1.4f)*FMath::Sin(PI*T));
 			Color=FLinearColor(.045,.055,.07)*(1-T*.65f);
 		}
 		else if (I<45)
 		{
-			const float T=FMath::Clamp(Age/.9f,0.f,1.f), A=I*2.39996f;
+			const float T=FMath::Clamp(BlastAge/.9f,0.f,1.f), A=I*2.39996f;
 			const FVector D(FMath::Cos(A),FMath::Sin(A),.25f+(I%5)*.18f);
 			Position=D*(40+T*480); Position.Z-=T*T*170;
 			Pieces[I]->SetRelativeRotation(D.Rotation());
@@ -85,8 +87,8 @@ void ANinjaExplosion::Tick(float DeltaSeconds)
 		}
 		else
 		{
-			const float T=FMath::Clamp(Age/.55f,0.f,1.f), A=(I-45)*2*PI/24;
-			Position=FVector(FMath::Cos(A),FMath::Sin(A),0)*(35+T*430); Position.Z=-65;
+			const float T=FMath::Clamp(BlastAge/.55f,0.f,1.f), A=(I-45)*2*PI/24;
+			Position=FVector(FMath::Cos(A),FMath::Sin(A),0)*(35+T*430); Position.Z=-65.f/3.f; // Keep the larger ring above the ground.
 			Pieces[I]->SetRelativeRotation(FRotator(0,FMath::RadiansToDegrees(A)+90,0));
 			Scale=FVector(.15f+T*1.05f,.10f*(1-T),.07f*(1-T)); Color=FLinearColor(4,1.1,.07);
 		}

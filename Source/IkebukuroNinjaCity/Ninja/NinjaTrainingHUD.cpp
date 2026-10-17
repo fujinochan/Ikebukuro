@@ -141,7 +141,7 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 		return;
 	}
 	// Let the final explosion read before the result panel covers the scene.
-	if ((Match->State==ENinjaMatchState::Won || Match->State==ENinjaMatchState::Lost) && Match->ResultAge<.7f) return;
+	if ((Match->State==ENinjaMatchState::Won || Match->State==ENinjaMatchState::Lost) && Match->ResultAge<2.1f) return;
 	DrawRect(FLinearColor(0,0,0,.48),0,0,W,H);
 	const float X=W/2-310*S,Y=H/2-180*S;
 	DrawRect(FLinearColor(.02,.035,.065,.96),X,Y,620*S,360*S);
