@@ -1,0 +1,23 @@
+{
+	"status": "passed",
+	"error": "",
+	"fixed_fps": 60,
+	"phase": 14,
+	"scope": "Actual AI ticks and swept hostile projectiles; shooter motion disabled and player placed/flying to isolate 100m boundaries, angles, timing and collision; expanded ground/roof patrols are verified separately",
+	"passed_cases": [
+		"Ready state rejects fire; player starts with one life; safe ground patrol radius extends beyond the old 4m limit",
+		"Start normal AI ticks with player just outside the 100m range",
+		"No fire at 100.01m; patrol speed is doubled to 3.2m/s; enter exactly 100m",
+		"Real AI emits exactly three straight shots at -30/0/+30 degrees at 100m; immediate re-fire rejected",
+		"Capture the red three-way fan",
+		"Second AI volley occurs two seconds later; pause with live projectiles",
+		"Pause freezes firing and projectiles; leave firing range after resume",
+		"Leaving range stops volleys; fire through a teammate toward a thin world wall",
+		"Hostile shot passes a red teammate without friendly damage or obstruction",
+		"15cm wall stops a travelling shot; muzzle sweep also prevents spawning through a close wall",
+		"Actual swept hostile projectile causes one-hit loss and one large explosion; late damage rejected",
+		"Round end removes both factions' projectiles",
+		"Retry the one-hit round",
+		"Retry restores all enemies, one life, 100m range, two-second interval and fresh firing state"
+	]
+}

@@ -16,3 +16,4 @@
 - Approval granted for Step 7: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for implementation and verification. No additional downloads.
 - Approval granted for Step 8: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for implementation and verification. No additional downloads.
 - Approval granted for Step 9: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for implementation and verification. No additional downloads.
+- Approval granted for Step 10: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for packaging and verification. Store all outputs within this project. The official PLATEAU site policy may be downloaded into doc/references/ to verify map attribution and terms; no new assets or code downloads.

@@ -1,0 +1,70 @@
+#ifndef __TIDY_H__
+#define __TIDY_H__
+
+/***************************************************************************//**
+ * @file
+ * Defines HTML Tidy public API implemented by LibTidy.
+ *
+ * This public interface provides the entire public API for LibTidy, and
+ * is the sole interface that you should use when implementing LibTidy in
+ * your own applications.
+ *
+ * See tidy.c as an example application implementing the public API.
+ *
+ * This API is const-correct and doesn't explicitly depend on any globals.
+ * Thus, thread-safety may be introduced without changing the interface.
+ *
+ * The API limits all exposure to internal structures and provides only
+ * accessors that return simple types such as C strings and integers, which
+ * makes it quite suitable for integration with any number of other languages.
+ *
+ * @author  Dave Raggett [dsr@w3.org]
+ * @author  HTACG, et al (consult git log)
+ * 
+ * @remarks The contributing author(s) would like to thank all those who 
+ *          helped with testing, bug fixes and suggestions for improvements.
+ *          This wouldn't have been possible without your help.
+ *
+ * @copyright
+ *     Copyright (c) 1998-2017 World Wide Web Consortium (Massachusetts
+ *     Institute of Technology, European Research Consortium for Informatics
+ *     and Mathematics, Keio University).
+ * @par
+ *     All Rights Reserved.
+ * @par
+ *     This software and documentation is provided "as is," and the copyright 
+ *     holders and contributing author(s) make no representations or warranties,
+ *     express or implied, including but not limited to, warranties of 
+ *     merchantability or fitness for any particular purpose or that the use of
+ *     the software or documentation will not infringe any third party patents,
+ *     copyrights, trademarks or other rights.
+ *     @par
+ *     The copyright holders and contributing author(s) will not be held liable
+ *     for any direct, indirect, special or consequential damages arising out of
+ *     any use of the software or documentation, even if advised of the
+ *     possibility of such damage.
+ * @par
+ *     Permission is hereby granted to use, copy, modify, and distribute this
+ *     source code, or portions hereof, documentation and executables, for any
+ *     purpose, without fee, subject to the following restrictions:
+ * @par
+ *        1. The origin of this source code must not be misrepresented.
+ *        2. Altered versions must be plainly marked as such and must not be
+ *           misrepresented as being the original source.
+ *        3. This Copyright notice may not be removed or altered from any source
+ *           or altered source distribution.
+ * @par
+ *     The copyright holders and contributing author(s) specifically permit,
+ *     without fee, and encourage the use of this source code as a component for
+ *     supporting the Hypertext Markup Language in commercial products. If you
+ *     use this source code in a product, acknowledgment is not required but
+ *     would be appreciated.
+ *
+ * @date Created 2001-05-20 by Charles Reitzel
+ * @date Updated 2002-07-01 by Charles Reitzel - 1st Implementation
+ * @date Updated 2015-06-09 by Geoff R. McLane - Add more doxygen syntax
+ * @date Additional updates: consult git log
+ ******************************************************************************/
+
+#include "tidyplatform.h"
+#include "tidyenum.h"

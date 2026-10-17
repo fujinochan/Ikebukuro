@@ -6,6 +6,7 @@
 #include "MediaSoundComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
@@ -14,6 +15,10 @@
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 #include "UnrealClient.h"
+#include "Misc/Paths.h"
+#include "HAL/PlatformProperties.h"
+#include "EngineUtils.h"
+#include "City/LocalCityTileset.h"
 
 ANinjaMusicCheck::ANinjaMusicCheck()
 {
@@ -27,6 +32,13 @@ void ANinjaMusicCheck::BeginPlay()
 void ANinjaMusicCheck::HoldEnemies()
 {
 	for (ARedNinja* Enemy:Match->Enemies) { Enemy->SetActorTickEnabled(false); Enemy->GetCharacterMovement()->StopMovementImmediately(); }
+	// This check drives the round directly; physical input must not move the
+	// unattended player during the four-minute decoder/clock test.
+	if (auto* PC=UGameplayStatics::GetPlayerController(this,0))
+	{
+		PC->ResetIgnoreMoveInput(); PC->SetIgnoreMoveInput(true);
+		PC->ResetIgnoreLookInput(); PC->SetIgnoreLookInput(true);
+	}
 }
 void ANinjaMusicCheck::Next(const FString& Case)
 {
@@ -136,8 +148,22 @@ void ANinjaMusicCheck::Finish(const FString& Error)
 {
 	UGameplayStatics::SetGamePaused(this,false);
 	auto Report=MakeShared<FJsonObject>(); Report->SetStringField(TEXT("status"),Error.IsEmpty()?TEXT("passed"):TEXT("failed")); Report->SetStringField(TEXT("error"),Error);
+	Report->SetBoolField(TEXT("cooked_data"), FPlatformProperties::RequiresCookedData());
+	Report->SetStringField(TEXT("map"), GetWorld()->GetMapName());
+	Report->SetStringField(TEXT("content_directory"), FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir()));
+	TArray<TSharedPtr<FJsonValue>> Datasets;
+	for (TActorIterator<ALocalCityTileset> It(GetWorld()); It; ++It)
+	{
+		auto Dataset = MakeShared<FJsonObject>();
+		const FString LocalPath = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir() / It->DatasetRelativePath);
+		Dataset->SetStringField(TEXT("path"), LocalPath);
+		Dataset->SetBoolField(TEXT("exists"), FPaths::FileExists(LocalPath));
+		Datasets.Add(MakeShared<FJsonValueObject>(Dataset));
+	}
+	Report->SetArrayField(TEXT("local_datasets"), Datasets);
 	Report->SetBoolField(TEXT("full_track"),bFullTrack); Report->SetNumberField(TEXT("phase"),Phase); Report->SetNumberField(TEXT("peak_decoded_envelope"),PeakEnvelope);
-	if (Match) { Report->SetNumberField(TEXT("duration_seconds"),Match->RoundDurationSeconds); Report->SetNumberField(TEXT("enemies"),Match->Enemies.Num()); }
+	if (Match) { Report->SetNumberField(TEXT("duration_seconds"),Match->RoundDurationSeconds); Report->SetNumberField(TEXT("enemies"),Match->Enemies.Num()); Report->SetStringField(TEXT("result_reason"),Match->ResultReason); Report->SetNumberField(TEXT("remaining_seconds"),Match->RemainingSeconds); }
+	if (Ninja) { Report->SetNumberField(TEXT("player_health"),Ninja->Health); Report->SetStringField(TEXT("player_location"),Ninja->GetActorLocation().ToString()); }
 	Report->SetNumberField(TEXT("wall_seconds"),FPlatformTime::Seconds()-Started);
 	Report->SetNumberField(TEXT("first_track_wall_seconds_including_pause"),CompletedTrackWallSeconds);
 	Report->SetStringField(TEXT("scope"),TEXT("Real WMF M4A playback and audio mixer, AI held stationary to isolate music lifecycle; no fixed simulation clock"));

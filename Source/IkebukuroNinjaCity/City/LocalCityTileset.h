@@ -7,6 +7,17 @@
 #if PLATFORM_WINDOWS && defined(GetObject)
 #undef GetObject
 #endif
+// Native dependency Windows macros must not leak into subsequent unity sources
+// (RHI uses std::numeric_limits::max in the Shipping translation unit).
+#if PLATFORM_WINDOWS && defined(max)
+#undef max
+#endif
+#if PLATFORM_WINDOWS && defined(min)
+#undef min
+#endif
+#if PLATFORM_WINDOWS && defined(DrawText)
+#undef DrawText
+#endif
 #include "LocalCityTileset.generated.h"
 
 /** Local-only city source with a portable path and an opt-in runtime smoke check. */

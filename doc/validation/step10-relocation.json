@@ -1,0 +1,7 @@
+{
+  "files": 93,
+  "status": "passed",
+  "tested_copy": "SavedBuilds/Step10/Relocated Windows v2",
+  "scope": "Every release-manifest file is SHA-256 identical in the tested relocated copy; generated user data is excluded",
+  "source": "SavedBuilds/Step10/Package/Windows"
+}
