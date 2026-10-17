@@ -44,6 +44,11 @@ public:
 	void TogglePause();
 	void Retry();
 	int32 RemainingEnemies() const { return Enemies.Num()-Credited.Num(); }
+	bool UsesRoundMusic() const { return bMusicRound; }
+	class UMediaPlayer* GetRoundMusicPlayer() const { return RoundMusic; }
+	class UMediaSoundComponent* GetRoundMusicSound() const { return MusicSound; }
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Match") float RoundDurationSeconds=300;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Match") FString MusicError;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Match") ENinjaMatchState State=ENinjaMatchState::Loading;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Match") float RemainingSeconds=300;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Match") float CountdownSeconds=3;
@@ -53,6 +58,15 @@ public:
 private:
 	bool IsPrepared() const;
 	void Finish(bool bWon,const FString& Reason);
+	void OpenRoundMusic();
+	void StopRoundMusic();
+	void StartRound();
+	UFUNCTION() void MusicEnded();
+	UFUNCTION() void MusicOpenFailed(FString Url);
+	UPROPERTY() TObjectPtr<class UMediaPlayer> RoundMusic;
+	UPROPERTY() TObjectPtr<class UFileMediaSource> MusicSource;
+	UPROPERTY() TObjectPtr<class UMediaSoundComponent> MusicSound;
+	bool bMusicRound=false,bMusicReady=false,bMusicStarted=false,bSongEnded=false;
 	bool bActive=true;
 	float PreparedSeconds=0;
 	FVector StartFoot;

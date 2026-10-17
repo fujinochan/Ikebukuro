@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "source": "Ikebukuro Ninja City.m4a",
+  "runtime_file": "Content/Movies/Ikebukuro Ninja City.m4a",
+  "bytes": 3864282,
+  "sha256": "8ec90ccc14e5531c09e091738efd9874beb1cc988408d5ebbf2067480a5838fd",
+  "container_duration_seconds": 243.72,
+  "conversion": false,
+  "downloads": false,
+  "note": "Runtime duration and completion come from UE WMF MediaPlayer."
+}

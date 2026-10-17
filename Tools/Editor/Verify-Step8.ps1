@@ -19,6 +19,7 @@ $ueArgs=@(
     "-abslog=`"$(Join-Path $projectRoot "Saved\Logs\$RunName.log")`""
 )
 if ($Route) { $ueArgs=$ueArgs | ForEach-Object { $_.Replace('-NinjaMatchCheck','-NinjaRouteCheck').Replace('-MatchFPS=','-RouteFPS=').Replace('-MatchReport=','-RouteReport=').Replace('-MatchScreenshot=','-RouteScreenshot=') } }
+$ueArgs+='-NinjaLegacyTimerCheck' # Preserve the original fixed-clock regression suite; BGM has a dedicated real-media check.
 if ($Headless) {
     if (!$Route) { throw 'Headless mode is only supported for the physical route check' }
     $ueArgs+='-NullRHI'

@@ -14,6 +14,8 @@ public class IkebukuroNinjaCity : ModuleRules
 			"Json",
 			"CoreUObject",
 			"Engine",
+			"MediaAssets",
+			"AudioMixer",
 			"InputCore",
 			"EnhancedInput",
 			"AIModule",

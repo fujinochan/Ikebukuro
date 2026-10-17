@@ -1,0 +1,15 @@
+{
+	"status": "passed",
+	"error": "",
+	"full_track": false,
+	"phase": 0,
+	"peak_decoded_envelope": 0,
+	"duration_seconds": 300,
+	"enemies": 3,
+	"wall_seconds": 0.24833879992365837,
+	"first_track_wall_seconds_including_pause": 0,
+	"scope": "Real WMF M4A playback and audio mixer, AI held stationary to isolate music lifecycle; no fixed simulation clock",
+	"passed_cases": [
+		"Missing local music keeps gameplay stopped and exposes an Enter-to-retry error"
+	]
+}

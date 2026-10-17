@@ -147,8 +147,8 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	if (Paused) { Title=TEXT("PAUSED"); Line=TEXT("The timer and the city are paused."); Action=TEXT("P TO RESUME"); }
 	else switch (Match->State)
 	{
-	case ENinjaMatchState::Loading: Title=TEXT("PREPARING CITY"); Line=TEXT("Waiting for the city and safe footing..."); break;
-	case ENinjaMatchState::Ready: Title=TEXT("IKEBUKURO NINJA"); Line=FString::Printf(TEXT("Defeat all %d red ninjas within 5 minutes."),Match->Enemies.Num()); Action=TEXT("ENTER TO START"); break;
+	case ENinjaMatchState::Loading: Title=TEXT("PREPARING CITY"); Line=Match->MusicError.IsEmpty()?TEXT("Preparing the city, safe footing and music..."):Match->MusicError; break;
+	case ENinjaMatchState::Ready: Title=TEXT("IKEBUKURO NINJA"); Line=Match->UsesRoundMusic()?FString::Printf(TEXT("Defeat all %d red ninjas before the song ends."),Match->Enemies.Num()):FString::Printf(TEXT("Defeat all %d red ninjas within 5 minutes."),Match->Enemies.Num()); Action=TEXT("ENTER TO START"); break;
 	case ENinjaMatchState::Countdown: Title=FString::Printf(TEXT("START IN %d"),FMath::Max(1,FMath::CeilToInt(Match->CountdownSeconds))); Line=TEXT("Find red markers on the street and roofs."); break;
 	case ENinjaMatchState::Won: Title=TEXT("MISSION COMPLETE"); Line=Match->ResultReason; Action=TEXT("ENTER TO RETRY"); Color=FLinearColor(.25,1,.6); break;
 	case ENinjaMatchState::Lost: Title=TEXT("MISSION FAILED"); Line=Match->ResultReason; Action=TEXT("ENTER TO RETRY"); Color=FLinearColor(1,.3,.2); break;

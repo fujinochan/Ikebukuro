@@ -1,0 +1,26 @@
+{
+	"status": "passed",
+	"error": "",
+	"full_track": true,
+	"phase": 10,
+	"peak_decoded_envelope": 0.32478773593902588,
+	"duration_seconds": 243.718994140625,
+	"enemies": 3,
+	"wall_seconds": 257.6783952973783,
+	"first_track_wall_seconds_including_pause": 244.55399860069156,
+	"scope": "Real WMF M4A playback and audio mixer, AI held stationary to isolate music lifecycle; no fixed simulation clock",
+	"passed_cases": [
+		"Real M4A is ready, duration matches metadata, playback remains stopped before countdown",
+		"Music does not start during the three-second countdown",
+		"Gameplay starts the media and audio mixer, HUD remaining time follows media position",
+		"Pause freezes both song position and game timer, then resumes them",
+		"Non-zero decoded audio confirmed; play the entire song to its natural end",
+		"Actual media end produces a time-limit loss and closes the player",
+		"Retry prepares a fresh media player at zero with the full song duration",
+		"Retry starts the song from the beginning; apply lethal contact damage",
+		"Health loss stops the song immediately",
+		"Second retry prepares another fresh round",
+		"Arrange the final enemy defeat on the actual media-end event",
+		"The last defeat wins a tied music deadline, stops playback and stays stable"
+	]
+}

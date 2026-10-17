@@ -13,12 +13,22 @@
 #include "Kismet/GameplayStatics.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
+#include "Misc/Paths.h"
+#include "HAL/FileManager.h"
+#include "MediaPlayer.h"
+#include "MediaSoundComponent.h"
+#include "FileMediaSource.h"
+#include "NinjaMusicCheck.h"
 
 ANinjaMatchDirector::ANinjaMatchDirector()
 {
 	PrimaryActorTick.bCanEverTick=true; PrimaryActorTick.bTickEvenWhenPaused=true;
 	// Resolve outcomes after physics/projectiles so the last kill wins a tied deadline.
 	PrimaryActorTick.TickGroup=TG_PostUpdateWork;
+	MusicSound=CreateDefaultSubobject<UMediaSoundComponent>(TEXT("RoundMusicSound"));
+	SetRootComponent(MusicSound); MusicSound->SetAutoActivate(false);
+	MusicSound->bAllowSpatialization=false; MusicSound->bIsUISound=false;
+	MusicSound->PrimaryComponentTick.bTickEvenWhenPaused=true;
 }
 ANinjaMatchDirector* ANinjaMatchDirector::Find(const UObject* Context)
 {
@@ -37,6 +47,9 @@ void ANinjaMatchDirector::BeginPlay()
 	for (const TCHAR* Flag:{TEXT("CityAreaCheck"),TEXT("CityTextureCheck"),TEXT("NinjaEncounterCheck"),TEXT("NinjaCombatCheck"),TEXT("NinjaCityCombatCheck")})
 		if (FParse::Param(FCommandLine::Get(),Flag)) bActive=false;
 	SetActorTickEnabled(bActive); if (!bActive) return;
+	bMusicRound=(GetWorld()->GetMapName().Contains(TEXT("L_Ikebukuro")) || FParse::Param(FCommandLine::Get(),TEXT("NinjaMusicCheck"))) &&
+		!FParse::Param(FCommandLine::Get(),TEXT("NinjaLegacyTimerCheck"));
+	if (bMusicRound) OpenRoundMusic();
 	Ninja=Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 	for (TActorIterator<ARedNinja> It(GetWorld());It;++It)
 	{
@@ -53,9 +66,51 @@ void ANinjaMatchDirector::BeginPlay()
 		InputComponent->BindKey(EKeys::P,IE_Pressed,this,&ANinjaMatchDirector::TogglePause).bExecuteWhenPaused=true;
 		InputComponent->BindKey(EKeys::Escape,IE_Pressed,this,&ANinjaMatchDirector::TogglePause).bExecuteWhenPaused=true;
 	}
+	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaMusicCheck"))) GetWorld()->SpawnActor<ANinjaMusicCheck>();
+}
+void ANinjaMatchDirector::StopRoundMusic()
+{
+	MusicSound->Stop(); MusicSound->SetMediaPlayer(nullptr);
+	if (RoundMusic)
+	{
+		RoundMusic->OnEndReached.RemoveAll(this); RoundMusic->OnMediaOpenFailed.RemoveAll(this);
+		RoundMusic->Close(); RoundMusic=nullptr;
+	}
+	MusicSource=nullptr; bMusicStarted=false;
+}
+void ANinjaMatchDirector::OpenRoundMusic()
+{
+	StopRoundMusic(); bMusicReady=false; bSongEnded=false; MusicError.Reset();
+	const bool MissingCheck=FParse::Param(FCommandLine::Get(),TEXT("NinjaMusicCheck")) && FParse::Param(FCommandLine::Get(),TEXT("MusicMissingFileCheck"));
+	const FString Path=FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir()/(MissingCheck?TEXT("Movies/__missing_music_check__.m4a"):TEXT("Movies/Ikebukuro Ninja City.m4a")));
+	if (!IFileManager::Get().FileExists(*Path)) { MusicOpenFailed(Path); return; }
+	RoundMusic=NewObject<UMediaPlayer>(this); RoundMusic->PlayOnOpen=false;
+	RoundMusic->SetDesiredPlayerName(TEXT("WmfMedia")); RoundMusic->SetLooping(false);
+	RoundMusic->OnEndReached.AddDynamic(this,&ANinjaMatchDirector::MusicEnded);
+	RoundMusic->OnMediaOpenFailed.AddDynamic(this,&ANinjaMatchDirector::MusicOpenFailed);
+	MusicSource=NewObject<UFileMediaSource>(this); MusicSource->PrecacheFile=true; MusicSource->SetFilePath(Path);
+	MusicSound->SetMediaPlayer(RoundMusic); MusicSound->SetVolumeMultiplier(.35f);
+	if (!RoundMusic->OpenSource(MusicSource)) MusicOpenFailed(Path);
+}
+void ANinjaMatchDirector::MusicOpenFailed(FString Url)
+{
+	MusicError=TEXT("Music unavailable. Press ENTER to retry.");
+	UE_LOG(LogTemp,Error,TEXT("ROUND_MUSIC_OPEN_FAILED %s"),*Url);
+}
+void ANinjaMatchDirector::MusicEnded()
+{
+	if (State==ENinjaMatchState::Playing && bMusicStarted) bSongEnded=true;
+}
+void ANinjaMatchDirector::StartRound()
+{
+	State=ENinjaMatchState::Playing;
+	if (!bMusicRound) return;
+	if (!RoundMusic || !RoundMusic->Play()) { Finish(false,TEXT("Music could not start")); return; }
+	bMusicStarted=true; MusicSound->UpdatePlayer(); MusicSound->Start();
 }
 bool ANinjaMatchDirector::IsPrepared() const
 {
+	if (bMusicRound && (!bMusicReady || !MusicError.IsEmpty())) return false;
 	if (!Ninja || !Ninja->GetCharacterMovement()->IsMovingOnGround() || Enemies.IsEmpty()) return false;
 	for (ARedNinja* Enemy:Enemies) if (!IsValid(Enemy) || Enemy->GetCharacterMovement()->IsFalling() || !Enemy->IsReadyForMatch()) return false;
 	// The isolated NullRHI route check validates saved collision without a renderer.
@@ -77,6 +132,12 @@ void ANinjaMatchDirector::Tick(float DeltaSeconds)
 	if (!Ninja) Ninja=Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 	if (State==ENinjaMatchState::Loading)
 	{
+		if (bMusicRound && !bMusicReady && RoundMusic && RoundMusic->IsReady() && RoundMusic->GetDuration().GetTotalSeconds()>0)
+		{
+			RoundDurationSeconds=float(RoundMusic->GetDuration().GetTotalSeconds());
+			RemainingSeconds=RoundDurationSeconds; bMusicReady=true;
+			UE_LOG(LogTemp,Display,TEXT("ROUND_MUSIC_READY %.3f seconds"),RoundDurationSeconds);
+		}
 		PreparedSeconds=IsPrepared()?PreparedSeconds+DeltaSeconds:0;
 		if (PreparedSeconds>=.5)
 		{
@@ -88,31 +149,41 @@ void ANinjaMatchDirector::Tick(float DeltaSeconds)
 	else if (State==ENinjaMatchState::Countdown)
 	{
 		CountdownSeconds=FMath::Max(0.f,CountdownSeconds-DeltaSeconds);
-		if (CountdownSeconds<=0) State=ENinjaMatchState::Playing;
+		if (CountdownSeconds<=0) StartRound();
 	}
 	else if (State==ENinjaMatchState::Playing)
 	{
-		RemainingSeconds=FMath::Max(0.f,RemainingSeconds-DeltaSeconds);
+		if (bMusicRound && RoundMusic) RemainingSeconds=FMath::Clamp(RoundDurationSeconds-float(RoundMusic->GetTime().GetTotalSeconds()),0.f,RoundDurationSeconds);
+		else RemainingSeconds=FMath::Max(0.f,RemainingSeconds-DeltaSeconds);
 		if (RemainingEnemies()==0) Finish(true,TEXT("All red ninjas defeated"));
 		else if (Ninja->Health<=0) Finish(false,TEXT("No health remaining"));
-		else if (RemainingSeconds<=0) Finish(false,TEXT("Time is up"));
+		else if (bMusicRound && (!RoundMusic || RoundMusic->HasError() || !MusicError.IsEmpty())) Finish(false,TEXT("Music playback failed"));
+		else if (bMusicRound && bSongEnded) { RemainingSeconds=0; Finish(false,TEXT("The song has ended")); }
+		else if (!bMusicRound && RemainingSeconds<=0) Finish(false,TEXT("Time is up"));
 	}
 }
 bool ANinjaMatchDirector::CanDefeat(ARedNinja* Enemy) const { return CanPlay() && Enemies.Contains(Enemy) && !Credited.Contains(Enemy); }
 void ANinjaMatchDirector::CreditDefeat(ARedNinja* Enemy) { if (CanDefeat(Enemy)) Credited.Add(Enemy); }
 void ANinjaMatchDirector::Confirm()
 {
+	if (State==ENinjaMatchState::Loading && bMusicRound && !MusicError.IsEmpty()) { OpenRoundMusic(); return; }
 	if (State==ENinjaMatchState::Ready) { CountdownSeconds=3; State=ENinjaMatchState::Countdown; }
 	else if (State==ENinjaMatchState::Won || State==ENinjaMatchState::Lost) Retry();
 }
 void ANinjaMatchDirector::TogglePause()
 {
 	if (State==ENinjaMatchState::Playing || State==ENinjaMatchState::Countdown)
-		UGameplayStatics::SetGamePaused(this,!UGameplayStatics::IsGamePaused(this));
+	{
+		const bool Paused=UGameplayStatics::IsGamePaused(this);
+		if (!Paused && bMusicStarted && RoundMusic) RoundMusic->Pause();
+		UGameplayStatics::SetGamePaused(this,!Paused);
+		if (Paused && bMusicStarted && RoundMusic) RoundMusic->Play();
+	}
 }
 void ANinjaMatchDirector::Finish(bool bWon,const FString& Reason)
 {
 	State=bWon?ENinjaMatchState::Won:ENinjaMatchState::Lost; ResultReason=Reason;
+	StopRoundMusic();
 	Ninja->GetCharacterMovement()->StopMovementImmediately(); Ninja->GetCharacterMovement()->ClearAccumulatedForces(); Ninja->GetCharacterMovement()->DisableMovement();
 	Ninja->DoJumpEnd(); Ninja->DoSprintEnd();
 	for (ARedNinja* Enemy:Enemies) if (IsValid(Enemy))
@@ -125,7 +196,8 @@ void ANinjaMatchDirector::Retry()
 	UGameplayStatics::SetGamePaused(this,false); State=ENinjaMatchState::Loading;
 	for (TActorIterator<ANinjaShuriken> It(GetWorld());It;++It) It->Destroy();
 	for (ARedNinja* Enemy:Enemies) if (IsValid(Enemy)) Enemy->Destroy();
-	Enemies.Reset(); Credited.Reset(); RemainingSeconds=300; CountdownSeconds=3; PreparedSeconds=0; ResultReason.Reset(); ++RoundNumber;
+	Enemies.Reset(); Credited.Reset(); RemainingSeconds=RoundDurationSeconds; CountdownSeconds=3; PreparedSeconds=0; ResultReason.Reset(); ++RoundNumber;
+	if (bMusicRound) OpenRoundMusic();
 	Ninja->ResetForMatch(StartFoot,StartRotation);
 	for (const auto& Spawn:Spawns)
 	{
@@ -139,5 +211,6 @@ void ANinjaMatchDirector::Retry()
 void ANinjaMatchDirector::EndPlay(const EEndPlayReason::Type Reason)
 {
 	if (bActive) UGameplayStatics::SetGamePaused(this,false);
+	StopRoundMusic();
 	Super::EndPlay(Reason);
 }
