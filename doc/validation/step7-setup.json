@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "maps": [
+    "/Game/Ninja/Maps/L_NinjaMatch",
+    "/Game/Ninja/Maps/L_Ikebukuro"
+  ],
+  "round_seconds": 300,
+  "countdown_seconds": 3,
+  "enemies": 3,
+  "retry": "reset actors and player in place, keep city tiles loaded",
+  "controls": {
+    "enter": "start/retry",
+    "p": "pause/resume",
+    "escape": "pause/resume in standalone; PIE may reserve Escape"
+  },
+  "external_downloads": false
+}

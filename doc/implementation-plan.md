@@ -2,9 +2,9 @@
 
 作成日: 2026-10-16  
 対象: `IkebukuroNinjaCity` / Unreal Engine  
-状態: Step 1〜6とStep 6.5を実装・検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。次はStep 7へ進む。以下の数値・操作・追加ルールは初期案で、試遊結果に合わせて調整する。
+状態: Step 1〜7（追加のStep 6.5を含む）を実装・検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵3体・300秒の開始から勝敗・リトライまで実装した。次はStep 8の敵8体と経路・難易度調整へ進む。以下の数値・操作・追加ルールは初期案で、試遊結果に合わせて調整する。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)。
 
 追加調査: [街のテクスチャ](texture-investigation.md)。既存Stepの番号を維持し、Step 6と7の間にStep 6.5を追加した。
 
@@ -152,7 +152,8 @@ Tools/City/                    # 調査・切り出し・検証の再現用ス�
 | 走る | Shift を押している間 |
 | ジャンプ / 次の段 | Space を押す |
 | 手裏剣 | マウス左ボタン |
-| ポーズ | Esc |
+| 開始／リトライ | Enter |
+| ポーズ | P（単独ゲーム実行ではEscも可。PIEではEscが終了操作になる場合がある） |
 
 **完了条件:** タイミング成功で最大3段、失敗で次段不発、着地後に再試行できる。通常ジャンプでは越えられないテスト建物を、3段成功で越えられる。30 / 60 / 120 fps で成功判定が大きく変わらない。
 

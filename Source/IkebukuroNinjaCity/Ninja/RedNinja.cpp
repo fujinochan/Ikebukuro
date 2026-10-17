@@ -2,6 +2,7 @@
 #include "NinjaCharacter.h"
 #include "NinjaAppearance.h"
 #include "NinjaPatrolArea.h"
+#include "NinjaMatchDirector.h"
 #include "AIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -38,10 +39,13 @@ void ARedNinja::BeginPlay()
 bool ARedNinja::TryDefeat(ENinjaDefeatMethod Method,ANinjaCharacter* Ninja)
 {
 	if (bDefeated || !IsValid(Ninja)) return false;
+	auto* Match=ANinjaMatchDirector::Find(this);
+	if (Match && !Match->CanDefeat(this)) return false;
 	bDefeated=true; DefeatMethod=Method;
 	SetState(ENinjaBrainState::Defeated); SetActorTickEnabled(false);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->DisableMovement(); Ninja->RegisterDefeat(Method);
+	if (Match) Match->CreditDefeat(this);
 	// Retain identity briefly for a subsequent CharacterMovement landing callback.
 	SetActorHiddenInGame(true); SetLifeSpan(0.8f); return true;
 }
@@ -80,6 +84,7 @@ void ARedNinja::Tick(float DeltaSeconds)
 		if (!PatrolArea->Sample(Foot,Surface)) { SetState(ENinjaBrainState::Blocked); return; }
 		HomeFoot=Surface; bInitialized=true; PatrolTarget=PatrolArea->PatrolGoal(HomeFoot,0); SetState(ENinjaBrainState::Patrol);
 	}
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) { Movement->StopMovementImmediately(); return; }
 	FVector Surface;
 	if (Foot.Z<PatrolArea->GetActorLocation().Z-80 || !PatrolArea->Sample(Foot,Surface)) { ReturnSafely(); return; }
 	if (Movement->IsFalling()) return;

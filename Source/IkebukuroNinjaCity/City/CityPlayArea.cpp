@@ -1,6 +1,7 @@
 #include "CityPlayArea.h"
 #include "LocalCityTileset.h"
 #include "Ninja/NinjaCharacter.h"
+#include "Ninja/NinjaMatchDirector.h"
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -81,6 +82,7 @@ void ACityPlayArea::Tick(float DeltaSeconds)
 	Ninja = Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 	if (!Ninja) return;
 	Ninja->SetSafeSurface(SafeStreet);
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
 	auto* PC = Cast<APlayerController>(Ninja->GetController());
 	if (!PC) return;
 	const FVector Position = Ninja->GetActorLocation();

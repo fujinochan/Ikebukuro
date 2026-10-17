@@ -2,6 +2,8 @@
 #include "NinjaCharacter.h"
 #include "Engine/Canvas.h"
 #include "RedNinja.h"
+#include "NinjaMatchDirector.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "GameFramework/PlayerController.h"
@@ -11,6 +13,8 @@ void ANinjaTrainingHUD::DrawHUD()
 	Super::DrawHUD();
 	const auto* Ninja = Cast<ANinjaCharacter>(GetOwningPawn());
 	if (!Ninja || !Canvas) return;
+	auto* Match=ANinjaMatchDirector::Find(this);
+	if (Match && (Match->State!=ENinjaMatchState::Playing || UGameplayStatics::IsGamePaused(this))) { DrawMatchHUD(Match); return; }
 	const float Scale = FMath::Clamp(Canvas->ClipX / 1280.f, 0.75f, 1.5f);
 	const float X = 28 * Scale;
 	const bool bCity = GetWorld()->GetMapName().Contains(TEXT("L_Ikebukuro"));
@@ -42,7 +46,7 @@ void ANinjaTrainingHUD::DrawHUD()
 	DrawLine(CX+3,CY,CX+8,CY,FLinearColor::White,1.5f);
 	DrawLine(CX,CY-8,CX,CY-3,FLinearColor::White,1.5f);
 	DrawLine(CX,CY+3,CX,CY+8,FLinearColor::White,1.5f);
-	if (bCity || bEncounter)
+	if ((bCity || bEncounter) && !Match)
 	{
 		int32 Alive=0;
 		FVector View; FRotator Look; GetOwningPlayerController()->GetPlayerViewPoint(View,Look);
@@ -61,4 +65,76 @@ void ANinjaTrainingHUD::DrawHUD()
 		DrawText(FString::Printf(TEXT("ENCOUNTER: %d RED NINJAS / STREET + ROOF"),Alive),FLinearColor(.85f,.3f,.2f),X,285*Scale,nullptr,Scale);
 		DrawText(bCity?TEXT("Street ahead / low roof to the west"):TEXT("Use the triple jump to reach the 8m roof"),FLinearColor(.7f,.8f,.9f),X,304*Scale,nullptr,Scale);
 	}
+	if (Match) DrawMatchHUD(Match);
+}
+
+void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
+{
+	const float W=Canvas->ClipX,H=Canvas->ClipY,S=FMath::Clamp(W/1280.f,.75f,1.5f);
+	const int32 Seconds=FMath::CeilToInt(Match->RemainingSeconds);
+	const FString Time=FString::Printf(TEXT("%02d:%02d"),Seconds/60,Seconds%60);
+	DrawRect(FLinearColor(.015,.025,.045,.9),W-270*S,16*S,254*S,112*S);
+	DrawText(Time,Seconds<=30?FLinearColor(1,.3,.2):FLinearColor::White,W-250*S,29*S,nullptr,2.6*S);
+	const auto* Ninja=Cast<ANinjaCharacter>(GetOwningPawn());
+	DrawText(FString::Printf(TEXT("ENEMIES %d / %d   HP %d / 3"),Match->RemainingEnemies(),Match->Enemies.Num(),Ninja?Ninja->Health:0),FLinearColor(.9,.8,.6),W-250*S,82*S,nullptr,S);
+	const bool Paused=UGameplayStatics::IsGamePaused(this);
+	LastMarkerCount=LastOffscreenMarkerCount=0;
+	if (Match->State==ENinjaMatchState::Playing && !Paused)
+	{
+		DrawText(TEXT("P: pause  |  R: return"),FLinearColor::White,W-270*S,140*S,nullptr,S);
+		FVector View; FRotator Look; GetOwningPlayerController()->GetPlayerViewPoint(View,Look);
+		const FVector Right=FRotationMatrix(Look).GetUnitAxis(EAxis::Y),Forward=Look.Vector();
+		for (ARedNinja* Enemy:Match->Enemies) if (IsValid(Enemy) && !Enemy->bDefeated)
+		{
+			++LastMarkerCount;
+			const FVector Target=Enemy->GetActorLocation()+FVector(0,0,130),D=Target-View;
+			const FVector Projected=Canvas->Project(Target);
+			FVector2D Point(Projected.X,Projected.Y),Direction(0,-1);
+			const bool Offscreen=Projected.Z<=0 || Point.X<70*S || Point.X>W-70*S || Point.Y<70*S || Point.Y>H-70*S;
+			if (Offscreen)
+			{
+				++LastOffscreenMarkerCount;
+				const double Angle=FMath::Atan2(FVector::DotProduct(D,Right),FVector::DotProduct(D,Forward));
+				Direction=FVector2D(FMath::Sin(Angle),-FMath::Cos(Angle));
+				const double Radius=FMath::Min((W/2-80*S)/FMath::Max(.001,FMath::Abs(Direction.X)),(H/2-90*S)/FMath::Max(.001,FMath::Abs(Direction.Y)));
+				Point=FVector2D(W/2,H/2)+Direction*Radius;
+			}
+			const FLinearColor Red(1,.25,.15); const FVector2D Side(-Direction.Y,Direction.X);
+			DrawLine(Point.X,Point.Y,Point.X-Direction.X*13*S+Side.X*7*S,Point.Y-Direction.Y*13*S+Side.Y*7*S,Red,2*S);
+			DrawLine(Point.X,Point.Y,Point.X-Direction.X*13*S-Side.X*7*S,Point.Y-Direction.Y*13*S-Side.Y*7*S,Red,2*S);
+			const float Up=(Enemy->GetActorLocation().Z-Ninja->GetActorLocation().Z)/100;
+			const FString Label=FString::Printf(TEXT("%s %.0fm %+.0fm"),Enemy->ActorHasTag(TEXT("RoofA"))?TEXT("ROOF"):TEXT("NINJA"),FVector::Dist(Ninja->GetActorLocation(),Enemy->GetActorLocation())/100,Up);
+			DrawText(Label,Red,FMath::Clamp(Point.X-55*S,12.f,W-170*S),Point.Y+10*S,nullptr,S);
+		}
+		return;
+	}
+	DrawRect(FLinearColor(0,0,0,.48),0,0,W,H);
+	const float X=W/2-310*S,Y=H/2-180*S;
+	DrawRect(FLinearColor(.02,.035,.065,.96),X,Y,620*S,360*S);
+	FString Title,Line,Action; FLinearColor Color=FLinearColor::White;
+	if (Paused) { Title=TEXT("PAUSED"); Line=TEXT("The timer and the city are paused."); Action=TEXT("P TO RESUME"); }
+	else switch (Match->State)
+	{
+	case ENinjaMatchState::Loading: Title=TEXT("PREPARING CITY"); Line=TEXT("Waiting for the city and safe footing..."); break;
+	case ENinjaMatchState::Ready: Title=TEXT("IKEBUKURO NINJA"); Line=FString::Printf(TEXT("Defeat all %d red ninjas within 5 minutes."),Match->Enemies.Num()); Action=TEXT("ENTER TO START"); break;
+	case ENinjaMatchState::Countdown: Title=FString::Printf(TEXT("START IN %d"),FMath::Max(1,FMath::CeilToInt(Match->CountdownSeconds))); Line=TEXT("Find red markers on the street and roofs."); break;
+	case ENinjaMatchState::Won: Title=TEXT("MISSION COMPLETE"); Line=Match->ResultReason; Action=TEXT("ENTER TO RETRY"); Color=FLinearColor(.25,1,.6); break;
+	case ENinjaMatchState::Lost: Title=TEXT("MISSION FAILED"); Line=Match->ResultReason; Action=TEXT("ENTER TO RETRY"); Color=FLinearColor(1,.3,.2); break;
+	default: break;
+	}
+	DrawText(Title,Color,X+32*S,Y+30*S,nullptr,2.2*S);
+	DrawText(Line,FLinearColor::White,X+32*S,Y+91*S,nullptr,1.1*S);
+	if (Match->State==ENinjaMatchState::Won || Match->State==ENinjaMatchState::Lost)
+	{
+		DrawText(FString::Printf(TEXT("DEFEATED  %d / %d"),Ninja->Defeats,Match->Enemies.Num()),FLinearColor::White,X+32*S,Y+144*S,nullptr,1.3*S);
+		DrawText(FString::Printf(TEXT("STOMPS  %d     SHURIKEN  %d"),Ninja->StompDefeats,Ninja->ShurikenDefeats),FLinearColor(.75,.85,.95),X+32*S,Y+181*S,nullptr,1.1*S);
+		DrawText(TEXT("TIME LEFT  ")+Time,FLinearColor(.75,.85,.95),X+32*S,Y+218*S,nullptr,1.1*S);
+		DrawText(Action,Color,X+32*S,Y+280*S,nullptr,1.6*S);
+		return;
+	}
+	DrawText(TEXT("WASD move   |   MOUSE look   |   SHIFT run"),FLinearColor(.75,.85,.95),X+32*S,Y+137*S,nullptr,S);
+	DrawText(TEXT("SPACE near the jump apex: up to 3 jumps"),FLinearColor(.75,.85,.95),X+32*S,Y+165*S,nullptr,S);
+	DrawText(TEXT("LMB / F: throw   |   Descend onto an enemy to stomp"),FLinearColor(.75,.85,.95),X+32*S,Y+193*S,nullptr,S);
+	DrawText(TEXT("P: pause   |   Red arrows: enemy direction / height"),FLinearColor(.75,.85,.95),X+32*S,Y+221*S,nullptr,S);
+	DrawText(Action,Color,X+32*S,Y+280*S,nullptr,1.6*S);
 }

@@ -21,6 +21,9 @@ public:
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void DoJumpStart() override;
 	virtual void DoJumpEnd() override;
+	virtual void DoMove(float Right,float Forward) override;
+	virtual void DoLook(float Yaw,float Pitch) override;
+	void ResetForMatch(FVector Foot,FRotator Rotation);
 
 	UFUNCTION(BlueprintCallable, Category="Ninja|Input")
 	void DoSprintStart();

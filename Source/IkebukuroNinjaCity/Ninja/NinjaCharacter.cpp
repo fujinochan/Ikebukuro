@@ -2,6 +2,7 @@
 #include "NinjaAppearance.h"
 #include "RedNinja.h"
 #include "NinjaShuriken.h"
+#include "NinjaMatchDirector.h"
 #include "City/CityPlayArea.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -90,6 +91,7 @@ bool ANinjaCharacter::CanChainJump() const
 
 void ANinjaCharacter::DoJumpStart()
 {
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
 	if (bJumpButtonHeld) return;
 	bJumpButtonHeld = true;
 	const bool bGrounded = GetCharacterMovement()->IsMovingOnGround();
@@ -125,6 +127,7 @@ void ANinjaCharacter::Landed(const FHitResult& Hit)
 
 void ANinjaCharacter::DoSprintStart()
 {
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
 	bIsSprinting = true;
 	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 }
@@ -138,8 +141,8 @@ void ANinjaCharacter::DoSprintEnd()
 void ANinjaCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	if (!bCityHandlesRecovery && GetActorLocation().Z < -1500) RecoverToSurface(SafeSurface,true);
-	if (!bCityHandlesRecovery)
+	if (ANinjaMatchDirector::AllowsGameplay(this) && !bCityHandlesRecovery && GetActorLocation().Z < -1500) RecoverToSurface(SafeSurface,true);
+	if (ANinjaMatchDirector::AllowsGameplay(this) && !bCityHandlesRecovery)
 		if (auto* PC=Cast<APlayerController>(GetController()); PC && PC->WasInputKeyJustPressed(EKeys::R)) RecoverToSurface(SafeSurface,false);
 	PreviousVerticalVelocity=GetVelocity().Z;
 	PreviousFeet=GetActorLocation()-FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
@@ -149,6 +152,7 @@ void ANinjaCharacter::DoThrow() { TryThrowShuriken(); }
 
 bool ANinjaCharacter::TryThrowShuriken()
 {
+	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0) return false;
 	const double Now=GetWorld()->GetTimeSeconds();
 	if (Now<NextThrowTime) return false;
 	auto* PC=Cast<APlayerController>(GetController());
@@ -175,6 +179,7 @@ bool ANinjaCharacter::TryThrowShuriken()
 
 bool ANinjaCharacter::TryStomp(ARedNinja* Enemy,const FHitResult& Hit)
 {
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return false;
 	if (!Enemy || Enemy->bDefeated) return false;
 	const float Top=Enemy->GetActorLocation().Z+Enemy->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	// A previous descending frame may precede a bounce. Never accept an actual
@@ -202,12 +207,14 @@ bool ANinjaCharacter::IsInvulnerable() const { return GetWorld()->GetTimeSeconds
 
 bool ANinjaCharacter::ReceiveContactDamage()
 {
-	if (IsInvulnerable()) return false;
+	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0 || IsInvulnerable()) return false;
 	Health=FMath::Max(0,Health-1); InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
 	CombatFeedback=TEXT("Hit! One second of protection");
 	if (Health==0)
 	{
-		++Knockouts; Health=3; RecoverToSurface(SafeSurface,false);
+		++Knockouts;
+		if (ANinjaMatchDirector::Find(this)) return true;
+		Health=3; RecoverToSurface(SafeSurface,false);
 		CombatFeedback=TEXT("Knocked out - returned with full health");
 	}
 	return true;
@@ -215,6 +222,7 @@ bool ANinjaCharacter::ReceiveContactDamage()
 
 void ANinjaCharacter::RegisterDefeat(ENinjaDefeatMethod Method)
 {
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
 	++Defeats;
 	if (Method==ENinjaDefeatMethod::Stomp) { ++StompDefeats; CombatFeedback=TEXT("STOMP! Red ninja defeated"); }
 	else { ++ShurikenDefeats; CombatFeedback=TEXT("SHURIKEN HIT! Red ninja defeated"); }
@@ -224,15 +232,32 @@ void ANinjaCharacter::SetSafeSurface(FVector Surface) { SafeSurface=Surface; }
 
 void ANinjaCharacter::RecoverToSurface(FVector Surface,bool bFallPenalty)
 {
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
 	SetSafeSurface(Surface);
 	if (bFallPenalty)
 	{
 		Health=FMath::Max(0,Health-1);
-		if (Health==0) { ++Knockouts; Health=3; }
+		if (Health==0) { ++Knockouts; if (ANinjaMatchDirector::Find(this)) return; Health=3; }
 		InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
 	}
 	SetActorLocation(Surface+FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+20));
 	GetCharacterMovement()->StopMovementImmediately(); GetCharacterMovement()->ClearAccumulatedForces(); GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 	JumpStage=0; PredictedApexTime=0;
 	CombatFeedback=bFallPenalty?TEXT("Fell - lost one health, returned to safety"):TEXT("Returned to safety");
+}
+
+void ANinjaCharacter::DoMove(float Right,float Forward)
+{ if (ANinjaMatchDirector::AllowsGameplay(this)) Super::DoMove(Right,Forward); }
+void ANinjaCharacter::DoLook(float Yaw,float Pitch)
+{ if (ANinjaMatchDirector::AllowsGameplay(this)) Super::DoLook(Yaw,Pitch); }
+void ANinjaCharacter::ResetForMatch(FVector Foot,FRotator Rotation)
+{
+	Health=3; Defeats=StompDefeats=ShurikenDefeats=ShotsFired=ShurikenWorldHits=Knockouts=0;
+	JumpStage=0; PredictedApexTime=NextThrowTime=InvulnerableUntil=0;
+	bJumpButtonHeld=false; DoJumpEnd(); DoSprintEnd();
+	SafeSurface=PreviousFeet=Foot; PreviousVerticalVelocity=0;
+	SetActorLocation(Foot+FVector(0,0,110));
+	GetCharacterMovement()->StopMovementImmediately(); GetCharacterMovement()->ClearAccumulatedForces(); GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+	if (GetController()) GetController()->SetControlRotation(Rotation);
+	JumpFeedback=TEXT("Ready - SPACE to jump"); CombatFeedback=TEXT("F / LMB: shuriken  |  Stomp red ninjas from above");
 }

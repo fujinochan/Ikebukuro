@@ -13,3 +13,4 @@
 - Approval granted for Step 5: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for build and runtime verification. No new downloads are authorized.
 - Approval granted for Step 6: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for implementation and verification. No additional downloads are planned or authorized.
 - Approval granted for Step 6.5: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access. Use the original ZIP within this project; no additional downloads.
+- Approval granted for Step 7: the same UE 5.8 / Visual Studio / MSVC / Windows SDK read/execute and normal settings/cache/temp access for implementation and verification. No additional downloads.

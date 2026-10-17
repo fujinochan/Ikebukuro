@@ -17,6 +17,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	bool TryDefeat(ENinjaDefeatMethod Method, ANinjaCharacter* Ninja);
+	bool IsReadyForMatch() const { return !bAIEnabled || bInitialized; }
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja") bool bDefeated=false;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja") ENinjaDefeatMethod DefeatMethod=ENinjaDefeatMethod::Stomp;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|AI") TObjectPtr<ANinjaPatrolArea> PatrolArea;
