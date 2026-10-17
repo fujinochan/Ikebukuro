@@ -80,7 +80,7 @@ void ANinjaPerformanceCheck::Tick(float DeltaSeconds)
 	{
 		Match=ANinjaMatchDirector::Find(this); Ninja=Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0)); PC=UGameplayStatics::GetPlayerController(this,0);
 		if (!Match || !Ninja || !PC) return;
-		for (ARedNinja* E:Match->Enemies) E->DetectionRadius=0; // Keep real patrols without combat ending the sample.
+		for (ARedNinja* E:Match->Enemies) { E->DetectionRadius=0; E->bRangedAttackEnabled=false; } // Keep real patrols without combat ending the sample.
 		StartPoint=Ninja->GetActorLocation()-FVector(0,0,100);
 	}
 	if (Match->State==ENinjaMatchState::Ready) Match->Confirm();

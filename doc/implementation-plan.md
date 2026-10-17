@@ -2,9 +2,9 @@
 
 作成日: 2026-10-16  
 対象: `IkebukuroNinjaCity` / Unreal Engine  
-状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。Step 9への追加要望で自動カメラを実装・検証済み。Step 9の簡易性能計測と最適化も実施済み。次は通し試遊とStep 10のWindows配布ビルド。
+状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。Step 9への追加要望で自動カメラを実装・検証済み。Step 9の簡易性能計測と最適化も実施済み。配布前の追加要望として敵の巡回距離・速度2倍、100m以内の3方向射撃、一撃敗北も実装。次は通し試遊とStep 10のWindows配布ビルド。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)、[Step 9の自動カメラ](step9-auto-camera.md)、[Step 9の簡易性能計測](step9-performance.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)、[Step 9の自動カメラ](step9-auto-camera.md)、[Step 9の簡易性能計測](step9-performance.md)、[敵の射撃と一撃敗北](one-hit-volley.md)。
 
 追加調査: [街のテクスチャ](texture-investigation.md)。既存Stepの番号を維持し、Step 6と7の間にStep 6.5を追加した。
 
@@ -20,6 +20,7 @@
 - 直進する手裏剣を投げられる。
 - `13116_toshima-ku_pref_2025_3dtiles_mvt_1_op.zip` の3D都市データから、池袋駅周辺の一部をプレイエリアとして使う。
 - 赤い敵忍者を、踏みつけまたは手裏剣の命中で倒す。
+- 赤忍者の巡回距離と速度を約2倍にし、100m以内では2秒間隔で前方と左右30度へ3発の手裏剣を投げる。黒忍者は一撃で敗北し、HP表示をなくす（追加要望）。
 - 同梱のテクスチャ付き建物LOD2を使い、街の外観を改善する（追加要望）。
 - 提供された `Ikebukuro Ninja City.m4a` を操作開始と同時に再生し、曲終了でゲームオーバーにする（追加要望）。
 
@@ -30,9 +31,9 @@
 | 対象 | Windows PC、1人用、キーボードとマウス |
 | 制限時間 | 操作開始から曲終了まで約243.719秒。ポーズ中と開始前のロード中は停止 |
 | 勝利 | 固定配置した敵8体を全滅させる |
-| 敗北 | 時間切れ、または主人公の体力が0になる |
-| 主人公の体力 | 3。敵との側面接触で1減少、被弾後は短い無敵時間 |
-| 落下・範囲外 | 体力を1減らし、安全な復帰地点に戻す。残り時間と撃破数は維持 |
+| 敗北 | 曲終了、または1回の被弾・接触・落下ペナルティ |
+| 主人公 | 一撃で敗北。HP数値表示と被弾後の無敵時間なし |
+| 落下・範囲外 | 敗北。Rによる任意の安全地点への復帰はペナルティなし |
 | 敵の耐久力 | 踏みつけ・手裏剣のどちらも1回で撃破 |
 | 手裏剣 | 弾数無制限、投射間隔あり、重力なし、追尾なし、貫通なし |
 | ステージ | 池袋駅周辺の約400m四方を候補にする。実際の範囲はデータと移動速度の検証後に決定 |

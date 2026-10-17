@@ -23,6 +23,7 @@
 #include "NinjaExplosionCheck.h"
 #include "NinjaCameraCheck.h"
 #include "NinjaPerformanceCheck.h"
+#include "NinjaVolleyCheck.h"
 
 ANinjaMatchDirector::ANinjaMatchDirector()
 {
@@ -61,6 +62,7 @@ void ANinjaMatchDirector::BeginPlay()
 		Spawn.Area=It->PatrolArea; Spawn.Tags=It->Tags; Spawn.bAI=It->bAIEnabled;
 		Spawn.RouteOrder=It->RouteOrder; Spawn.RouteHint=It->RouteHint; Spawn.AssistRoute=It->AssistRoute;
 		Spawn.DetectionRadius=It->DetectionRadius; Spawn.LeashRadius=It->LeashRadius;
+		Spawn.bRanged=It->bRangedAttackEnabled; Spawn.RangedRadius=It->RangedAttackRadius; Spawn.VolleyInterval=It->VolleyInterval; Spawn.ProjectileSpeed=It->ProjectileSpeed;
 		Spawns.Add(Spawn); Enemies.Add(*It);
 	}
 	if (auto* PC=UGameplayStatics::GetPlayerController(this,0))
@@ -74,6 +76,7 @@ void ANinjaMatchDirector::BeginPlay()
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaExplosionCheck"))) GetWorld()->SpawnActor<ANinjaExplosionCheck>();
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaCameraCheck"))) GetWorld()->SpawnActor<ANinjaCameraCheck>();
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaPerformanceCheck"))) GetWorld()->SpawnActor<ANinjaPerformanceCheck>();
+	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaVolleyCheck"))) GetWorld()->SpawnActor<ANinjaVolleyCheck>();
 }
 void ANinjaMatchDirector::StopRoundMusic()
 {
@@ -164,7 +167,7 @@ void ANinjaMatchDirector::Tick(float DeltaSeconds)
 		if (bMusicRound && RoundMusic) RemainingSeconds=FMath::Clamp(RoundDurationSeconds-float(RoundMusic->GetTime().GetTotalSeconds()),0.f,RoundDurationSeconds);
 		else RemainingSeconds=FMath::Max(0.f,RemainingSeconds-DeltaSeconds);
 		if (RemainingEnemies()==0) Finish(true,TEXT("All red ninjas defeated"));
-		else if (Ninja->Health<=0) Finish(false,TEXT("No health remaining"));
+		else if (Ninja->Health<=0) Finish(false,TEXT("One hit - ninja down"));
 		else if (bMusicRound && (!RoundMusic || RoundMusic->HasError() || !MusicError.IsEmpty())) Finish(false,TEXT("Music playback failed"));
 		else if (bMusicRound && bSongEnded) { RemainingSeconds=0; Finish(false,TEXT("The song has ended")); }
 		else if (!bMusicRound && RemainingSeconds<=0) Finish(false,TEXT("Time is up"));
@@ -214,6 +217,7 @@ void ANinjaMatchDirector::Retry()
 		Enemy->PatrolArea=Spawn.Area; Enemy->Tags=Spawn.Tags; Enemy->bAIEnabled=Spawn.bAI;
 		Enemy->RouteOrder=Spawn.RouteOrder; Enemy->RouteHint=Spawn.RouteHint; Enemy->AssistRoute=Spawn.AssistRoute;
 		Enemy->DetectionRadius=Spawn.DetectionRadius; Enemy->LeashRadius=Spawn.LeashRadius;
+		Enemy->bRangedAttackEnabled=Spawn.bRanged; Enemy->RangedAttackRadius=Spawn.RangedRadius; Enemy->VolleyInterval=Spawn.VolleyInterval; Enemy->ProjectileSpeed=Spawn.ProjectileSpeed;
 		Enemies.Add(Enemy); Enemy->FinishSpawning(Spawn.Transform);
 	}
 }

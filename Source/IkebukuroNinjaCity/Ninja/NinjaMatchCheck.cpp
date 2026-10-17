@@ -49,7 +49,7 @@ void ANinjaMatchCheck::Place(FVector Center)
 { Ninja->SetActorLocation(Center); Ninja->GetCharacterMovement()->StopMovementImmediately(); Ninja->GetCharacterMovement()->ClearAccumulatedForces(); Ninja->GetCharacterMovement()->SetMovementMode(MOVE_Falling); }
 bool ANinjaMatchCheck::CheckReset()
 {
-	if (Match->RemainingSeconds!=300 || Match->RemainingEnemies()!=ExpectedEnemies || Ninja->Health!=3 || Ninja->Defeats!=0 || Ninja->JumpStage!=0 || Ninja->ShotsFired!=0 || Ninja->Knockouts!=0 || Ninja->IsInvulnerable()) return false;
+	if (Match->RemainingSeconds!=300 || Match->RemainingEnemies()!=ExpectedEnemies || Ninja->Health!=1 || Ninja->Defeats!=0 || Ninja->JumpStage!=0 || Ninja->ShotsFired!=0 || Ninja->Knockouts!=0 || Ninja->IsInvulnerable()) return false;
 	for (ARedNinja* Enemy:Match->Enemies) if (!IsValid(Enemy) || Enemy->bDefeated || !Enemy->bAIEnabled || !Enemy->IsReadyForMatch()) return false;
 	if (ExpectedEnemies==8)
 	{
@@ -188,7 +188,7 @@ void ANinjaMatchCheck::Tick(float DeltaSeconds)
 	}
 	else if (Phase==17 && Match->State==ENinjaMatchState::Lost)
 	{
-		if (Ninja->Health!=0 || Match->ResultReason!=TEXT("No health remaining") || Match->Enemies[0]->TryDefeat(ENinjaDefeatMethod::Shuriken,Ninja)) { Finish(TEXT("Zero health did not remain a locked loss")); return; }
+		if (Ninja->Health!=0 || Match->ResultReason!=TEXT("One hit - ninja down") || Match->Enemies[0]->TryDefeat(ENinjaDefeatMethod::Shuriken,Ninja)) { Finish(TEXT("Zero health did not remain a locked loss")); return; }
 		Capture(TEXT("health_loss")); Next(TEXT("Zero health loses without automatic healing; post-result defeat is rejected"));
 	}
 	else if (Phase==18 && Elapsed>.3) { Key(EKeys::Enter,true); ++Retries; Next(TEXT("Retry 3 requested from health loss")); }

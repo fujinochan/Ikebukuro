@@ -67,7 +67,7 @@ void ANinjaExplosionCheck::Tick(float DeltaSeconds)
 			for (auto* Mesh:Meshes) UniqueMaterials.Add(Mesh->GetMaterial(0));
 			for (auto* Mesh:Meshes) if (Mesh->GetCollisionEnabled()!=ECollisionEnabled::NoCollision || Mesh->IsSimulatingPhysics()) { Finish(TEXT("Cosmetic explosion gained collision or physics")); return; }
 		}
-		if (Components!=69 || UniqueMaterials.Num()!=7 || UniqueMaterials.Contains(nullptr) || Ninja->Health!=3 || Match->RemainingEnemies()!=Match->Enemies.Num()-1) { Finish(TEXT("Explosion geometry, shared materials or gameplay invariants failed")); return; }
+		if (Components!=69 || UniqueMaterials.Num()!=7 || UniqueMaterials.Contains(nullptr) || Ninja->Health!=1 || Match->RemainingEnemies()!=Match->Enemies.Num()-1) { Finish(TEXT("Explosion geometry, shared materials or gameplay invariants failed")); return; }
 		Capture(TEXT("enemy")); Next(TEXT("69 explosion pieces share 7 materials without collision or splash damage"));
 	}
 	else if (Phase==3)
@@ -81,8 +81,8 @@ void ANinjaExplosionCheck::Tick(float DeltaSeconds)
 		if (PhaseAge<4.5f) return;
 		for (TActorIterator<ANinjaExplosion> It(GetWorld());It;++It) { Finish(TEXT("Explosion outlived its lifetime")); return; }
 		if (!Match->Enemies[1]->TryDefeat(ENinjaDefeatMethod::Stomp,Ninja) || ANinjaExplosion::EnemyBursts!=EnemyBase+2) { Finish(TEXT("Stomp did not explode")); return; }
-		if (!Ninja->ReceiveContactDamage() || Ninja->Health!=2 || ANinjaExplosion::PlayerBursts!=PlayerBase) { Finish(TEXT("Nonlethal hit exploded the player")); return; }
-		Next(TEXT("Expired effect is removed; stomp also explodes; a nonlethal hit does not"));
+		if (Ninja->Health!=1 || ANinjaExplosion::PlayerBursts!=PlayerBase) { Finish(TEXT("Stomp damaged the one-hit player")); return; }
+		Next(TEXT("Expired effect is removed; stomp explodes without damaging the one-hit player"));
 	}
 	else if (Phase==4 && PhaseAge>1.1f)
 	{
@@ -99,7 +99,7 @@ void ANinjaExplosionCheck::Tick(float DeltaSeconds)
 	{
 		Match->Confirm();
 		for (TActorIterator<ANinjaExplosion> It(GetWorld());It;++It) { Finish(TEXT("Retry retained an explosion")); return; }
-		if (Ninja->IsHidden() || Ninja->Health!=3) { Finish(TEXT("Retry left player hidden or dead")); return; }
+		if (Ninja->IsHidden() || Ninja->Health!=1) { Finish(TEXT("Retry left player hidden or dead")); return; }
 		Next(TEXT("Immediate retry removes active explosions and restores player visibility and health"));
 	}
 	else if (Phase==7 && Match->State==ENinjaMatchState::Ready)

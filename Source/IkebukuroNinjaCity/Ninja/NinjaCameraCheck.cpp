@@ -127,7 +127,7 @@ void ANinjaCameraCheck::Tick(float DeltaSeconds)
 	}
 	else if (Phase==13 && Match->State==ENinjaMatchState::Ready)
 	{
-		if (Ninja->Health!=3 || Ninja->IsHidden()) { Finish(TEXT("Retry failed")); return; }
+		if (Ninja->Health!=1 || Ninja->IsHidden()) { Finish(TEXT("Retry failed")); return; }
 		Next(TEXT("Retry reaches ready with a visible healthy player and reset camera input state")); Finish(FString());
 	}
 }

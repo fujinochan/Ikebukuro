@@ -55,6 +55,7 @@ void ANinjaRouteCheck::Tick(float DeltaSeconds)
 		for (ARedNinja* Enemy:Match->Enemies)
 		{
 			Orders.Add(Enemy->RouteOrder); InitialPositions.Add(Enemy->GetActorLocation()); PatrolDistances.Add(0);
+			Enemy->bRangedAttackEnabled=false;
 			if (!Enemy->IsReadyForMatch() || !Enemy->PatrolArea || Enemy->PatrolArea->ValidNodes<3) { Finish(TEXT("Enemy graph unavailable")); return; }
 			if (!Enemy->AssistRoute.IsEmpty()) Roofs.Add(Enemy);
 		}
@@ -64,6 +65,7 @@ void ANinjaRouteCheck::Tick(float DeltaSeconds)
 			if (!LoadObject<USoundWave>(nullptr,*(FString(TEXT("/Game/Ninja/Audio/S_"))+Cue+TEXT(".S_")+Cue))) { Finish(TEXT("Sound asset missing")); return; }
 		Roofs.Sort([](const ARedNinja& A,const ARedNinja& B){return A.RouteOrder<B.RouteOrder;});
 		Cases.Add(TEXT("Eight unique enemies, four ready roof approaches and seven sound assets loaded"));
+		Ninja->GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn,ECR_Ignore);
 		Match->Confirm(); Phase=1;
 	}
 	else if (Phase==1 && Match->CanPlay()) { Phase=2; PhaseTime=Now; }
@@ -150,7 +152,7 @@ void ANinjaRouteCheck::Finish(const FString& Error)
 	auto Report=MakeShared<FJsonObject>(); Report->SetStringField(TEXT("status"),Error.IsEmpty()?TEXT("passed"):TEXT("failed")); Report->SetStringField(TEXT("error"),Error);
 	Report->SetNumberField(TEXT("fps"),FPS); Report->SetNumberField(TEXT("landings"),Landings); Report->SetNumberField(TEXT("feedback_events"),ANinjaFeedback::EmittedCount);
 	Report->SetBoolField(TEXT("rendered"),!FParse::Param(FCommandLine::Get(),TEXT("NullRHI")));
-	Report->SetStringField(TEXT("scope"),TEXT("Independent roof approach tests start by placing the player at each ground entrance; no claim of an end-to-end human playtest"));
+	Report->SetStringField(TEXT("scope"),TEXT("Ranged fire and pawn contact disabled to isolate patrol and roof approaches; starts at each ground entrance; not an end-to-end human playtest"));
 	TArray<TSharedPtr<FJsonValue>> Results; for (const auto& Case:Cases) Results.Add(MakeShared<FJsonValueString>(Case)); Report->SetArrayField(TEXT("passed_cases"),Results);
 	TArray<TSharedPtr<FJsonValue>> Enemies; if (Match) for (ARedNinja* E:Match->Enemies)
 	{

@@ -1,0 +1,18 @@
+{
+	"status": "passed",
+	"error": "",
+	"enemy_bursts": 2,
+	"player_bursts": 2,
+	"passed_cases": [
+		"Start a prepared round with enemies held stationary for effects inspection",
+		"Shuriken defeat emits one explosion; duplicate defeat is rejected",
+		"69 explosion pieces share 7 materials without collision or splash damage",
+		"Triple-sized explosion remains alive beyond the original 1.45-second lifetime",
+		"Expired effect is removed; stomp explodes without damaging the one-hit player",
+		"Lethal damage emits one player explosion and hides the defeated character",
+		"Game loss resolves immediately while the result panel leaves the blast visible",
+		"Immediate retry removes active explosions and restores player visibility and health",
+		"Retry prepares the existing enemy roster",
+		"Fatal fall penalty also emits a knockout explosion"
+	]
+}

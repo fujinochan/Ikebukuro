@@ -89,7 +89,7 @@ void ANinjaMusicCheck::Tick(float DeltaSeconds)
 	}
 	else if (Phase==4 && Match->State==ENinjaMatchState::Lost)
 	{
-		if (Match->ResultReason!=TEXT("The song has ended") || Player || Ninja->Health!=3 || Match->RemainingSeconds!=0) { Finish(TEXT("Song end did not stop audio and produce the intended loss")); return; }
+		if (Match->ResultReason!=TEXT("The song has ended") || Player || Ninja->Health!=1 || Match->RemainingSeconds!=0) { Finish(TEXT("Song end did not stop audio and produce the intended loss")); return; }
 		if (!bEndCaptured)
 		{
 			CompletedTrackWallSeconds=Wall-FullTrackStarted;
@@ -112,7 +112,7 @@ void ANinjaMusicCheck::Tick(float DeltaSeconds)
 	}
 	else if (Phase==7 && Match->State==ENinjaMatchState::Lost)
 	{
-		if (Player || Match->ResultReason!=TEXT("No health remaining")) { Finish(TEXT("Early loss did not stop music")); return; }
+		if (Player || Match->ResultReason!=TEXT("One hit - ninja down")) { Finish(TEXT("Early loss did not stop music")); return; }
 		Match->Confirm(); Next(TEXT("Health loss stops the song immediately"));
 	}
 	else if (Phase==8 && Match->State==ENinjaMatchState::Ready)

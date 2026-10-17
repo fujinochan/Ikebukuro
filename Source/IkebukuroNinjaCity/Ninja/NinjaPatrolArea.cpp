@@ -6,7 +6,8 @@ ANinjaPatrolArea::ANinjaPatrolArea() { PrimaryActorTick.bCanEverTick=false; SetR
 bool ANinjaPatrolArea::RawSample(FVector Location,FVector& Foot) const
 {
 	const FVector Center=GetActorLocation();
-	if (FMath::Abs(Location.X-Center.X)>HalfExtent.X-50 || FMath::Abs(Location.Y-Center.Y)>HalfExtent.Y-50) return false;
+	const FVector2D Extent=GetWalkingHalfExtent();
+	if (FMath::Abs(Location.X-Center.X)>Extent.X-50 || FMath::Abs(Location.Y-Center.Y)>Extent.Y-50) return false;
 	FHitResult Hit;
 	if (!GetWorld()->LineTraceSingleByObjectType(Hit,FVector(Location.X,Location.Y,Center.Z+HeightTolerance),
 		FVector(Location.X,Location.Y,Center.Z-HeightTolerance),FCollisionObjectQueryParams(ECC_WorldStatic),FCollisionQueryParams(SCENE_QUERY_STAT(NinjaFloor),true))) return false;
@@ -41,12 +42,13 @@ bool ANinjaPatrolArea::ClearSegment(FVector Start,FVector End) const
 bool ANinjaPatrolArea::BuildGraph()
 {
 	Nodes.Reset(); Edges.Reset(); bReady=false;
-	const int32 NX=FMath::Clamp(FMath::FloorToInt(2*HalfExtent.X/GridSpacing),1,40), NY=FMath::Clamp(FMath::FloorToInt(2*HalfExtent.Y/GridSpacing),1,40);
+	const FVector2D Extent=GetWalkingHalfExtent();
+	const int32 NX=FMath::Clamp(FMath::FloorToInt(2*Extent.X/GridSpacing),1,40), NY=FMath::Clamp(FMath::FloorToInt(2*Extent.Y/GridSpacing),1,40);
 	TMap<FIntPoint,int32> Lookup;
 	for (int32 X=0; X<=NX; ++X) for (int32 Y=0; Y<=NY; ++Y)
 	{
 		FVector Foot;
-		if (Sample(GetActorLocation()+FVector(-HalfExtent.X+X*GridSpacing,-HalfExtent.Y+Y*GridSpacing,0),Foot))
+		if (Sample(GetActorLocation()+FVector(-Extent.X+X*(2*Extent.X/NX),-Extent.Y+Y*(2*Extent.Y/NY),0),Foot))
 		{ Lookup.Add(FIntPoint(X,Y),Nodes.Num()); Nodes.Add(Foot); }
 	}
 	Edges.SetNum(Nodes.Num());
@@ -83,14 +85,18 @@ bool ANinjaPatrolArea::FindRoute(FVector Start,FVector End,TArray<FVector>& Rout
 }
 FVector ANinjaPatrolArea::PatrolGoal(FVector Home,int32 Index) const
 {
-	FVector Goal=Home; double Best=0;
+	TArray<FVector> Candidates;
 	for (const FVector& Point:Nodes)
 	{
 		const FVector Delta=Point-Home;
 		const double Distance=Delta.SizeSquared2D();
-		if (Distance<250*250 || Distance>400*400 || (Index%2==0 ? Delta.X<=0 : Delta.X>=0)) continue;
-		TArray<FVector> Route;
-		if (Distance>Best && FindRoute(Home,Point,Route)) { Best=Distance; Goal=Point; }
+		if (Distance<150*150 || Distance>FMath::Square(PatrolTravelRadius) || (Index%2==0 ? Delta.X<=0 : Delta.X>=0)) continue;
+		Candidates.Add(Point);
 	}
-	return Goal;
+	Candidates.Sort([Home](const FVector& A,const FVector& B){return FVector::DistSquared2D(A,Home)>FVector::DistSquared2D(B,Home);});
+	for (const FVector& Point:Candidates)
+	{
+		TArray<FVector> Route; if (FindRoute(Home,Point,Route)) return Point;
+	}
+	return Home;
 }

@@ -38,7 +38,7 @@ void ANinjaTrainingHUD::DrawHUD()
 		DrawRect(FLinearColor::White, X + Width * Position - 2, 146 * Scale, 4, 20 * Scale);
 	}
 	DrawText(bCity ? TEXT("SPACE near apex  |  R: return to the safe street") : TEXT("Press again when the marker reaches the green zone"), FLinearColor(0.7f, 0.8f, 0.85f), X, 171 * Scale, nullptr, Scale);
-	DrawText(FString::Printf(TEXT("HP %d / 3%s   DEFEATED %d"),Ninja->Health,Ninja->IsInvulnerable()?TEXT(" [PROTECTED]"):TEXT(""),Ninja->Defeats),FLinearColor(1,.7f,.4f),X,196*Scale,nullptr,1.2f*Scale);
+	DrawText(FString::Printf(TEXT("ONE HIT = GAME OVER   DEFEATED %d"),Ninja->Defeats),FLinearColor(1,.7f,.4f),X,196*Scale,nullptr,1.2f*Scale);
 	DrawText(TEXT("LMB / F: throw   |   R: return   |   Stomp from above"),FLinearColor::White,X,222*Scale,nullptr,Scale);
 	DrawText(Ninja->CombatFeedback,FLinearColor(.65f,.9f,1),X,244*Scale,nullptr,.9f*Scale);
 	const float CX=Canvas->ClipX/2,CY=Canvas->ClipY/2;
@@ -76,7 +76,7 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	DrawRect(FLinearColor(.015,.025,.045,.9),W-270*S,16*S,254*S,112*S);
 	DrawText(Time,Seconds<=30?FLinearColor(1,.3,.2):FLinearColor::White,W-250*S,29*S,nullptr,2.6*S);
 	const auto* Ninja=Cast<ANinjaCharacter>(GetOwningPawn());
-	DrawText(FString::Printf(TEXT("ENEMIES %d / %d   HP %d / 3"),Match->RemainingEnemies(),Match->Enemies.Num(),Ninja?Ninja->Health:0),FLinearColor(.9,.8,.6),W-250*S,82*S,nullptr,S);
+	DrawText(FString::Printf(TEXT("ENEMIES %d / %d   ONE HIT"),Match->RemainingEnemies(),Match->Enemies.Num()),FLinearColor(.9,.8,.6),W-250*S,82*S,nullptr,S);
 	const bool Paused=UGameplayStatics::IsGamePaused(this);
 	LastMarkerCount=LastOffscreenMarkerCount=0;
 	if (Match->State==ENinjaMatchState::Playing && !Paused)
@@ -151,7 +151,7 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	{
 	case ENinjaMatchState::Loading: Title=TEXT("PREPARING CITY"); Line=Match->MusicError.IsEmpty()?TEXT("Preparing the city, safe footing and music..."):Match->MusicError; break;
 	case ENinjaMatchState::Ready: Title=TEXT("IKEBUKURO NINJA"); Line=Match->UsesRoundMusic()?FString::Printf(TEXT("Defeat all %d red ninjas before the song ends."),Match->Enemies.Num()):FString::Printf(TEXT("Defeat all %d red ninjas within 5 minutes."),Match->Enemies.Num()); Action=TEXT("ENTER TO START"); break;
-	case ENinjaMatchState::Countdown: Title=FString::Printf(TEXT("START IN %d"),FMath::Max(1,FMath::CeilToInt(Match->CountdownSeconds))); Line=TEXT("Find red markers on the street and roofs."); break;
+	case ENinjaMatchState::Countdown: Title=FString::Printf(TEXT("START IN %d"),FMath::Max(1,FMath::CeilToInt(Match->CountdownSeconds))); Line=TEXT("Dodge red shuriken. One hit ends the round."); break;
 	case ENinjaMatchState::Won: Title=TEXT("MISSION COMPLETE"); Line=Match->ResultReason; Action=TEXT("ENTER TO RETRY"); Color=FLinearColor(.25,1,.6); break;
 	case ENinjaMatchState::Lost: Title=TEXT("MISSION FAILED"); Line=Match->ResultReason; Action=TEXT("ENTER TO RETRY"); Color=FLinearColor(1,.3,.2); break;
 	default: break;
@@ -170,5 +170,6 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	DrawText(TEXT("SPACE near the jump apex: up to 3 jumps"),FLinearColor(.75,.85,.95),X+32*S,Y+165*S,nullptr,S);
 	DrawText(TEXT("LMB / F: throw   |   Descend onto an enemy to stomp"),FLinearColor(.75,.85,.95),X+32*S,Y+193*S,nullptr,S);
 	DrawText(TEXT("Gold arrow: next enemy   |   Cyan steps: easier roof route"),FLinearColor(.75,.85,.95),X+32*S,Y+221*S,nullptr,S);
+	DrawText(TEXT("Red ninja: 3-way volleys  |  One hit = game over"),FLinearColor(1,.65,.4),X+32*S,Y+249*S,nullptr,S);
 	DrawText(Action,Color,X+32*S,Y+280*S,nullptr,1.6*S);
 }

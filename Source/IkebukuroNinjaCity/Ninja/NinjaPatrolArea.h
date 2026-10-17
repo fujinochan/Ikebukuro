@@ -16,7 +16,10 @@ public:
 	bool FindRoute(FVector Start,FVector End,TArray<FVector>& Route) const;
 	int32 Nearest(FVector Point) const;
 	FVector PatrolGoal(FVector Home,int32 Index) const;
+	FVector2D GetWalkingHalfExtent() const { return HalfExtent*PatrolExtentScale; }
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Patrol") FVector2D HalfExtent=FVector2D(1800,600);
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Patrol",meta=(ClampMin="1")) float PatrolExtentScale=2;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Patrol") float PatrolTravelRadius=800;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Patrol") float GridSpacing=150;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Patrol") float HeightTolerance=100;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Patrol") bool bReady=false;

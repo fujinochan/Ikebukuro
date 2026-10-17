@@ -23,6 +23,10 @@ struct FNinjaMatchSpawn
 	UPROPERTY() TArray<FVector> AssistRoute;
 	UPROPERTY() float DetectionRadius=1000;
 	UPROPERTY() float LeashRadius=1800;
+	UPROPERTY() bool bRanged=true;
+	UPROPERTY() float RangedRadius=10000;
+	UPROPERTY() float VolleyInterval=2;
+	UPROPERTY() float ProjectileSpeed=2500;
 };
 
 /** Owns one local round. Practice maps without this actor retain their old rules. */

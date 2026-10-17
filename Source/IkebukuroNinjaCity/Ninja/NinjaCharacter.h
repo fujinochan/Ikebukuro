@@ -42,7 +42,7 @@ public:
 	void RecoverToSurface(FVector Surface,bool bFallPenalty);
 	UFUNCTION() void OnNinjaHit(UPrimitiveComponent* Component,AActor* Other,UPrimitiveComponent* OtherComponent,FVector Impulse,const FHitResult& Hit);
 	UPROPERTY(EditDefaultsOnly,Category="Ninja|Input") TObjectPtr<UInputAction> ThrowAction;
-	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 Health=3;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 Health=1;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 Defeats=0;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 StompDefeats=0;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Combat") int32 ShurikenDefeats=0;

@@ -17,6 +17,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	bool TryDefeat(ENinjaDefeatMethod Method, ANinjaCharacter* Ninja);
+	bool TryFireVolley(ANinjaCharacter* Player);
 	bool IsReadyForMatch() const { return !bAIEnabled || bInitialized; }
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja") bool bDefeated=false;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja") ENinjaDefeatMethod DefeatMethod=ENinjaDefeatMethod::Stomp;
@@ -24,6 +25,12 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|AI") bool bAIEnabled=false;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|AI") float DetectionRadius=1000;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|AI") float LeashRadius=1800;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Ranged") bool bRangedAttackEnabled=true;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Ranged") float RangedAttackRadius=10000;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Ranged") float VolleyInterval=2;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Ninja|Ranged") float ProjectileSpeed=2500;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Ranged") int32 VolleysFired=0;
+	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|Ranged") double LastVolleyTime=-1;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|AI") ENinjaBrainState BrainState=ENinjaBrainState::Waiting;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|AI") int32 SafetyRecoveries=0;
 	UPROPERTY(VisibleInstanceOnly,BlueprintReadOnly,Category="Ninja|AI") int32 SuccessfulAttacks=0;
@@ -39,6 +46,7 @@ private:
 	bool bInitialized=false,bReturning=false;
 	int32 PatrolIndex=0,RouteIndex=0;
 	double NextRouteTime=0,NextAttackTime=0,ReacquireTime=0;
+	double NextVolleyTime=0;
 	TArray<FVector> Route;
 	FVector PatrolTarget;
 };

@@ -25,6 +25,7 @@ ANinjaCharacter::ANinjaCharacter()
 void ANinjaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	Health=1; // Override saved pre-one-hit Blueprint defaults.
 	GetCameraBoom()->SocketOffset=CameraShoulderOffset;
 	FNinjaAppearance::Apply(this,false);
 	GetCapsuleComponent()->OnComponentHit.AddDynamic(this,&ANinjaCharacter::OnNinjaHit);
@@ -217,20 +218,14 @@ bool ANinjaCharacter::IsInvulnerable() const { return GetWorld()->GetTimeSeconds
 
 bool ANinjaCharacter::ReceiveContactDamage()
 {
-	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0 || IsInvulnerable()) return false;
+	if (!ANinjaMatchDirector::AllowsGameplay(this) || Health<=0) return false;
+	Health=0; ++Knockouts; CombatFeedback=TEXT("One hit - ninja down!");
 	ANinjaFeedback::Emit(this,GetActorLocation(),TEXT("Damage"));
-	Health=FMath::Max(0,Health-1); InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
-	CombatFeedback=TEXT("Hit! One second of protection");
-	if (Health==0)
-	{
-		++Knockouts; ANinjaExplosion::Emit(this,GetActorLocation(),true);
-		if (ANinjaMatchDirector::Find(this)) { SetActorHiddenInGame(true); return true; }
-		Health=3; RecoverToSurface(SafeSurface,false);
-		CombatFeedback=TEXT("Knocked out - returned with full health");
-	}
-	return true;
+	ANinjaExplosion::Emit(this,GetActorLocation(),true);
+	if (ANinjaMatchDirector::Find(this)) { SetActorHiddenInGame(true); return true; }
+	// Maps without a round director remain instant-respawn training areas.
+	Health=1; RecoverToSurface(SafeSurface,false); return true;
 }
-
 void ANinjaCharacter::RegisterDefeat(ENinjaDefeatMethod Method)
 {
 	if (!ANinjaMatchDirector::AllowsGameplay(this)) return;
@@ -247,15 +242,13 @@ void ANinjaCharacter::RecoverToSurface(FVector Surface,bool bFallPenalty)
 	SetSafeSurface(Surface);
 	if (bFallPenalty)
 	{
-		ANinjaFeedback::Emit(this,GetActorLocation(),TEXT("Damage"));
-		Health=FMath::Max(0,Health-1);
-		if (Health==0) { ++Knockouts; ANinjaExplosion::Emit(this,GetActorLocation(),true); if (ANinjaMatchDirector::Find(this)) { SetActorHiddenInGame(true); return; } Health=3; }
-		InvulnerableUntil=GetWorld()->GetTimeSeconds()+1;
+		ReceiveContactDamage();
+		if (Health<=0) return;
 	}
 	SetActorLocation(Surface+FVector(0,0,GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+20));
 	GetCharacterMovement()->StopMovementImmediately(); GetCharacterMovement()->ClearAccumulatedForces(); GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 	JumpStage=0; PredictedApexTime=0;
-	CombatFeedback=bFallPenalty?TEXT("Fell - lost one health, returned to safety"):TEXT("Returned to safety");
+	CombatFeedback=bFallPenalty?TEXT("Fell - returned to the training area"):TEXT("Returned to safety");
 }
 
 void ANinjaCharacter::DoMove(float Right,float Forward)
@@ -303,7 +296,7 @@ void ANinjaCharacter::ResetForMatch(FVector Foot,FRotator Rotation)
 {
 	SetActorHiddenInGame(false);
 	EndMoveInput(); ManualCameraUntil=AimCameraUntil=0;
-	Health=3; Defeats=StompDefeats=ShurikenDefeats=ShotsFired=ShurikenWorldHits=Knockouts=0;
+	Health=1; Defeats=StompDefeats=ShurikenDefeats=ShotsFired=ShurikenWorldHits=Knockouts=0;
 	JumpStage=0; PredictedApexTime=NextThrowTime=InvulnerableUntil=0;
 	bJumpButtonHeld=false; DoJumpEnd(); DoSprintEnd();
 	SafeSurface=PreviousFeet=Foot; PreviousVerticalVelocity=0;

@@ -5,6 +5,7 @@
 #include "NinjaMatchDirector.h"
 #include "NinjaExplosion.h"
 #include "NinjaFeedback.h"
+#include "NinjaShuriken.h"
 #include "AIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -12,6 +13,7 @@
 #include "Misc/CommandLine.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 ARedNinja::ARedNinja()
 {
@@ -73,6 +75,27 @@ void ARedNinja::ReturnSafely()
 	GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 	++SafetyRecoveries; bReturning=true; SetState(ENinjaBrainState::Return);
 }
+bool ARedNinja::TryFireVolley(ANinjaCharacter* Player)
+{
+	if (!bAIEnabled || !bRangedAttackEnabled || bDefeated || !IsValid(Player) || Player->Health<=0 ||
+		!ANinjaMatchDirector::AllowsGameplay(this) || FVector::DistSquared(GetActorLocation(),Player->GetActorLocation())>FMath::Square(RangedAttackRadius)) return false;
+	const double Now=GetWorld()->GetTimeSeconds(); if (Now<NextVolleyTime) return false;
+	NextVolleyTime=Now+FMath::Max(.1f,VolleyInterval); LastVolleyTime=Now; ++VolleysFired;
+	const FVector Center=GetActorLocation()+FVector(0,0,15);
+	const FRotator Aim=(Player->GetActorLocation()-Center).Rotation();
+	SetActorRotation(FRotator(0,Aim.Yaw,0));
+	for (float Spread:{-30.f,0.f,30.f})
+	{
+		const FVector Direction=FRotator(Aim.Pitch,Aim.Yaw+Spread,0).Vector(), Hand=Center+Direction*70;
+		FHitResult Block;
+		FCollisionQueryParams Query(SCENE_QUERY_STAT(EnemyMuzzle),false,this);
+		const bool bBlocked=GetWorld()->SweepSingleByObjectType(Block,Center,Hand,FQuat::Identity,FCollisionObjectQueryParams(ECC_WorldStatic),FCollisionShape::MakeSphere(8),Query);
+		FActorSpawnParameters Params; Params.SpawnCollisionHandlingOverride=ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		auto* Star=GetWorld()->SpawnActor<ANinjaShuriken>(bBlocked?Block.Location:Hand,Direction.Rotation(),Params);
+		if (Star) { Star->LaunchEnemy(this,Direction,ProjectileSpeed); if (bBlocked) Star->Impact(Block); }
+	}
+	ANinjaFeedback::Emit(this,Center,TEXT("Throw")); return true;
+}
 void ARedNinja::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -88,13 +111,15 @@ void ARedNinja::Tick(float DeltaSeconds)
 		if (!PatrolArea->Sample(Foot,Surface)) { SetState(ENinjaBrainState::Blocked); return; }
 		HomeFoot=Surface; bInitialized=true; PatrolTarget=PatrolArea->PatrolGoal(HomeFoot,0); SetState(ENinjaBrainState::Patrol);
 	}
-	if (!ANinjaMatchDirector::AllowsGameplay(this)) { Movement->StopMovementImmediately(); return; }
+	if (!ANinjaMatchDirector::AllowsGameplay(this)) { NextVolleyTime=Now+FMath::Max(.1f,VolleyInterval); Movement->StopMovementImmediately(); return; }
 	FVector Surface;
 	if (Foot.Z<PatrolArea->GetActorLocation().Z-80 || !PatrolArea->Sample(Foot,Surface)) { ReturnSafely(); return; }
 	if (Movement->IsFalling()) return;
-	if (BrainState==ENinjaBrainState::Blocked && Now<NextRouteTime) { Movement->StopMovementImmediately(); return; }
+
 	auto* Player=Cast<ANinjaCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
 	if (!Player) return;
+	TryFireVolley(Player);
+	if (BrainState==ENinjaBrainState::Blocked && Now<NextRouteTime) { Movement->StopMovementImmediately(); return; }
 	const FVector PlayerFoot=Player->GetActorLocation()-FVector(0,0,Player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
 	const double Distance=FVector::Dist2D(Foot,PlayerFoot);
 	TArray<FVector> Candidate;
@@ -102,7 +127,7 @@ void ARedNinja::Tick(float DeltaSeconds)
 	const bool bOnLevel=FMath::Abs(PlayerFoot.Z-Foot.Z)<100;
 	const bool bDetected=Distance<(BrainState==ENinjaBrainState::Chase || BrainState==ENinjaBrainState::Attack ? DetectionRadius*1.5 : DetectionRadius);
 	const bool bTargetValid=!bReturning && Now>=ReacquireTime && bInLeash && bOnLevel && bDetected;
-	FVector Goal;
+	FVector Goal=PatrolTarget;
 	if (bTargetValid)
 	{
 		if (Now>=NextRouteTime || Route.IsEmpty())
@@ -142,7 +167,7 @@ void ARedNinja::Tick(float DeltaSeconds)
 	while (RouteIndex<Route.Num() && FVector::Dist2D(Foot,Route[RouteIndex])<55) ++RouteIndex;
 	if (!Route.IsValidIndex(RouteIndex)) { Movement->StopMovementImmediately(); return; }
 	const FVector Direction=(Route[RouteIndex]-Foot).GetSafeNormal2D();
-	const float Speed=BrainState==ENinjaBrainState::Chase ? 420 : bReturning ? 260 : 160;
+	const float Speed=BrainState==ENinjaBrainState::Chase ? 840 : bReturning ? 520 : 320;
 	FVector Next;
 	if (!PatrolArea->Sample(Foot+Direction*(Speed*DeltaSeconds+45),Next) || !PatrolArea->ClearSegment(Foot,Next))
 	{ SetState(ENinjaBrainState::Blocked); Movement->StopMovementImmediately(); NextRouteTime=Now+.6; return; }

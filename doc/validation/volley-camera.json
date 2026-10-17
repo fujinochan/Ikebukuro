@@ -1,0 +1,23 @@
+{
+	"status": "passed",
+	"error": "",
+	"fixed_simulation_fps": 60,
+	"peak_follow_yaw_degrees_per_second": 100.001220703125,
+	"scope": "Mapped D/S movement and real character/controller ticks; flying with collision disabled isolates camera from terrain. Fixed simulation FPS is not measured rendering performance.",
+	"passed_cases": [
+		"Prepared round uses normal start/countdown",
+		"Hold mapped D from a fixed initial world direction",
+		"D moves straight while camera settles behind the right turn; pitch is preserved",
+		"Releasing movement holds the view; hold mapped S for a reversal",
+		"S reverses direction and auto-yaw takes the short arc without a circular movement path",
+		"Manual look changes the camera; begin moving during its grace period",
+		"Manual look keeps exclusive control while moving during the 1.2-second grace period",
+		"Automatic following resumes smoothly after manual look; vertical angle stays manual",
+		"Auto-camera can be disabled; begin moving and throwing to check aiming priority",
+		"Throwing preserves aim for 0.6 seconds; pause the moving round",
+		"Pause holds the camera and resumes without losing input state",
+		"Follow resumes after aiming and pause; trigger player defeat",
+		"Defeat holds the camera; retry restores normal player collision",
+		"Retry reaches ready with a visible healthy player and reset camera input state"
+	]
+}
