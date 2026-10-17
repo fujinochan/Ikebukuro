@@ -2,9 +2,9 @@
 
 作成日: 2026-10-16  
 対象: `IkebukuroNinjaCity` / Unreal Engine  
-状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。Step 9への追加要望で自動カメラを実装・検証済み。次はStep 9の性能計測・不具合調整と通し試遊。
+状態: Step 1〜8（追加のStep 6.5を含む）を実装し、自動検証済み。現在の起動マップはテクスチャ付きの `L_Ikebukuro`。敵8体・曲終了まで約4分4秒のゲーム進行、補助足場と橋、案内、効果音を追加した。Step 8の初見プレイヤーによる3〜5分の試遊は未実施。以下の数値・操作・追加ルールは試遊結果に合わせて調整する。Step 9への追加要望で自動カメラを実装・検証済み。Step 9の簡易性能計測と最適化も実施済み。次は通し試遊とStep 10のWindows配布ビルド。
 
-実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)、[Step 9の自動カメラ](step9-auto-camera.md)。
+実装記録: [Step 1](step1-setup.md)、[Step 2](map-data-notes.md)、[Step 3](step3-movement.md)、[Step 4](step4-city-area.md)、[Step 5](step5-combat.md)、[Step 6](step6-encounters.md)、[Step 6.5](step6_5-textures.md)、[Step 7](step7-match-flow.md)、[Step 8](step8-route-and-feedback.md)、[追加BGM](round-music.md)、[撃破時の大爆発](defeat-explosion.md)、[Step 9の自動カメラ](step9-auto-camera.md)、[Step 9の簡易性能計測](step9-performance.md)。
 
 追加調査: [街のテクスチャ](texture-investigation.md)。既存Stepの番号を維持し、Step 6と7の間にStep 6.5を追加した。
 
@@ -237,6 +237,8 @@ Tools/City/                    # 調査・切り出し・検証の再現用ス�
 **完了条件:** 初見の試遊で、目的と操作が伝わり、3〜5分でクリアを狙える。経路や敵を探すだけの時間が長すぎない。
 
 ### Step 9 — 性能・不具合と自動カメラを調整する
+
+簡易計測と最適化を実施済み（[実測値と検証範囲](step9-performance.md)）。初見の通し試遊は未実施。
 
 1. テストPCの CPU / GPU / メモリ、解像度、描画品質を記録する。
 2. Windows・1080p・60 fps を暫定目標に、地上、高い屋上、高速移動、敵複数体の場面を計測する。

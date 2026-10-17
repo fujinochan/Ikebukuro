@@ -1,0 +1,128 @@
+{
+	"status": "passed",
+	"error": "",
+	"cpu": "AMD Ryzen AI 7 350 w/ Radeon 860M              ",
+	"gpu": "AMD Radeon(TM) 860M Graphics",
+	"physical_memory_gb": 63.118999481201172,
+	"viewport_width": 1920,
+	"viewport_height": 1080,
+	"cvars":
+	{
+		"r.ScreenPercentage": "100",
+		"r.VSync": "0",
+		"t.MaxFPS": "0",
+		"r.DynamicGlobalIlluminationMethod": "0",
+		"r.ReflectionMethod": "0",
+		"r.Lumen.DiffuseIndirect.Allow": "0",
+		"r.Lumen.Reflections.Allow": "0",
+		"r.Shadow.Virtual.Enable": "0",
+		"r.RayTracing": "1",
+		"sg.ShadowQuality": "1",
+		"sg.GlobalIlluminationQuality": "0",
+		"sg.ReflectionQuality": "0",
+		"sg.TextureQuality": "3"
+	},
+	"scenes": [
+		{
+			"scene": "street_8_patrolling_enemies",
+			"frames": 1029,
+			"wall_frame":
+			{
+				"mean_ms": 7.7701415957120927,
+				"p95_ms": 9.113900363445282,
+				"max_ms": 14.917802065610886
+			},
+			"gpu_frame":
+			{
+				"mean_ms": 6.412320796903531,
+				"p95_ms": 6.7558999061584473,
+				"max_ms": 7.3467001914978027
+			},
+			"render_thread":
+			{
+				"mean_ms": 7.7514097206330739,
+				"p95_ms": 8.4954996109008789,
+				"max_ms": 12.348899841308594
+			},
+			"average_fps": 128.69778339069705,
+			"frames_over_33ms_percent": 0,
+			"process_memory_mb": 4804.53125
+		},
+		{
+			"scene": "middle_rooftop",
+			"frames": 1025,
+			"wall_frame":
+			{
+				"mean_ms": 7.8015502451396568,
+				"p95_ms": 9.0048015117645264,
+				"max_ms": 16.843799501657486
+			},
+			"gpu_frame":
+			{
+				"mean_ms": 6.3343809690708071,
+				"p95_ms": 6.6841998100280762,
+				"max_ms": 7.1904001235961914
+			},
+			"render_thread":
+			{
+				"mean_ms": 7.7772910169275793,
+				"p95_ms": 8.5199003219604492,
+				"max_ms": 9.5940999984741211
+			},
+			"average_fps": 128.17965257904953,
+			"frames_over_33ms_percent": 0,
+			"process_memory_mb": 4890.90234375
+		},
+		{
+			"scene": "scripted_14mps_flight",
+			"frames": 912,
+			"wall_frame":
+			{
+				"mean_ms": 8.7762582238371429,
+				"p95_ms": 10.332800447940826,
+				"max_ms": 15.292998403310776
+			},
+			"gpu_frame":
+			{
+				"mean_ms": 7.2938239051584608,
+				"p95_ms": 7.9369997978210449,
+				"max_ms": 8.4191999435424805
+			},
+			"render_thread":
+			{
+				"mean_ms": 8.7560186359966004,
+				"p95_ms": 9.8458003997802734,
+				"max_ms": 11.275699615478516
+			},
+			"average_fps": 113.94377586610953,
+			"frames_over_33ms_percent": 0,
+			"process_memory_mb": 4885.62890625
+		},
+		{
+			"scene": "eight_simultaneous_explosions",
+			"frames": 1093,
+			"wall_frame":
+			{
+				"mean_ms": 7.3175162847229673,
+				"p95_ms": 8.7798982858657837,
+				"max_ms": 27.433600276708603
+			},
+			"gpu_frame":
+			{
+				"mean_ms": 5.8815291898575595,
+				"p95_ms": 6.6156997680664062,
+				"max_ms": 6.9566001892089844
+			},
+			"render_thread":
+			{
+				"mean_ms": 7.2631372310432507,
+				"p95_ms": 8.4071998596191406,
+				"max_ms": 10.527099609375
+			},
+			"average_fps": 136.65839078318618,
+			"frames_over_33ms_percent": 0,
+			"process_memory_mb": 4901.15625
+		}
+	],
+	"scope": "UE Editor -game, real wall-clock frames, no fixed timestep, no vsync or cap; 3s warmup + 8s sample per scene; audio disabled; eight real AI patrols; flight scripted with collision disabled; no human full-round playtest"
+}

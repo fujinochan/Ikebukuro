@@ -59,14 +59,16 @@ void ANinjaExplosionCheck::Tick(float DeltaSeconds)
 	else if (Phase==2 && PhaseAge>.54f)
 	{
 		int32 Components=0;
+		TSet<UMaterialInterface*> UniqueMaterials;
 		for (TActorIterator<ANinjaExplosion> It(GetWorld());It;++It)
 		{
 			if (!It->GetActorScale3D().Equals(FVector(3.f),.001f)) { Finish(TEXT("Explosion is not triple-sized")); return; }
 			TArray<UStaticMeshComponent*> Meshes; It->GetComponents(Meshes); Components+=Meshes.Num();
+			for (auto* Mesh:Meshes) UniqueMaterials.Add(Mesh->GetMaterial(0));
 			for (auto* Mesh:Meshes) if (Mesh->GetCollisionEnabled()!=ECollisionEnabled::NoCollision || Mesh->IsSimulatingPhysics()) { Finish(TEXT("Cosmetic explosion gained collision or physics")); return; }
 		}
-		if (Components!=69 || Ninja->Health!=3 || Match->RemainingEnemies()!=Match->Enemies.Num()-1) { Finish(TEXT("Explosion geometry or gameplay invariants failed")); return; }
-		Capture(TEXT("enemy")); Next(TEXT("Large fireball, sparks, smoke and ring exist without collision or splash damage"));
+		if (Components!=69 || UniqueMaterials.Num()!=7 || UniqueMaterials.Contains(nullptr) || Ninja->Health!=3 || Match->RemainingEnemies()!=Match->Enemies.Num()-1) { Finish(TEXT("Explosion geometry, shared materials or gameplay invariants failed")); return; }
+		Capture(TEXT("enemy")); Next(TEXT("69 explosion pieces share 7 materials without collision or splash damage"));
 	}
 	else if (Phase==3)
 	{

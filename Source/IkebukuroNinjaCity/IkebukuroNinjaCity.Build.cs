@@ -16,6 +16,8 @@ public class IkebukuroNinjaCity : ModuleRules
 			"Engine",
 			"MediaAssets",
 			"AudioMixer",
+			"RHI",
+			"RenderCore",
 			"InputCore",
 			"EnhancedInput",
 			"AIModule",

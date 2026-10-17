@@ -22,6 +22,7 @@
 #include "NinjaMusicCheck.h"
 #include "NinjaExplosionCheck.h"
 #include "NinjaCameraCheck.h"
+#include "NinjaPerformanceCheck.h"
 
 ANinjaMatchDirector::ANinjaMatchDirector()
 {
@@ -72,6 +73,7 @@ void ANinjaMatchDirector::BeginPlay()
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaMusicCheck"))) GetWorld()->SpawnActor<ANinjaMusicCheck>();
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaExplosionCheck"))) GetWorld()->SpawnActor<ANinjaExplosionCheck>();
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaCameraCheck"))) GetWorld()->SpawnActor<ANinjaCameraCheck>();
+	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaPerformanceCheck"))) GetWorld()->SpawnActor<ANinjaPerformanceCheck>();
 }
 void ANinjaMatchDirector::StopRoundMusic()
 {

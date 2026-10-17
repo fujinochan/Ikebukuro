@@ -1,0 +1,50 @@
+[
+  {
+    "scene": "street_8_patrolling_enemies",
+    "before_fps": 113.45546732014944,
+    "after_fps": 128.69778339069705,
+    "fps_gain_percent": 13.434624554087593,
+    "before_p95_ms": 12.477900832891464,
+    "after_p95_ms": 9.113900363445282,
+    "before_max_ms": 26.168599724769592,
+    "after_max_ms": 14.917802065610886,
+    "before_memory_mb": 5016.5703125,
+    "after_memory_mb": 4804.53125
+  },
+  {
+    "scene": "middle_rooftop",
+    "before_fps": 107.89653616187505,
+    "after_fps": 128.17965257904953,
+    "fps_gain_percent": 18.798672449265762,
+    "before_p95_ms": 12.945901602506638,
+    "after_p95_ms": 9.004801511764526,
+    "before_max_ms": 22.388998419046402,
+    "after_max_ms": 16.843799501657486,
+    "before_memory_mb": 5055.9296875,
+    "after_memory_mb": 4890.90234375
+  },
+  {
+    "scene": "scripted_14mps_flight",
+    "before_fps": 100.53195283233079,
+    "after_fps": 113.94377586610953,
+    "fps_gain_percent": 13.340855972575461,
+    "before_p95_ms": 12.723900377750397,
+    "after_p95_ms": 10.332800447940826,
+    "before_max_ms": 21.099597215652466,
+    "after_max_ms": 15.292998403310776,
+    "before_memory_mb": 5056.78125,
+    "after_memory_mb": 4885.62890625
+  },
+  {
+    "scene": "eight_simultaneous_explosions",
+    "before_fps": 117.28512693087495,
+    "after_fps": 136.65839078318618,
+    "fps_gain_percent": 16.51809087756657,
+    "before_p95_ms": 11.221397668123245,
+    "after_p95_ms": 8.779898285865784,
+    "before_max_ms": 48.638999462127686,
+    "after_max_ms": 27.433600276708603,
+    "before_memory_mb": 5087.23046875,
+    "after_memory_mb": 4901.15625
+  }
+]

@@ -10,6 +10,8 @@
 
 int32 ANinjaExplosion::EnemyBursts=0;
 int32 ANinjaExplosion::PlayerBursts=0;
+static int32 BlastMaterialSlot(int32 I)
+{ return I==0?0:I<=10?1+I%3:I<=20?4:I<45?5:6; }
 ANinjaExplosion::ANinjaExplosion()
 {
 	PrimaryActorTick.bCanEverTick=true; InitialLifeSpan=4.35f;
@@ -31,11 +33,14 @@ void ANinjaExplosion::BeginPlay()
 	Super::BeginPlay();
 	SetActorScale3D(FVector(3.f)); // Deliberately ridiculous: triple every spatial dimension.
 	auto* Material=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/Ninja/Materials/M_NinjaBurst.M_NinjaBurst"));
-	for (UStaticMeshComponent* Piece:Pieces)
+	// Identical colors share one instance: 7 materials instead of 69 per blast.
+	for (int32 I=0; I<7; ++I)
 	{
 		auto* Dynamic=Material?UMaterialInstanceDynamic::Create(Material,this):nullptr;
-		Materials.Add(Dynamic); if (Dynamic) Piece->SetMaterial(0,Dynamic);
+		Materials.Add(Dynamic);
 	}
+	for (int32 I=0; I<Pieces.Num(); ++I)
+		if (UMaterialInstanceDynamic* Dynamic=Materials[BlastMaterialSlot(I)]) Pieces[I]->SetMaterial(0,Dynamic);
 	Tick(0);
 }
 void ANinjaExplosion::Emit(const UObject* Context,FVector Location,bool bPlayer)
@@ -55,9 +60,11 @@ void ANinjaExplosion::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds); Age+=DeltaSeconds;
 	const float BlastAge=Age/3.f; // Keep the original choreography, played three times slower.
+	bool Updated[7]={};
 	for (int32 I=0; I<Pieces.Num(); ++I)
 	{
 		FVector Position=FVector::ZeroVector, Scale; FLinearColor Color;
+		FRotator Rotation=FRotator::ZeroRotator; bool bRotate=false;
 		if (I==0)
 		{
 			const float T=FMath::Clamp(BlastAge/.22f,0.f,1.f);
@@ -82,18 +89,23 @@ void ANinjaExplosion::Tick(float DeltaSeconds)
 			const float T=FMath::Clamp(BlastAge/.9f,0.f,1.f), A=I*2.39996f;
 			const FVector D(FMath::Cos(A),FMath::Sin(A),.25f+(I%5)*.18f);
 			Position=D*(40+T*480); Position.Z-=T*T*170;
-			Pieces[I]->SetRelativeRotation(D.Rotation());
+			Rotation=D.Rotation(); bRotate=true;
 			Scale=FVector(.7,.055,.055)*(1-T); Color=FLinearColor(5,1.4,.06)*(1-T);
 		}
 		else
 		{
 			const float T=FMath::Clamp(BlastAge/.55f,0.f,1.f), A=(I-45)*2*PI/24;
 			Position=FVector(FMath::Cos(A),FMath::Sin(A),0)*(35+T*430); Position.Z=-65.f/3.f; // Keep the larger ring above the ground.
-			Pieces[I]->SetRelativeRotation(FRotator(0,FMath::RadiansToDegrees(A)+90,0));
+			Rotation=FRotator(0,FMath::RadiansToDegrees(A)+90,0); bRotate=true;
 			Scale=FVector(.15f+T*1.05f,.10f*(1-T),.07f*(1-T)); Color=FLinearColor(4,1.1,.07);
 		}
-		Pieces[I]->SetVisibility(Scale.GetAbsMax()>.01f);
+		const bool Visible=Scale.GetAbsMax()>.01f;
+		if (Pieces[I]->IsVisible()!=Visible) Pieces[I]->SetVisibility(Visible);
+		if (!Visible) continue; // Finished pieces need no transform or render-parameter updates.
+		if (bRotate) Pieces[I]->SetRelativeRotation(Rotation);
 		Pieces[I]->SetRelativeLocation(Position); Pieces[I]->SetRelativeScale3D(Scale);
-		if (Materials.IsValidIndex(I) && Materials[I]) Materials[I]->SetVectorParameterValue(TEXT("Color"),Color);
+		const int32 Slot=BlastMaterialSlot(I);
+		if (!Updated[Slot] && Materials[Slot]) Materials[Slot]->SetVectorParameterValue(TEXT("Color"),Color);
+		Updated[Slot]=true;
 	}
 }
