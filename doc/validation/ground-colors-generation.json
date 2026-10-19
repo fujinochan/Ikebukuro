@@ -1,0 +1,17 @@
+{
+	"status": "passed",
+	"source": "GSI seamlessphoto; coarse color inference plus saved PLATEAU road mesh mask",
+	"tiles": 12,
+	"resolution": 1024,
+	"classification_grid": 256,
+	"road_mask_cells": 7660,
+	"road_triangles": 12247,
+	"class_histogram_neutral_road_green_earth_light": [
+		27166,
+		13139,
+		655,
+		0,
+		24576
+	],
+	"all_photo_samples_covered": true
+}

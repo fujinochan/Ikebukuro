@@ -1,0 +1,14 @@
+[
+  {
+    "file": "doc/references/gsi-tile-list.html",
+    "sha256": "925B6D8371B112486360567ECF8E7AAB964FD55526BF027AB32F1EF16E047B5B"
+  },
+  {
+    "file": "doc/references/gsi-tile-spec.html",
+    "sha256": "1D9FA2729A17803AA3DC34BA0C5E144F183CE4F614885F3C44AC6802ABE38AAA"
+  },
+  {
+    "file": "doc/references/gsi-content-use.html",
+    "sha256": "5388D2854A05F3E7B41CB980ECFB2DE75B315DE68E0D9C94B9334C11E580739E"
+  }
+]

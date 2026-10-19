@@ -1,4 +1,5 @@
 #include "LocalCityTileset.h"
+#include "CityGroundColorCheck.h"
 #include "CesiumGeoreference.h"
 #include "Camera/CameraActor.h"
 #include "Components/StaticMeshComponent.h"
@@ -56,6 +57,7 @@ void ALocalCityTileset::BeginPlay()
 	UE_LOG(LogTemp, Display, TEXT("LocalCity: source=%s exists=%d"), *ResolvedDatasetPath,
 		IFileManager::Get().FileExists(*ResolvedDatasetPath));
 	bSmokeTest = FParse::Param(FCommandLine::Get(), TEXT("CitySmokeTest"));
+	if (DatasetRelativePath.Contains(TEXT("/Roads/")) && FParse::Param(FCommandLine::Get(),TEXT("CityGroundColorCheck"))) GetWorld()->SpawnActor<ACityGroundColorCheck>();
 	SmokeStart = FPlatformTime::Seconds();
 	if (bSmokeTest)
 	{

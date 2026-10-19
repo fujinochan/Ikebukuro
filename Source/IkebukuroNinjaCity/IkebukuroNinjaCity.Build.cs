@@ -30,7 +30,7 @@ public class IkebukuroNinjaCity : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "MeshDescription", "StaticMeshDescription" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "MeshDescription", "StaticMeshDescription", "ImageCore" });
 		}
 
 		PublicIncludePaths.AddRange(new string[] {

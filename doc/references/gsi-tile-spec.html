@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "https://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css; charset=UTF-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript; charset=UTF-8">
+
+<title>地理院地図｜地理院タイルについて</title>
+
+<script type="text/javascript" src="../help/js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="../help/js/common.js"></script>
+<script type="text/javascript" src="../help/js/jquery.cookie.js"></script>
+<link rel="stylesheet" href="../help/css/change_font_size.css" type="text/css">
+<link rel="stylesheet" href="../help/css/common.css" type="text/css">
+</head>
+
+
+<body>
+
+<!-- ヘッダ　開始 -->
+<noscript><p class="position_center">国土地理院ホームページではJavaScriptを使用しています。すべての機能をご利用いただくにはJavascriptを有効にしてください。</p></noscript>
+<div id="headerArea">
+<div class="logo" id="top">
+	<a href="https://www.gsi.go.jp/"><img src="../help/css/css_image/gsi_logo.gif" alt="国土交通省 国土地理院" width="530" height="85"></a>
+</div>
+
+<div class="header_navi">
+<div class="header_navi01">
+	<div class="header_skip">
+		<a href="#container">本文へ</a>
+	</div>
+	<div class="header_font">
+		<p>文字サイズ変更</p>
+		<ul>
+			<li id="fontDefault"><img src="../help/css/css_image/hyojun.png" alt="標準"></li>
+			<li id="fontLarge"><img src="../help/css/css_image/kakudai.png" alt="拡大"></li>
+		</ul>
+	</div>
+	<div class="header_language">
+		<a href="https://www.gsi.go.jp/ENGLISH/index.html">English</a>
+	</div>
+</div>
+
+<div class="header_navi02">
+	<div class="header_search">
+		<script>
+			(function() {
+				var cx = '013997707106678309048:u_4aigwwq7c';
+				var gcse = document.createElement('script');
+				gcse.type = 'text/javascript';
+				gcse.async = true;
+				gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(gcse, s);
+			})();
+		</script>
+		<div id="cse-search-form" style="width: 100%;">
+			<gcse:searchbox-only enableHistory="true" resultsUrl="https://www.gsi.go.jp/search.html"></gcse:searchbox-only>
+		</div>
+	</div>
+	<div class="header_sitemap">
+		<a href="https://www.gsi.go.jp/SITEMAP-index.html">サイトマップ</a>
+	</div>
+</div>
+
+</div>
+</div>
+<!-- ヘッダ　終了 -->
+
+<!-- メニュー　開始 -->
+<div id="menuArea">
+	<table summary=""><tr>
+		<td><p class="navi1"><a href="https://www.gsi.go.jp/index.html" class="g_menu">地理院ホーム</a></p></td>
+		<td><p class="navi1"><a href="https://www.gsi.go.jp/syoukai.html" class="g_menu">国土地理院の紹介</a></p></td>
+		<td><p class="navi1"><a href="https://www.gsi.go.jp/sokuchi/index.html" class="g_menu">位置の基準・測量情報</a></p></td>
+		<td><p class="navi1"><a href="https://www.gsi.go.jp/tizu-kutyu.html" class="g_menu">地図・空中写真</a></p></td>
+		<td><p class="navi1"><a href="https://www.gsi.go.jp/bousai.html" class="g_menu">防災関連</a></p></td>
+		<td class="active"><p class="navi1"><a href="https://www.gsi.go.jp/gis.html" class="g_menu">GIS・国土の情報</a></p></td>
+		<td><p class="navi1"><a href="https://www.gsi.go.jp/sinsei.html" class="g_menu">申請・承認</a></p></td>
+	</tr></table>
+</div>
+<!-- メニュー　終了 -->
+
+<!-- パンくずリスト　開始 -->
+<div id="pankuzu">
+	<table summary=""><tr>
+		<td><a href="../help/index.html">地理院地図　ヘルプ</a>&nbsp;&gt;&nbsp;
+		地理院タイルについて</td>
+	</tr></table>
+</div>
+<!-- パンくずリスト　終了 -->
+
+<!-- コンテナ　開始-->
+<div id="container">
+<div class="h1_titleBox">
+	<h1 class="h1_normal"><span>地理院タイルについて</span></h1>
+</div>
+
+<div class="h2_titleBox" id="gaiyou">
+	<h2 class="h2_normal">地理院タイルの概要</h2>
+</div>
+<div class="base_txt">
+	<p>地理院タイルとは、国土地理院が配信するタイル状の地図データです。</p>
+	<p>「タイル」という名前のとおり、建物の壁や天井、道路の歩道などで見かける「タイル」と同じく、敷き詰められて利用されるものです。</p>
+	<div align="center">
+		<img src="../help/image/example_of_tile.jpg" width="400px" alt="タイルの例"><br>
+		図1：タイルの例（<a href="https://www.gsi.go.jp/MUSEUM/" class="blank">地図と測量の科学館</a>の屋外の歩道）
+	</div><br>
+
+	<p>国土地理院のサーバから配信されたタイル状に分割された地図データが、
+	地図利用者のブラウザやアプリ等（クライアント）の画面上に敷き詰められて表示されることで、利用者は地図を見ることができます。</p>
+	<div align="center">
+		<img src="../help/image/data_providing.png" width="550px" alt="地理院タイルの配信"><br>
+		図2：地理院タイルの配信
+	</div>
+</div>
+
+
+<div class="h2_titleBox" id="siyou">
+	<h2 class="h2_normal">地理院タイルの仕様</h2>
+</div>
+<div class="base_txt">
+	<ul>
+		<li><a href="#siyou-haisin">配信方法</a></li>
+		<li><a href="#siyou-touei">地図投影法</a></li>
+		<li><a href="#siyou-zm">ズームレベル・タイル座標</a></li>
+		<li><a href="#siyou-url">URL</a></li>
+	</ul>
+</div>
+
+<div class="h3_titleBox" id="siyou-haisin">
+	<h3 class="h3_normal">配信方法</h3>
+</div>
+<div class="base_txt">
+	<p>地理院タイルは、予めタイル状に分割したデータを配信する方式（いわゆるXYZ方式）で提供しています。</p>
+	<p>地図の配信方式としては、他に、地図表示のリクエストがある度にその範囲をサーバ側で切り抜いて配信する方式（WMS：Web Map Service）があります。</p>
+	<p>WMSはかつてよく使われていた方式ですが、クライアント側で地図が表示されるまでに時間がかかるものであるため、
+	現在ではタイル状に分割したデータを配信する方式がウェブ地図配信における事実上の標準となっています。</p>
+	<div align="center">
+		<img src="../help/image/method_tile.png" width="700px" alt="タイル状に分割して配信する方式"><br>
+		<p>→ サーバは予めタイル化された画像を返すだけなので、<span style="color: #ff0000" class=ul>負荷は小さく表示も早い</span></p><br>
+
+		<img src="../help/image/method_wms.png" width="700px" alt="WMS"><br>
+		<p>→ サーバはリクエストの度に画像を生成する必要があるため、<span style="color: #0000ff" class=ul>負荷が大きく表示も遅い</span></p>
+		図3：タイル状に分割して配信する方式とWMSの比較
+	</div><br>
+
+	<p>いわゆるXYZ方式は多くのウェブ地図APIが対応しているため、容易にサイト構築やアプリ開発にご利用いただけます。</p>
+	<p><span style="color: #ff0000">地理院タイルのご利用にあたっては、「<a href="../help/use.html" class="blank">地理院タイルのご利用について</a>」をご覧ください。</span></p>
+</div>
+
+
+<div class="h3_titleBox" id="siyou-touei">
+	<h3 class="h3_normal">地図投影法</h3>
+</div>
+<div class="base_txt">
+	<p>世界測地系<sup>※</sup>の経緯度が正方形に変換されるよう極域の一部地域（北緯及び南緯約85.0511度以上）を除外した範囲について、メルカトル投影の数式を使って変換します。<br>
+	<span style="font-size:small">※ 地理院タイルの測地系は、日本国内の地図については、<a href="https://www.gsi.go.jp/sokuchikijun/jgd2000-2011.html" class="blank">世界測地系（JGD2011）</a>です。</span></p>
+	<div align="center">
+		<img src="//cyberjapandata.gsi.go.jp/xyz/std/0/0/0.png" alt="範囲全体について正方形に変換したタイル"><br>
+		図4：範囲全体について正方形に変換したタイル
+	</div>
+</div>
+
+
+<div class="h3_titleBox" id="siyou-zm">
+	<h3 class="h3_normal">ズームレベル・タイル座標</h3>
+</div>
+<div class="base_txt">
+	<p>地理院タイルでは地図の表示倍率を「ズームレベル」という概念を使って区分します。<br>
+	<a href="#siyou-touei">前述の地図投影法</a>で投影した地球地図全体を一枚の正方形タイルで表現したものを「ズームレベル0」と定義します。
+	さらに、一枚の正方形タイルの辺の長さを2倍にして縦横それぞれ2分の1に分割したものを「ズームレベル1」とします。
+	つまり、「ズームレベル1」では、1枚1枚のタイルの大きさはズームレベル0の場合と同一ですが、2×2=4枚のタイルで地球地図全体を表現します。
+	同様にしてズームレベルが1つ大きいものは、各タイルの辺の長さを2倍にして2×2=4枚のタイルに等分割したものと定義します。</p><br>
+
+	<p>また、各タイルにはX,Yからなるタイル座標を定義します。<br>
+	西経180度、北緯約85.0511度の北西端を左上の端点にもつタイルを(0,0)として東方向をX正方向、南方向をY正方向にとります。
+	ズームレベルによって地球地図全体のタイル数は異なるため、タイル座標の範囲もズームレベルにより異なりますが、
+	タイル一枚の大きさは、256ピクセル×256ピクセルで統一しています。</p><br>
+
+	<p>以下の図は、ズームレベル0～2の各タイルの範囲とタイル座標を示しています。<br>
+	ズームレベル3以上のタイル座標については、<a href="./tileCoordCheck.html" class="blank">タイル座標確認ページ</a>をご覧ください。
+	タイル座標確認ページでは、タイル座標を<a href="#siyou-url">タイルのURLの命名規則</a>と同様、{z}/{x}/{y}の形式で表示しています。</p><br>
+	<div align="center">
+		<img src="../help/image/tileNum.png" width="600px" alt="ズームレベルとタイル座標"><br>
+		図5：ズームレベルとタイル座標
+	</div><br>
+
+	<p>提供しているズームレベルや範囲は地理院タイルの種類により異なりますので、個別の情報については「<a href="./ichiran.html">地理院タイル一覧</a>」をご参照下さい。</p>
+</div>
+
+
+<div class="h3_titleBox" id="siyou-url">
+	<h3 class="h3_normal">URL</h3>
+</div>
+<div class="base_txt">
+	<p>地理院タイル1枚1枚のURLは、<a href="#siyou-zm">ズームレベルとタイル座標</a>に基づいて、原則として以下のように命名されています。</p>
+	<div class="source">
+		https://cyberjapandata.gsi.go.jp/xyz/{t}/{z}/{x}/{y}.{ext}
+	</div>
+	<br>
+	<p>ここで、{t},{x},{y},{z},{ext}の意味は次の通りです。<br></p>
+	{t}：データID<br>
+	{x}：タイル座標のX値<br>
+	{y}：タイル座標のY値<br>
+	{z}：ズームレベル<br>
+	{ext}：拡張子<br><br>
+	<p>例えば、以下のように入力すると小縮尺地図（500万分1日本とその周辺）のズームレベル6の(57,23)のタイルを取得できます。</p>
+	<div class="source">
+		https://cyberjapandata.gsi.go.jp/xyz/std/6/57/23.png
+	</div>
+	<br>
+	<p>データIDは地図の種類により異なりますので、個別の情報については「<a href="./ichiran.html">地理院タイル一覧</a>」をご参照下さい。</p>
+</div>
+
+
+<div id="page_top_scroll">ページトップへ</div>
+</div>
+<!-- コンテナ　終了-->
+
+<!-- フッター　開始 -->
+<p id="copyright" class="small" lang="en">Copyright. Geospatial Information Authority of Japan. ALL RIGHTS RESERVED.</p>
+<!-- フッター　終了 -->
+
+</body>
+</html>

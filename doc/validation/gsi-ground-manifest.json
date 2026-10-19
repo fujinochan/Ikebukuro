@@ -1,0 +1,95 @@
+{
+  "layer": "seamlessphoto",
+  "zoom": 17,
+  "acquired_date": "2026-10-19",
+  "source": "国土地理院 地理院タイル 全国最新写真（シームレス）",
+  "source_url": "https://maps.gsi.go.jp/development/ichiran.html#seamlessphoto",
+  "world_min_cm": [
+    -23000,
+    -38000
+  ],
+  "world_max_cm": [
+    47000,
+    32000
+  ],
+  "origin_longitude_latitude_height": [
+    139.7109,
+    35.7295,
+    60.0
+  ],
+  "tiles": [
+    {
+      "x": 116402,
+      "y": 51590,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116402/51590.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116402_51590.jpg"
+    },
+    {
+      "x": 116402,
+      "y": 51591,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116402/51591.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116402_51591.jpg"
+    },
+    {
+      "x": 116402,
+      "y": 51592,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116402/51592.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116402_51592.jpg"
+    },
+    {
+      "x": 116403,
+      "y": 51590,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116403/51590.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116403_51590.jpg"
+    },
+    {
+      "x": 116403,
+      "y": 51591,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116403/51591.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116403_51591.jpg"
+    },
+    {
+      "x": 116403,
+      "y": 51592,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116403/51592.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116403_51592.jpg"
+    },
+    {
+      "x": 116404,
+      "y": 51590,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116404/51590.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116404_51590.jpg"
+    },
+    {
+      "x": 116404,
+      "y": 51591,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116404/51591.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116404_51591.jpg"
+    },
+    {
+      "x": 116404,
+      "y": 51592,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116404/51592.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116404_51592.jpg"
+    },
+    {
+      "x": 116405,
+      "y": 51590,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116405/51590.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116405_51590.jpg"
+    },
+    {
+      "x": 116405,
+      "y": 51591,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116405/51591.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116405_51591.jpg"
+    },
+    {
+      "x": 116405,
+      "y": 51592,
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/17/116405/51592.jpg",
+      "file": "Downloads/GSI/seamlessphoto-z17/116405_51592.jpg"
+    }
+  ],
+  "note": "Download date is not the photography date. Final sampling uses the saved Cesium georeference."
+}

@@ -1,0 +1,8 @@
+{
+	"status": "passed",
+	"error": "",
+	"baseline": false,
+	"cooked_data": false,
+	"map": "L_Ikebukuro",
+	"scope": "Rendered local city, floor and road material assignments, overhead and street captures; AI held for visual inspection."
+}

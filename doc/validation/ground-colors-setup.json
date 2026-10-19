@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "material": "/Game/Ninja/City/M_CityGroundPhotoColors",
+  "texture": "/Game/Ninja/City/Textures/T_CityGroundColors.T_CityGroundColors",
+  "floor_actor": "City_FillGround",
+  "roads_actor": "City_Roads",
+  "world_min_cm": [
+    -23000,
+    -38000
+  ],
+  "world_max_cm": [
+    47000,
+    32000
+  ],
+  "static_meshes_transforms_and_collision_unchanged": true,
+  "static_mesh_actors_checked": 60,
+  "runtime_network_needed": false
+}

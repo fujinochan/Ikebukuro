@@ -1,0 +1,5 @@
+{
+  "status": "passed",
+  "files": 90,
+  "scope": "All release manifest entries SHA-256 match the tested relocated copy; runtime user data excluded"
+}
