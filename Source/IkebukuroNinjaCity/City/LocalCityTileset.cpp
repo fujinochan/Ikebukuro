@@ -40,7 +40,9 @@ void ALocalCityTileset::ConfigureLocalSource()
 		return;
 	}
 	SetTilesetSource(ETilesetSource::FromUrl);
-	SetUrl(TEXT("file:///") + ResolvedDatasetPath.Replace(TEXT(" "), TEXT("%20")));
+	// POSIX paths already start with '/', while Windows drive paths need one.
+	const FString UrlPath = ResolvedDatasetPath.StartsWith(TEXT("/")) ? ResolvedDatasetPath : TEXT("/") + ResolvedDatasetPath;
+	SetUrl(TEXT("file://") + UrlPath.Replace(TEXT("%"), TEXT("%25")).Replace(TEXT(" "), TEXT("%20")).Replace(TEXT("#"), TEXT("%23")));
 	SetCreatePhysicsMeshes(bCreateTilePhysics);
 }
 

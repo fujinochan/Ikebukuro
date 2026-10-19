@@ -16,10 +16,22 @@
 /Data/City/
 /Downloads/
 /Plugins/CesiumForUnreal/
-/Content/CityData/
+/Content/CityData/*
+!/Content/CityData/Ikebukuro/
+/Content/CityData/Ikebukuro/*
+!/Content/CityData/Ikebukuro/Roads/
+!/Content/CityData/IkebukuroLOD2/
+/Content/CityData/IkebukuroLOD2/*
+!/Content/CityData/IkebukuroLOD2/Buildings/
 /SavedBuilds/
 /cesium-request-cache.sqlite*
 
 # Python generated files
 __pycache__/
 *.pyc
+
+# Local source duplicate and Mac-generated files
+/Ikebukuro Ninja City.m4a
+.DS_Store
+*.xcodeproj/
+*.xcworkspace/

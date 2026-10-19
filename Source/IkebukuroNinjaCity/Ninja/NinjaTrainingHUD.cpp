@@ -81,7 +81,7 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	LastMarkerCount=LastOffscreenMarkerCount=0;
 	if (Match->State==ENinjaMatchState::Playing && !Paused)
 	{
-		DrawText(TEXT("P: pause  |  R: return"),FLinearColor::White,W-270*S,140*S,nullptr,S);
+		DrawText(TEXT("P/Esc: pause  |  Q: quit"),FLinearColor::White,W-270*S,140*S,nullptr,S);
 		FVector View; FRotator Look; GetOwningPlayerController()->GetPlayerViewPoint(View,Look);
 		const FVector Right=FRotationMatrix(Look).GetUnitAxis(EAxis::Y),Forward=Look.Vector();
 		ARedNinja* NextEnemy=nullptr;
@@ -146,7 +146,7 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	const float X=W/2-310*S,Y=H/2-180*S;
 	DrawRect(FLinearColor(.02,.035,.065,.96),X,Y,620*S,360*S);
 	FString Title,Line,Action; FLinearColor Color=FLinearColor::White;
-	if (Paused) { Title=TEXT("PAUSED"); Line=TEXT("The timer and the city are paused."); Action=TEXT("P TO RESUME"); }
+	if (Paused) { Title=TEXT("PAUSED"); Line=TEXT("The timer and the city are paused."); Action=TEXT("P / ESC TO RESUME"); }
 	else switch (Match->State)
 	{
 	case ENinjaMatchState::Loading: Title=TEXT("PREPARING CITY"); Line=Match->MusicError.IsEmpty()?TEXT("Preparing the city, safe footing and music..."):Match->MusicError; break;
@@ -164,6 +164,7 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 		DrawText(FString::Printf(TEXT("STOMPS  %d     SHURIKEN  %d"),Ninja->StompDefeats,Ninja->ShurikenDefeats),FLinearColor(.75,.85,.95),X+32*S,Y+181*S,nullptr,1.1*S);
 		DrawText(TEXT("TIME LEFT  ")+Time,FLinearColor(.75,.85,.95),X+32*S,Y+218*S,nullptr,1.1*S);
 		DrawText(Action,Color,X+32*S,Y+280*S,nullptr,1.6*S);
+		DrawText(TEXT("Q / ESC TO QUIT"),FLinearColor(.75,.85,.95),X+32*S,Y+322*S,nullptr,S);
 		return;
 	}
 	DrawText(TEXT("WASD move   |   MOUSE look   |   SHIFT run"),FLinearColor(.75,.85,.95),X+32*S,Y+137*S,nullptr,S);
@@ -172,4 +173,5 @@ void ANinjaTrainingHUD::DrawMatchHUD(ANinjaMatchDirector* Match)
 	DrawText(TEXT("Gold arrow: next enemy   |   Cyan steps: easier roof route"),FLinearColor(.75,.85,.95),X+32*S,Y+221*S,nullptr,S);
 	DrawText(TEXT("Red ninja: 3-way volleys  |  One hit = game over"),FLinearColor(1,.65,.4),X+32*S,Y+249*S,nullptr,S);
 	DrawText(Action,Color,X+32*S,Y+280*S,nullptr,1.6*S);
+	DrawText(Paused?TEXT("Q TO QUIT"):TEXT("Q / ESC TO QUIT"),FLinearColor(.75,.85,.95),X+32*S,Y+322*S,nullptr,S);
 }

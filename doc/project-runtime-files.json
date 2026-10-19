@@ -1,0 +1,245 @@
+{
+  "description": "Minimum loose runtime files; retain Content/Distribution/CREDITS.md for attribution.",
+  "files": [
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data10.b3dm",
+      "bytes": 475628,
+      "sha256": "90d3f77f932d1ff3712c3eedeae4791145ccddd4366a7d535af10bac531f01fa"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data11.b3dm",
+      "bytes": 386044,
+      "sha256": "903776f32392df95851e7cdcd0fd248a44026fe2fb715b57b0afc5f10b7ed060"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data12.b3dm",
+      "bytes": 491412,
+      "sha256": "84cf6b088ffba93217ecf33718b4f4062cb42d39393b0ede7a2350d0b5e8bce9"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data13.b3dm",
+      "bytes": 433872,
+      "sha256": "35cd60b31ec084ee1d31c4cf4da123b66c41a95df71eb1abc4675b856d87bbd4"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data15.b3dm",
+      "bytes": 747228,
+      "sha256": "b4bf08dd52ee2786de00aeb8206d4a98dfe3a7f1d3371111b524ffccb8a07a15"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data17.b3dm",
+      "bytes": 696324,
+      "sha256": "d803d129fe2c2c94060efb7fc33e3c6ce3f954d3acbda831ad0db9493642af0c"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data39.b3dm",
+      "bytes": 354788,
+      "sha256": "82737954ca1e886138d28277d15cf80ab97488e9603e033ca6b094ed266528ec"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data40.b3dm",
+      "bytes": 417492,
+      "sha256": "e1fc214cb1993e9b34140543cd8232f938b3dedf86754c86a667a0c6f96fbde8"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data41.b3dm",
+      "bytes": 404564,
+      "sha256": "9af4de6580e51ca4658c33a3b32b40d448141e4e094c4054e2af467aeeb57c91"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data42.b3dm",
+      "bytes": 438548,
+      "sha256": "454b13646023951e44cef2a3ac258561ea13f8d3aa3aedfbbeee1696df0390c9"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data44.b3dm",
+      "bytes": 235172,
+      "sha256": "1919df31b4fa55ddd29bdb4824e9f840e7fd32406bd56d86a49be895193baac5"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data46.b3dm",
+      "bytes": 216948,
+      "sha256": "fb206c5900999a0c6f0ebc77379361e8ac9125d5a37c8bfce06424c8de41b7b5"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/data/data7.b3dm",
+      "bytes": 406808,
+      "sha256": "2372850ca6d6d944cb44f644ad77a2742764b205e5e3e7f0dc5c37dfc6d264a1"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/tileset-hierarchy.json",
+      "bytes": 15581,
+      "sha256": "3af6cbe0acc9a21ef09af37a1eb676a2282e5edcd4a69e6199b1286ef65b98f5"
+    },
+    {
+      "path": "Content/CityData/Ikebukuro/Roads/tileset.json",
+      "bytes": 9651,
+      "sha256": "3bf0eba82c270baad3b1562fd1adeb8ee2eeffce1fcc2c1061010d3a5eabe426"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data241.b3dm",
+      "bytes": 2276280,
+      "sha256": "31841fedd8cfbf74b5ad1546bd2778958418d26732b7dbcf6083e4580342a41b"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data243.b3dm",
+      "bytes": 1414624,
+      "sha256": "ab4484da2cb76b1445065e123fbef9cc677561c57054cd2e989c2a0a22f0c82e"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data251.b3dm",
+      "bytes": 1842884,
+      "sha256": "55aa58c159538ae3a65cb81b5c5e0bf9f9440335a7021b3815b2f5fddef55d6e"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data253.b3dm",
+      "bytes": 3114404,
+      "sha256": "a73dc317d8f39810ae522f26ac341ff68fd6e5c55d029bf528348bfc86e87dfb"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data397.b3dm",
+      "bytes": 2023000,
+      "sha256": "499a0bc93a364fee22308953d9d74dd4b1c5c36349e95e5be2a9b75c6e71080a"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data398.b3dm",
+      "bytes": 1372144,
+      "sha256": "d145acaffc111a9700af522ee9aeee2586eb877f028e2803c0ec1f6bbe0422f4"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data399.b3dm",
+      "bytes": 3041596,
+      "sha256": "a09c1186108c3aed06ef1e3823765479c0134909199a8db322d5bfabb4a04d17"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data400.b3dm",
+      "bytes": 1561380,
+      "sha256": "1c183acf76d33692a6472191ae26a0022fbeab3df35a5fdc6af7b25c0b86f73c"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data402.b3dm",
+      "bytes": 2521944,
+      "sha256": "d11dce92c33a0037eb41ec5fcf02436e79bc6e5db2b9b07e401b9c6a160da6a6"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data404.b3dm",
+      "bytes": 2199004,
+      "sha256": "29d0ab6ee7ec0b0147bd1468725f68c7d73bd7064a3e4385f010d369081319ac"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data407.b3dm",
+      "bytes": 2316276,
+      "sha256": "0776977fe149c8d7c5f7bfddb68453ec88bb0d59f7c5941840943e283fddac14"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data408.b3dm",
+      "bytes": 420840,
+      "sha256": "0b4049235272b342545b2629378e52f0386b36b488a643cef0649d24e4b66dab"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data409.b3dm",
+      "bytes": 2986764,
+      "sha256": "0022a3ede24816e516cb42b82ea308ca3cf13358636297604e3c82a616c804d8"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data410.b3dm",
+      "bytes": 1540196,
+      "sha256": "cb2f9adc709f15da98c5a8dd35e8528f0ac43e6815e460379a23821d4b5d670c"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data412.b3dm",
+      "bytes": 1651548,
+      "sha256": "3ffc7475b6fba508f94226e6f9ee80438751c33c876535e33c460b7cba055364"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data414.b3dm",
+      "bytes": 2757120,
+      "sha256": "bada0f50ae1154a46320df608a57edbab682c8e223267965ec1ea8e10fc334b3"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data415.b3dm",
+      "bytes": 1477304,
+      "sha256": "422de9b02979d154af52b48f5c5c581b00b261a6c7649d18daf5731f78cc6807"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data562.b3dm",
+      "bytes": 1524328,
+      "sha256": "360fde310de00bdc30bf122e743aa2d56e9453f73f578994fe0f98fe850b4cd9"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data564.b3dm",
+      "bytes": 1427180,
+      "sha256": "ae9f066ba2fbc2809e326865f6adc49ccb57972fb0979270724c4dff85bd2f28"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data572.b3dm",
+      "bytes": 2352164,
+      "sha256": "f09e3e3387e585e26bc857bae0dcaea7dc507d4dd77705e9fb92645985aaf0ed"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data632.b3dm",
+      "bytes": 3020116,
+      "sha256": "9ceb938187616bee57bf4b4df9c05ccbb3b0c5f404eb121498a899b771ab295f"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data633.b3dm",
+      "bytes": 5247224,
+      "sha256": "a76a8cf50b369821db8d387a4aed1b83ba157ed12e8de077e21bd082aebe34b4"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data634.b3dm",
+      "bytes": 1929336,
+      "sha256": "e935d06867870cd6b98553456e8031ba84e37fc68884eda65c31476ec088b462"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data635.b3dm",
+      "bytes": 1218628,
+      "sha256": "a4d5cd418771016408a1ff4abe9c43e46f7fd1579f71af5d12141173c24f921d"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data637.b3dm",
+      "bytes": 819936,
+      "sha256": "7f4b384918cadd5a19c6017be3cc36d534fe13551d4ec45e81ae2459ecedccae"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data638.b3dm",
+      "bytes": 1548928,
+      "sha256": "34fcb7351475891e702b511c153cf7866bc8c33788b4ab6420c8c191bca83ad2"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data639.b3dm",
+      "bytes": 1610136,
+      "sha256": "1a042d2591b5b54019dc12c34e64acff47218352d62197e7dc9f3cfe181145fa"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data642.b3dm",
+      "bytes": 1660256,
+      "sha256": "f127e8e1f634ffefc862b4704cee2a9161ca607f0a37fc8240d254f5496771c2"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data643.b3dm",
+      "bytes": 2649972,
+      "sha256": "1264bc5a0ce31e8cdc316fa4d7c2ef35a6a74589f9c559b6e8d1a2bff4956ea1"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/data/data647.b3dm",
+      "bytes": 783060,
+      "sha256": "0c6003e016c22bbbfe614f2f4ba381b7650aae9bc563aea40ad09fdd7b5b9b0b"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/tileset-hierarchy.json",
+      "bytes": 47457,
+      "sha256": "965247e2ec89b01dd10ec78cdee2c8190d57cec53cb29095776529afd6bf76f4"
+    },
+    {
+      "path": "Content/CityData/IkebukuroLOD2/Buildings/tileset.json",
+      "bytes": 21811,
+      "sha256": "004ad6a21bcb8a85567e76ddc7c451264bf4960851fcaee9fa254767d00e2a9e"
+    },
+    {
+      "path": "Content/Movies/Ikebukuro Ninja City.m4a",
+      "bytes": 3864282,
+      "sha256": "8ec90ccc14e5531c09e091738efd9874beb1cc988408d5ebbf2067480a5838fd"
+    }
+  ]
+}

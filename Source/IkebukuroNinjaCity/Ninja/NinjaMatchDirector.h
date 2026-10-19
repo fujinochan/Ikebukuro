@@ -46,6 +46,8 @@ public:
 	void CreditDefeat(ARedNinja* Enemy);
 	void Confirm();
 	void TogglePause();
+	void HandleEscape();
+	void Quit();
 	void Retry();
 	float ResultAge=0;
 	int32 RemainingEnemies() const { return Enemies.Num()-Credited.Num(); }

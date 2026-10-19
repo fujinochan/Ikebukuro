@@ -4,5 +4,8 @@
 *.umap binary
 *.zip binary
 *.png binary
+*.b3dm binary
+*.m4a binary
+*.sh text eol=lf
 # Preserve downloaded reference pages byte-for-byte and suppress generated HTML diffs.
 doc/references/*.html -text -diff

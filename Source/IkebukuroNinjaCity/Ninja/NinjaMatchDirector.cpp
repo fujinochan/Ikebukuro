@@ -12,6 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Parse.h"
 #include "Misc/Paths.h"
@@ -70,7 +71,8 @@ void ANinjaMatchDirector::BeginPlay()
 		EnableInput(PC);
 		InputComponent->BindKey(EKeys::Enter,IE_Pressed,this,&ANinjaMatchDirector::Confirm).bExecuteWhenPaused=true;
 		InputComponent->BindKey(EKeys::P,IE_Pressed,this,&ANinjaMatchDirector::TogglePause).bExecuteWhenPaused=true;
-		InputComponent->BindKey(EKeys::Escape,IE_Pressed,this,&ANinjaMatchDirector::TogglePause).bExecuteWhenPaused=true;
+		InputComponent->BindKey(EKeys::Escape,IE_Pressed,this,&ANinjaMatchDirector::HandleEscape).bExecuteWhenPaused=true;
+		InputComponent->BindKey(EKeys::Q,IE_Pressed,this,&ANinjaMatchDirector::Quit).bExecuteWhenPaused=true;
 	}
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaMusicCheck"))) GetWorld()->SpawnActor<ANinjaMusicCheck>();
 	if (FParse::Param(FCommandLine::Get(),TEXT("NinjaExplosionCheck"))) GetWorld()->SpawnActor<ANinjaExplosionCheck>();
@@ -95,7 +97,12 @@ void ANinjaMatchDirector::OpenRoundMusic()
 	const FString Path=FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir()/(MissingCheck?TEXT("Movies/__missing_music_check__.m4a"):TEXT("Movies/Ikebukuro Ninja City.m4a")));
 	if (!IFileManager::Get().FileExists(*Path)) { MusicOpenFailed(Path); return; }
 	RoundMusic=NewObject<UMediaPlayer>(this); RoundMusic->PlayOnOpen=false;
-	RoundMusic->SetDesiredPlayerName(TEXT("WmfMedia")); RoundMusic->SetLooping(false);
+#if PLATFORM_WINDOWS
+	RoundMusic->SetDesiredPlayerName(TEXT("WmfMedia"));
+#elif PLATFORM_MAC
+	RoundMusic->SetDesiredPlayerName(TEXT("AvfMedia"));
+#endif
+	RoundMusic->SetLooping(false);
 	RoundMusic->OnEndReached.AddDynamic(this,&ANinjaMatchDirector::MusicEnded);
 	RoundMusic->OnMediaOpenFailed.AddDynamic(this,&ANinjaMatchDirector::MusicOpenFailed);
 	MusicSource=NewObject<UFileMediaSource>(this); MusicSource->PrecacheFile=true; MusicSource->SetFilePath(Path);
@@ -190,6 +197,15 @@ void ANinjaMatchDirector::TogglePause()
 		UGameplayStatics::SetGamePaused(this,!Paused);
 		if (Paused && bMusicStarted && RoundMusic) RoundMusic->Play();
 	}
+}
+void ANinjaMatchDirector::HandleEscape()
+{
+	if (State==ENinjaMatchState::Playing || State==ENinjaMatchState::Countdown) TogglePause();
+	else Quit();
+}
+void ANinjaMatchDirector::Quit()
+{
+	UKismetSystemLibrary::QuitGame(this,UGameplayStatics::GetPlayerController(this,0),EQuitPreference::Quit,false);
 }
 void ANinjaMatchDirector::Finish(bool bWon,const FString& Reason)
 {

@@ -1,0 +1,9 @@
+{
+  "history_blob_count": 1330,
+  "largest_history_blob_bytes": 20999487,
+  "credential_pattern_paths": [],
+  "cesium_archive_sha256_verified": true,
+  "cesium_zip_path_safety_verified": true,
+  "missing_tileset_uris": [],
+  "mac_runtime_test": "not run: Windows host"
+}

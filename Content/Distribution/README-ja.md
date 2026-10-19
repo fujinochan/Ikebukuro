@@ -1,6 +1,6 @@
 # Ikebukuro Ninja City 1.0.0
 
-Windows 64bit版。フォルダ全体を展開し、`IkebukuroNinjaCity.exe` を起動してください。Unreal Editorは不要です。地図とBGMは同梱しています。終了はAlt+F4です。
+Windows 64bit版。フォルダ全体を展開し、`IkebukuroNinjaCity.exe` を起動してください。Unreal Editorは不要です。地図とBGMは同梱しています。
 
 初回にVisual C++ランタイム不足のエラーが出る場合は、同梱の `Engine/Extras/Redist/en-us/vc_redist.x64.exe` を実行してください。
 
@@ -15,9 +15,9 @@ Windows 64bit版。フォルダ全体を展開し、`IkebukuroNinjaCity.exe` を
 | 走る | Shift |
 | ジャンプ | Space（頂点付近で押し直すと3段まで） |
 | 手裏剣 | 左クリック または F |
-| ポーズ・再開 | P または Esc |
+| ポーズ・再開 | 試合中は P または Esc |
 | 路面へ戻る | R |
-| 終了 | Alt+F4 |
+| 終了 | Q（いつでも）、Esc（開始・結果画面など） |
 
 方向転換するとカメラも背後へ追従します。マウス操作中は手動視点を優先します。敵の方向と距離は画面の赤いマーカーが目印です。
 
