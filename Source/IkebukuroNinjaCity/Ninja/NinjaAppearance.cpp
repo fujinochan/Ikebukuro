@@ -55,7 +55,6 @@ void FNinjaAppearance::Apply(ACharacter* Character, bool bRed)
     {
         const FVector Eye=Head+Forward*21+Right*(Side*6)+Up*3;
         Piece(Side<0?TEXT("NinjaEyeLeft"):TEXT("NinjaEyeRight"),Sphere,Eye,FVector(2.4,4,4.8),Mask);
-        Add(Side<0?TEXT("NinjaBrowLeft"):TEXT("NinjaBrowRight"),Cube,Eye+Up*3.5,FVector(2,7,1.8),Mask,TEXT("head"),FQuat(Forward,FMath::DegreesToRadians(Side*12.f))*Facing);
     }
     Piece(TEXT("NinjaHoodKnot"),Sphere,Head-Forward*18+Right*5-Up*6,FVector(13,15,13),Cloth);
     for (int32 Side:{-1,1})
