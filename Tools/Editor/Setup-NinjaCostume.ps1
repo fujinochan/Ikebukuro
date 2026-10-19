@@ -1,0 +1,13 @@
+param([string]$EngineRoot='C:\Program Files\Epic Games\UE_5.8')
+$ErrorActionPreference='Stop'
+$root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
+$env:GIT_CONFIG_NOSYSTEM='1'
+$env:GIT_CONFIG_GLOBAL=Join-Path $root 'Saved/Git/empty-config'
+$env:GIT_CONFIG_SYSTEM=$env:GIT_CONFIG_GLOBAL
+$env:GIT_ATTR_NOSYSTEM='1'
+& (Join-Path $EngineRoot 'Engine/Binaries/Win64/UnrealEditor-Cmd.exe') `
+    (Join-Path $root 'IkebukuroNinjaCity.uproject') -run=pythonscript "-script=$(Join-Path $PSScriptRoot 'setup_ninja_costume.py')" `
+    -DDC=Step8Offline '-DisablePlugins=ModelContextProtocol,Fab,EOSShared,EditorTelemetry,EditorToolset,ToolsetRegistry' `
+    '-ini:Engine:[HTTP]:bEnableHttp=False' -NoEpicPortal -NoAnalytics -unattended -nop4 -NullRHI `
+    "-abslog=$(Join-Path $root 'Saved/Logs/NinjaCostume-Setup.log')"
+if ($LASTEXITCODE -ne 0) { throw 'Costume material setup failed' }

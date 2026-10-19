@@ -1,0 +1,281 @@
+{
+  "status": "passed",
+  "files": [
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\tileset-hierarchy.json",
+      "sha256": "965247E2EC89B01DD10EC78CDEE2C8190D57CEC53CB29095776529AFD6BF76F4",
+      "bytes": 47457
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\tileset.json",
+      "sha256": "004AD6A21BCB8A85567E76DDC7C451264BF4960851FCAEE9FA254767D00E2A9E",
+      "bytes": 21811
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data241.b3dm",
+      "sha256": "31841FEDD8CFBF74B5AD1546BD2778958418D26732B7DBCF6083E4580342A41B",
+      "bytes": 2276280
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data243.b3dm",
+      "sha256": "AB4484DA2CB76B1445065E123FBEF9CC677561C57054CD2E989C2A0A22F0C82E",
+      "bytes": 1414624
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data251.b3dm",
+      "sha256": "55AA58C159538AE3A65CB81B5C5E0BF9F9440335A7021B3815B2F5FDDEF55D6E",
+      "bytes": 1842884
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data253.b3dm",
+      "sha256": "A73DC317D8F39810AE522F26AC341FF68FD6E5C55D029BF528348BFC86E87DFB",
+      "bytes": 3114404
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data397.b3dm",
+      "sha256": "499A0BC93A364FEE22308953D9D74DD4B1C5C36349E95E5BE2A9B75C6E71080A",
+      "bytes": 2023000
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data398.b3dm",
+      "sha256": "D145ACAFFC111A9700AF522EE9AEEE2586EB877F028E2803C0EC1F6BBE0422F4",
+      "bytes": 1372144
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data399.b3dm",
+      "sha256": "A09C1186108C3AED06EF1E3823765479C0134909199A8DB322D5BFABB4A04D17",
+      "bytes": 3041596
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data400.b3dm",
+      "sha256": "1C183ACF76D33692A6472191AE26A0022FBEAB3DF35A5FDC6AF7B25C0B86F73C",
+      "bytes": 1561380
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data402.b3dm",
+      "sha256": "D11DCE92C33A0037EB41EC5FCF02436E79BC6E5DB2B9B07E401B9C6A160DA6A6",
+      "bytes": 2521944
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data404.b3dm",
+      "sha256": "29D0AB6EE7EC0B0147BD1468725F68C7D73BD7064A3E4385F010D369081319AC",
+      "bytes": 2199004
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data407.b3dm",
+      "sha256": "0776977FE149C8D7C5F7BFDDB68453EC88BB0D59F7C5941840943E283FDDAC14",
+      "bytes": 2316276
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data408.b3dm",
+      "sha256": "0B4049235272B342545B2629378E52F0386B36B488A643CEF0649D24E4B66DAB",
+      "bytes": 420840
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data409.b3dm",
+      "sha256": "0022A3EDE24816E516CB42B82EA308CA3CF13358636297604E3C82A616C804D8",
+      "bytes": 2986764
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data410.b3dm",
+      "sha256": "CB2F9ADC709F15DA98C5A8DD35E8528F0AC43E6815E460379A23821D4B5D670C",
+      "bytes": 1540196
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data412.b3dm",
+      "sha256": "3FFC7475B6FBA508F94226E6F9EE80438751C33C876535E33C460B7CBA055364",
+      "bytes": 1651548
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data414.b3dm",
+      "sha256": "BADA0F50AE1154A46320DF608A57EDBAB682C8E223267965EC1EA8E10FC334B3",
+      "bytes": 2757120
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data415.b3dm",
+      "sha256": "422DE9B02979D154AF52B48F5C5C581B00B261A6C7649D18DAF5731F78CC6807",
+      "bytes": 1477304
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data562.b3dm",
+      "sha256": "360FDE310DE00BDC30BF122E743AA2D56E9453F73F578994FE0F98FE850B4CD9",
+      "bytes": 1524328
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data564.b3dm",
+      "sha256": "AE9F066BA2FBC2809E326865F6ADC49CCB57972FB0979270724C4DFF85BD2F28",
+      "bytes": 1427180
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data572.b3dm",
+      "sha256": "F09E3E3387E585E26BC857BAE0DCAEA7DC507D4DD77705E9FB92645985AAF0ED",
+      "bytes": 2352164
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data632.b3dm",
+      "sha256": "9CEB938187616BEE57BF4B4DF9C05CCBB3B0C5F404EB121498A899B771AB295F",
+      "bytes": 3020116
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data633.b3dm",
+      "sha256": "A76A8CF50B369821DB8D387A4AED1B83BA157ED12E8DE077E21BD082AEBE34B4",
+      "bytes": 5247224
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data634.b3dm",
+      "sha256": "E935D06867870CD6B98553456E8031BA84E37FC68884EDA65C31476EC088B462",
+      "bytes": 1929336
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data635.b3dm",
+      "sha256": "A4D5CD418771016408A1FF4ABE9C43E46F7FD1579F71AF5D12141173C24F921D",
+      "bytes": 1218628
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data637.b3dm",
+      "sha256": "7F4B384918CADD5A19C6017BE3CC36D534FE13551D4EC45E81AE2459ECEDCCAE",
+      "bytes": 819936
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data638.b3dm",
+      "sha256": "34FCB7351475891E702B511C153CF7866BC8C33788B4AB6420C8C191BCA83AD2",
+      "bytes": 1548928
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data639.b3dm",
+      "sha256": "1A042D2591B5B54019DC12C34E64ACFF47218352D62197E7DC9F3CFE181145FA",
+      "bytes": 1610136
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data642.b3dm",
+      "sha256": "F127E8E1F634FFEFC862B4704CEE2A9161CA607F0A37FC8240D254F5496771C2",
+      "bytes": 1660256
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data643.b3dm",
+      "sha256": "1264BC5A0CE31E8CDC316FA4D7C2EF35A6A74589F9C559B6E8D1A2BFF4956EA1",
+      "bytes": 2649972
+    },
+    {
+      "path": "CityData\\IkebukuroLOD2\\Buildings\\data\\data647.b3dm",
+      "sha256": "0C6003E016C22BBBFE614F2F4BA381B7650AAE9BC563AEA40AD09FDD7B5B9B0B",
+      "bytes": 783060
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\tileset-hierarchy.json",
+      "sha256": "3AF6CBE0ACC9A21EF09AF37A1EB676A2282E5EDCD4A69E6199B1286EF65B98F5",
+      "bytes": 15581
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\tileset.json",
+      "sha256": "3BF0EBA82C270BAAD3B1562FD1ADEB8EE2EEFFCE1FCC2C1061010D3A5EABE426",
+      "bytes": 9651
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data10.b3dm",
+      "sha256": "90D3F77F932D1FF3712C3EEDEAE4791145CCDDD4366A7D535AF10BAC531F01FA",
+      "bytes": 475628
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data11.b3dm",
+      "sha256": "903776F32392DF95851E7CDCD0FD248A44026FE2FB715B57B0AFC5F10B7ED060",
+      "bytes": 386044
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data12.b3dm",
+      "sha256": "84CF6B088FFBA93217ECF33718B4F4062CB42D39393B0EDE7A2350D0B5E8BCE9",
+      "bytes": 491412
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data13.b3dm",
+      "sha256": "35CD60B31EC084EE1D31C4CF4DA123B66C41A95DF71EB1ABC4675B856D87BBD4",
+      "bytes": 433872
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data15.b3dm",
+      "sha256": "B4BF08DD52EE2786DE00AEB8206D4A98DFE3A7F1D3371111B524FFCCB8A07A15",
+      "bytes": 747228
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data17.b3dm",
+      "sha256": "D803D129FE2C2C94060EFB7FC33E3C6CE3F954D3ACBDA831AD0DB9493642AF0C",
+      "bytes": 696324
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data39.b3dm",
+      "sha256": "82737954CA1E886138D28277D15CF80AB97488E9603E033CA6B094ED266528EC",
+      "bytes": 354788
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data40.b3dm",
+      "sha256": "E1FC214CB1993E9B34140543CD8232F938B3DEDF86754C86A667A0C6F96FBDE8",
+      "bytes": 417492
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data41.b3dm",
+      "sha256": "9AF4DE6580E51CA4658C33A3B32B40D448141E4E094C4054E2AF467AEEB57C91",
+      "bytes": 404564
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data42.b3dm",
+      "sha256": "454B13646023951E44CEF2A3AC258561EA13F8D3AA3AEDFBBEEE1696DF0390C9",
+      "bytes": 438548
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data44.b3dm",
+      "sha256": "1919DF31B4FA55DDD29BDB4824E9F840E7FD32406BD56D86A49BE895193BAAC5",
+      "bytes": 235172
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data46.b3dm",
+      "sha256": "FB206C5900999A0C6F0EBC77379361E8AC9125D5A37C8BFCE06424C8DE41B7B5",
+      "bytes": 216948
+    },
+    {
+      "path": "CityData\\Ikebukuro\\Roads\\data\\data7.b3dm",
+      "sha256": "2372850CA6D6D944CB44F644AD77A2742764B205E5E3E7F0DC5C37DFC6D264A1",
+      "bytes": 406808
+    },
+    {
+      "path": "Movies\\Ikebukuro Ninja City.m4a",
+      "sha256": "8EC90CCC14E5531C09E091738EFD9874BEB1CC988408D5EBBF2067480A5838FD",
+      "bytes": 3864282
+    },
+    {
+      "path": "Distribution\\CREDITS.md",
+      "sha256": "5DF6ABB95E302A1CF091603351EAE43218AB0F43824BBA9AF0EB464EDD0C245E",
+      "bytes": 2062
+    },
+    {
+      "path": "Distribution\\README-ja.md",
+      "sha256": "BFF6551D1912A851A840B097550DBBA9B553E58EE6CC85FE3870A154585A755A",
+      "bytes": 1673
+    },
+    {
+      "path": "Distribution\\Licenses\\Cesium-LICENSE.txt",
+      "sha256": "2F28B7257EC775A1EB17C170588C1BC411F2C809096EE8DADDBC3C0426FF5908",
+      "bytes": 10351
+    },
+    {
+      "path": "Distribution\\Licenses\\Cesium-ThirdParty.json",
+      "sha256": "3CC9FE1FE0098B09ADC7B9D00DACFFFDD72B795893EA73AD271AD34BE64EB8B8",
+      "bytes": 604
+    },
+    {
+      "path": "Distribution\\Licenses\\FontAwesome-attribution.txt",
+      "sha256": "A6FD1DD7AA4F0C5BE29E62D103E271FC3F5BBFCFDCB8DD98F3FF64307E1BD5A0",
+      "bytes": 469
+    },
+    {
+      "path": "Distribution\\Licenses\\HTML-Tidy-notice.txt",
+      "sha256": "152ED82267C66518235EDF564BEBF21E3A0E95FC30DF0DAF271E551687179C3E",
+      "bytes": 3449
+    },
+    {
+      "path": "Distribution\\Licenses\\MikkTSpace-notice.txt",
+      "sha256": "F62A9A251097AD79E77DD1A4DA1856134537896A3E3A19D593E7447AC4D6B5EA",
+      "bytes": 1018
+    }
+  ],
+  "scope": "SHA-256 equality of every required loose dataset, movie and distribution file"
+}

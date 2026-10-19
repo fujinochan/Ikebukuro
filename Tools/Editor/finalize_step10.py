@@ -1,12 +1,21 @@
 """Create a local release archive and integrity manifest; no network access."""
 import hashlib
 import json
+import argparse
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parents[2]
-PACKAGE = ROOT / 'SavedBuilds/Step10/Package/Windows'
-ARCHIVE = ROOT / 'SavedBuilds/Step10/IkebukuroNinjaCity-1.0.0-Windows.zip'
+parser = argparse.ArgumentParser()
+parser.add_argument('--build-directory', default='SavedBuilds/Step10')
+parser.add_argument('--archive-name', default='IkebukuroNinjaCity-1.0.0-Windows.zip')
+parser.add_argument('--report-name', default='step10-release')
+args = parser.parse_args()
+release_root = (ROOT / args.build_directory).resolve()
+if not release_root.is_relative_to(ROOT) or Path(args.archive_name).name != args.archive_name or Path(args.report_name).name != args.report_name:
+    raise RuntimeError('Outputs must remain inside the project')
+PACKAGE = release_root / 'Package/Windows'
+ARCHIVE = release_root / args.archive_name
 if not (PACKAGE / 'IkebukuroNinjaCity.exe').is_file():
     raise RuntimeError('Package missing')
 if ARCHIVE.exists():
@@ -32,5 +41,5 @@ with ZipFile(ARCHIVE) as check:
 report = {'status': 'passed', 'files': len(rows), 'package_bytes': sum(row['bytes'] for row in rows),
           'archive': str(ARCHIVE.relative_to(ROOT)), 'archive_bytes': ARCHIVE.stat().st_size,
           'archive_sha256': sha256(ARCHIVE), 'zip_crc_checked': True}
-(ROOT / 'Saved/Validation/step10-release.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+(ROOT / ('Saved/Validation/' + args.report_name + '.json')).write_text(json.dumps(report, indent=2), encoding='utf-8')
 print(json.dumps(report, indent=2))

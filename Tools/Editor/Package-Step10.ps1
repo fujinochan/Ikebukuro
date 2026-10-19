@@ -1,11 +1,13 @@
-param([string]$EngineRoot='C:\Program Files\Epic Games\UE_5.8', [switch]$ReuseCookedOutput)
+param([string]$EngineRoot='C:\Program Files\Epic Games\UE_5.8', [switch]$ReuseCookedOutput,
+    [string]$OutputDirectory='SavedBuilds/Step10/Package')
 $ErrorActionPreference='Stop'
 $projectRoot=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $env:GIT_CONFIG_NOSYSTEM='1'
 $env:GIT_CONFIG_GLOBAL=Join-Path $projectRoot 'Saved/Git/empty-config'
 $env:GIT_CONFIG_SYSTEM=$env:GIT_CONFIG_GLOBAL
 $env:GIT_ATTR_NOSYSTEM='1'
-$archive=Join-Path $projectRoot 'SavedBuilds/Step10/Package'
+$archive=[IO.Path]::GetFullPath((Join-Path $projectRoot $OutputDirectory))
+if (!$archive.StartsWith($projectRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw 'Output must remain inside this project' }
 $buildArgs=@('-build','-cook')
 if ($ReuseCookedOutput) { $buildArgs=@('-build','-skipcook') }
 & (Join-Path $EngineRoot 'Engine/Build/BatchFiles/RunUAT.bat') BuildCookRun `
