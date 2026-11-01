@@ -142,3 +142,15 @@ Step 10承認追記（2026-10-17）: UE 5.8・Visual Studio/MSVC・Windows SDK�
 ## 2026-10-19 GitHub / Mac共有の承認
 
 ユーザーの指定により `https://github.com/fujinochan/Ikebukuro` へのリモート接続・Public公開を許可。従来のローカル限定Gitルールは、この共有先について上書きする。他リポジトリやユーザーGit設定へのアクセスは含まない。Cesiumは承認済みの同一公式ZIPを固定SHA-256で復元する。実行に必要な切り出し済み都市データ・加工済み地面・BGMを共有し、元ZIP、ローカルキャッシュ、プラグイン本体、ビルド成果物は除外する。Mac実機検証は未実施。
+
+## 2026-11-01 Mac移植の追加許可
+
+ユーザーが、インストール済みXcode／Apple SDK／署名・公証用の標準ツールと、通常の設定・キャッシュへのアクセスを許可。プロジェクト内に成果物・ログを保持する。公証サービスへのアップロードや新規ツール取得はこの許可に含めない。
+
+確認: UE `/Users/Shared/Epic Games/UE_5.8`、Xcode `/Applications/Xcode.app`（27.2 / 27B52）。UE同梱Apple_SDK.jsonのツールチェーン判定範囲は15.2.0〜27.9.0。Cesiumプラグインと元ZIPはチェックアウトに存在しない。地図・BGMの48ファイルは `setup_project.py --check` のデータ検証に合格したが、プラグイン検証で停止。
+
+同日、ユーザーが不足中の公式Cesium 2.30.0 ZIP（約1.26GB）の再取得と、プロジェクト内でのSHA-256検証・復元を許可。
+
+同日、XcodeのMetal Toolchain未導入（`xcrun metal --version` がmissing Metal Toolchain）を確認し、ユーザーがApple公式Metal Toolchainの取得・標準登録を追加許可。`xcodebuild -downloadComponent MetalToolchain -exportPath <project>/Downloads/MetalToolchain` で取得する。ローカル署名検証で有効なコード署名証明書は0件。公開向けDeveloper ID署名・公証は別途設定が必要。
+
+Metal Toolchain 27B47（約839MB）はXcodeのdownloadComponent実行時に標準領域へ導入され、同時に `Downloads/MetalToolchain/MetalToolchain-27B47.exportedBundle` へエクスポートされた。後続importComponentは「already installed」で終了したが、`xcrun metal --version` はApple metal 32023.922として成功。

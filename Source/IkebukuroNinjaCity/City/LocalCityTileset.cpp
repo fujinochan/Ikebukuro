@@ -46,10 +46,19 @@ void ALocalCityTileset::ConfigureLocalSource()
 	SetCreatePhysicsMeshes(bCreateTilePhysics);
 }
 
+void ALocalCityTileset::PostLoad()
+{
+	Super::PostLoad();
+	// Saved levels can contain a URL from another development machine.
+	if (!IsTemplate()) ConfigureLocalSource();
+}
+
 void ALocalCityTileset::OnConstruction(const FTransform& Transform)
 {
-	Super::OnConstruction(Transform);
+	// Cesium starts loading in its construction hook. Replace the serialized
+	// source-machine URL before that hook runs, including during Cook.
 	ConfigureLocalSource();
+	Super::OnConstruction(Transform);
 }
 
 void ALocalCityTileset::BeginPlay()

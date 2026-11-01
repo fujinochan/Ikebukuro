@@ -1,6 +1,6 @@
 # Ikebukuro Ninja City 1.0.0
 
-Windows 64bit版。フォルダ全体を展開し、`IkebukuroNinjaCity.exe` を起動してください。Unreal Editorは不要です。地図とBGMは同梱しています。
+Windows版はフォルダ全体を展開して `IkebukuroNinjaCity.exe` を起動してください。Mac版（Apple Silicon）はZIP全体を展開して `IkebukuroNinjaCity-Mac-Shipping.app` を開いてください。アプリの周囲のフォルダも一緒に保持してください。Unreal Editorは不要です。地図とBGMは同梱しています。
 
 初回にVisual C++ランタイム不足のエラーが出る場合は、同梱の `Engine/Extras/Redist/en-us/vc_redist.x64.exe` を実行してください。
 
@@ -23,6 +23,6 @@ Windows 64bit版。フォルダ全体を展開し、`IkebukuroNinjaCity.exe` を
 
 ## 制約
 
-WindowsのWMFでM4Aを再生します。メディア機能がないWindows環境では開始できません。別PCでの動作と初見の通し試遊は未確認です。都市モデルの収録範囲や形状をもとに足場を補完しており、現実の街と一致しない部分があります。
+WindowsはWMF、MacはAVFoundationでM4Aを再生します。メディア機能がないWindows環境では開始できません。別PCでの動作と初見の通し試遊は未確認です。都市モデルの収録範囲や形状をもとに足場を補完しており、現実の街と一致しない部分があります。
 
 地図の出典・加工内容、音楽、ソフトウェアの表記は `CREDITS.md` と `Licenses/` を参照してください。

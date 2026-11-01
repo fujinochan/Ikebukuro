@@ -18,7 +18,7 @@ python3 Tools/setup_project.py --download
 
 ### Mac
 
-[Macでの開発手順](doc/mac-development.md)を参照してください。
+[Macでの開発手順](doc/mac-development.md)と[Mac向け配布手順](doc/mac-distribution.md)を参照してください。
 
 ```sh
 bash Tools/Mac/build.sh
