@@ -35,3 +35,8 @@ __pycache__/
 .DS_Store
 *.xcodeproj/
 *.xcworkspace/
+
+# UE-generated Mac packaging metadata (custom entitlements are tracked)
+/Build/Mac/*.PackageVersionCounter
+/Build/Mac/Resources/Info.Template.plist
+/Build/Mac/Resources/Sandbox.*.entitlements

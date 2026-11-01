@@ -11,6 +11,7 @@ touch "$ROOT/Saved/Git/empty-config"
 export GIT_CONFIG_NOSYSTEM=1 GIT_ATTR_NOSYSTEM=1
 export GIT_CONFIG_GLOBAL="$ROOT/Saved/Git/empty-config"
 export GIT_CONFIG_SYSTEM="$GIT_CONFIG_GLOBAL"
+python3 "$ROOT/Tools/Mac/patch_cesium.py"
 bash "$ENGINE_ROOT/Engine/Build/BatchFiles/Mac/Build.sh" \
   IkebukuroNinjaCityEditor Mac Development \
   "-Project=$ROOT/IkebukuroNinjaCity.uproject" -WaitMutex -NoHotReloadFromIDE -NoUBA \

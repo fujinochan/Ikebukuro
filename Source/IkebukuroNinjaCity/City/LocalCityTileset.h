@@ -28,6 +28,7 @@ class IKEBUKURONINJACITY_API ALocalCityTileset : public ACesium3DTileset
 
 public:
 	ALocalCityTileset();
+	virtual void PostLoad() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;

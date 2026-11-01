@@ -166,7 +166,8 @@ void ANinjaMusicCheck::Finish(const FString& Error)
 	if (Ninja) { Report->SetNumberField(TEXT("player_health"),Ninja->Health); Report->SetStringField(TEXT("player_location"),Ninja->GetActorLocation().ToString()); }
 	Report->SetNumberField(TEXT("wall_seconds"),FPlatformTime::Seconds()-Started);
 	Report->SetNumberField(TEXT("first_track_wall_seconds_including_pause"),CompletedTrackWallSeconds);
-	Report->SetStringField(TEXT("scope"),TEXT("Real WMF M4A playback and audio mixer, AI held stationary to isolate music lifecycle; no fixed simulation clock"));
+	Report->SetStringField(TEXT("media_player"), Match && Match->GetRoundMusicPlayer() ? Match->GetRoundMusicPlayer()->GetPlayerName().ToString() : TEXT("None"));
+	Report->SetStringField(TEXT("scope"),TEXT("Real platform M4A playback and audio mixer, AI held stationary to isolate music lifecycle; no fixed simulation clock"));
 	TArray<TSharedPtr<FJsonValue>> Rows; for (const auto& Case:Cases) Rows.Add(MakeShared<FJsonValueString>(Case)); Report->SetArrayField(TEXT("passed_cases"),Rows);
 	FString Json,Path; FJsonSerializer::Serialize(Report,TJsonWriterFactory<>::Create(&Json)); FParse::Value(FCommandLine::Get(),TEXT("MusicReport="),Path); FFileHelper::SaveStringToFile(Json,*Path);
 	UE_LOG(LogTemp,Display,TEXT("MUSIC_%s %s"),Error.IsEmpty()?TEXT("PASSED"):TEXT("FAILED"),*Error); bFinished=true; FinishedAt=FPlatformTime::Seconds();

@@ -38,4 +38,4 @@ MacのBGMは `AvfMedia`、Windowsは `WmfMedia` を使用します。Mac用メ�
 
 作業開始前に `git pull --ff-only` し、作業後は変更をコミットして `git push` します。`.umap` や `.uasset` の同時編集を避けてください。競合時にバイナリをテキストマージしないでください。
 
-今回のWindows環境ではMac向けC++コンパイル・Metal描画・AVFoundationによる音声再生は検証できません。Macで初回ビルド・Playの確認が必要です。Windows用のパッケージ作成スクリプトは `Tools/Editor/Package-Step10.ps1` にあり、Macアプリの配布・署名・公証は今回の対象外です。
+今回のWindows環境ではMac向けC++コンパイル・Metal描画・AVFoundationによる音声再生は検証できません。Macで初回ビルド・Playの確認が必要です。Windows用のパッケージ作成スクリプトは `Tools/Editor/Package-Step10.ps1` にあります。Mac向けShippingビルド・配布ZIP・署名と公証の手順は [Mac向け移植・配布](mac-distribution.md) を参照してください。
